@@ -1,6 +1,6 @@
 - [1. ODRIVE BASIC SETUP:](#1-odrive-basic-setup)
-  - [## 1.1. Introduction:](#-11-introduction)
-  - [## 1.2. Parts List:](#-12-parts-list)
+  - [1.1. Introduction:](#11-introduction)
+  - [1.2. Parts List:](#12-parts-list)
     - [1.2.1. ODrive Parts:](#121-odrive-parts)
     - [1.2.2. Per motor parts:](#122-per-motor-parts)
     - [1.2.3. Other Parts/Tools:](#123-other-partstools)
@@ -27,10 +27,8 @@
   
 # 1. ODRIVE BASIC SETUP:
 ## 1.1. Introduction:
----
 ODrive allows for precise control of up to 2 BLDC motors and 2 rotary encoders. The ODrive can be interfaced with through a microcontroller such as an Arduino or Teensy board to run control loops. For any questions regarding setup, contact John Bush (johncbus@usc.edu) or through slack message
 ## 1.2. Parts List:
----
 ### 1.2.1. ODrive Parts:
 - [ ] 3x heat sinks per motor installed
 - [ ] (if not already on the ODrive board) 2x 3 terminal block connectors
