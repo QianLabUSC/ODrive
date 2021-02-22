@@ -78,12 +78,12 @@ ODrive allows for precise control of up to 2 BLDC motors and 2 rotary encoders. 
 1. Solder the 2x8 pin header so that it protrudes from the **back** of the board.
 ### 2.1.4. Encoder Magnet Assembly
 1. Take an M4 x 14mm screw and screw 2 nuts fully onto it to act as spacers.
-   <br><img src="/images/magnet_screw.jpg" alt="diagram: screw with spacer nuts"
-	title="diagram: screw with spacer nuts" width="300" height="200" />
+<br><img src="/images/magnet_screw.jpg" alt="diagram: screw with spacer nuts"
+title="diagram: screw with spacer nuts" width="300" height="200" />
 2. Take a third M4 nut and **CAREFULLY** glue the provided encoder magnet onto one side of the nut, making sure to center the magnet on the nut. 
    1. **NOTE: IT IS CRUCIAL THAT THIS MAGNET IS CENTERED WITHIN 0.5mm** 
-   <br><img src="/images/magnet_assembly.jpg" alt="diagram: magnet and nut assembly"
-	title="diagram: magnet and nut assembly" width="300" height="200" />
+<br><img src="/images/magnet_assembly.jpg" alt="diagram: magnet and nut assembly"
+title="diagram: magnet and nut assembly" width="300" height="200" />
 3. Remove the plastic dust cover from the bottom of the U8II motor.
 4. From the top side of the motor, drop the M4 screw assembly into the center, through the hole in the center of the motor. From the bottom side, screw on the magnet-nut assembly and tighten the nut onto the screw with an allen key and hex wrench.
 ### 2.1.5. Mounting the Encoder
@@ -96,8 +96,8 @@ ODrive allows for precise control of up to 2 BLDC motors and 2 rotary encoders. 
    4. MOSI
    5. CSn
    6. GND
-  <br><img src="/images/encoder_assembly.jpg" alt="encoder assembly"
-	title="diagram: encoder assembly" width="200" />
+<br><img src="/images/encoder_assembly.jpg" alt="encoder assembly"
+title="diagram: encoder assembly" width="200" />
 ### 2.1.6. Putting it All Together
 7. Attach the motor mount to the motor with one M4 x 14mm screw into the second of the three motor mounting holes
 8. Attach the encoder module with two M4 x 18mm screws through the encoder module and the other two motor mounting holes. 
