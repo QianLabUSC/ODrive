@@ -82,6 +82,9 @@ void setup()
 	Serial.println("Send 'q' to exit");
 }
 
+/**
+ * @brief: outputs the current time in format "minutes:seconds.milliseconds"
+ */
 void formatTime(char *out)
 {
 	int minutes = minute();
@@ -91,7 +94,7 @@ void formatTime(char *out)
 
 	char buffer[12];
 
-	sprintf(buffer, "%d:%d:%d", minutes, seconds, ms);
+	sprintf(buffer, "%d:%d.%d", minutes, seconds, ms);
 
 	for (int i = 0; i < 10; i++)
 	{
