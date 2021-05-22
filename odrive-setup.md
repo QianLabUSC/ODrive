@@ -5,13 +5,15 @@
     - [1.2.2. Per motor parts:](#122-per-motor-parts)
     - [1.2.3. Other Parts/Tools:](#123-other-partstools)
 - [2. Assembly](#2-assembly)
-  - [2.1. Encoder Module Assembly](#21-encoder-module-assembly)
+  - [2.1. Encoder Module Assembly for AS5047P Encoder](#21-encoder-module-assembly-for-as5047p-encoder)
     - [2.1.1. Encoder Resistor Configuration](#211-encoder-resistor-configuration)
     - [2.1.2. Encoder Voltage Selector](#212-encoder-voltage-selector)
     - [2.1.3. Encoder Header Pin](#213-encoder-header-pin)
-    - [2.1.4. Encoder Magnet Assembly](#214-encoder-magnet-assembly)
-    - [2.1.5. Mounting the Encoder](#215-mounting-the-encoder)
-    - [2.1.6. Putting it All Together](#216-putting-it-all-together)
+  - [2.2. Encoder Assembly for AS5048A Encoder](#22-encoder-assembly-for-as5048a-encoder)
+    - [2.2.1. Header Pin Installation](#221-header-pin-installation)
+  - [2.3. Encoder Magnet Assembly](#23-encoder-magnet-assembly)
+  - [2.4. Mounting the Encoder](#24-mounting-the-encoder)
+  - [2.5. Putting it All Together](#25-putting-it-all-together)
 - [3. Setting up the ODrive Board and connecting motors and encoders](#3-setting-up-the-odrive-board-and-connecting-motors-and-encoders)
     - [3.0.1. Powering the Odrive](#301-powering-the-odrive)
     - [3.0.2. Wiring the Encoder and Motor](#302-wiring-the-encoder-and-motor)
@@ -24,6 +26,9 @@
   - [5.1. Motor Configuration](#51-motor-configuration)
   - [5.2. Encoder Calibration](#52-encoder-calibration)
   - [5.3. Motor Calibration and Startup](#53-motor-calibration-and-startup)
+  - [5.4. Motor Tuning](#54-motor-tuning)
+- [6. Controlling the ODrive with a Teensy Microcontroller (or Equivalent)](#6-controlling-the-odrive-with-a-teensy-microcontroller-or-equivalent)
+  - [Downloading PlatformIO in VSCode to Run Scripts](#downloading-platformio-in-vscode-to-run-scripts)
   
 # 1. ODRIVE BASIC SETUP:
 ## 1.1. Introduction:
@@ -60,7 +65,7 @@ ODrive allows for precise control of up to 2 BLDC motors and 2 rotary encoders. 
 - [ ] file/sandpaper
 
 # 2. Assembly
-## 2.1. Encoder Module Assembly
+## 2.1. Encoder Module Assembly for AS5047P Encoder
 **NOTE: "front" refers to the side with pin labels and the actual encoder chip, while "back" refers to the side with the serial number sticker.**
 ### 2.1.1. Encoder Resistor Configuration
 1. The AS5047P encoder package is made to work in either a 3.3V or 5V (default) power configuration, and for our purposes we need to select the 3.3V operation setting. On the eval board, notice the 0 ohm 0603 package resistor at R1 on the front of the board. 
@@ -74,7 +79,11 @@ ODrive allows for precise control of up to 2 BLDC motors and 2 rotary encoders. 
       2. Solder a jumper wire between [5V] and [3.3V] on the **back** of the board.
 ### 2.1.3. Encoder Header Pin
 1. Solder the 2x8 pin header so that it protrudes from the **back** of the board.
-### 2.1.4. Encoder Magnet Assembly
+## 2.2. Encoder Assembly for AS5048A Encoder
+### 2.2.1. Header Pin Installation
+1. The AS5048A/B Encoder has a 1x8 pinout. Solder a 1x8 right angle header pin into the pin holes in the encoder board.
+2. For 3V operation necessary for the ODrive, we must short the 3.3V and 5V pins of the board. To do this, solder a short piece of wire between the two pins. 
+## 2.3. Encoder Magnet Assembly
 <br><img src="/images/magnet_screw.jpg" alt="diagram: screw with spacer nuts"
 title="diagram: screw with spacer nuts" width="300" height="200" />
 <img src="/images/magnet_assembly.jpg" alt="diagram: magnet and nut assembly"
@@ -85,24 +94,21 @@ title="diagram: magnet and nut assembly" width="300" height="200" />
    1. **NOTE: IT IS CRUCIAL THAT THIS MAGNET IS CENTERED WITHIN 0.5mm** 
 3. Remove the plastic dust cover from the bottom of the U8II motor.
 4. From the top side of the motor, drop the M4 screw assembly into the center, through the hole in the center of the motor. From the bottom side, screw on the magnet-nut assembly and tighten the nut onto the screw with an allen key and hex wrench.
-### 2.1.5. Mounting the Encoder
-**Note: this part will be updated once I redesign the encoder mount**
-<br><img src="/images/encoder_assembly.jpg" alt="encoder assembly"
-title="diagram: encoder assembly" width="200" />
-
-1. Mounting the encoder to the encoder mounts 
-   1. If needed to be done before John redesigns the encoder mount, ask John how to do this part.
-2. Attach a ribbon of 6 jumper cables to the following pins of the encoder header in the following order for future simplicity:
+## 2.4. Mounting the Encoder
+1. Print one of the encoder mounts included under "CAD Files" in this repo
+2. Embed Thin Profile M2.5 hex nuts into the provided locations in the encoder mount.
+3. Attach a ribbon of 6 jumper cables to the following pins of the encoder header in the following order for future simplicity:
    1. 3V3
-   2. CLK
+   2. CLK (SCK)
    3. MISO
    4. MOSI
    5. CSn
    6. GND
-### 2.1.6. Putting it All Together
-7. Attach the motor mount to the motor with one M4 x 14mm screw into the second of the three motor mounting holes
-8. Attach the encoder module with two M4 x 18mm screws through the encoder module and the other two motor mounting holes. 
-9. Attach the motor mount to a board or install standoffs through the four outer mounting points as desired
+4. Pass the jumper wires through the wire pass-thru if using the encoder mount for aluminum extrusions.
+5. Attach the encoder to the mount with 4x M2.5 x 8mm socket head screws.
+## 2.5. Putting it All Together
+1. Attach the motor to the mount with M4 x 14mm screws
+2. Attach the motor mount to a board or install standoffs through the four outer mounting points as desired
 
 # 3. Setting up the ODrive Board and connecting motors and encoders
 ### 3.0.1. Powering the Odrive
@@ -204,3 +210,20 @@ odrv0.axis0.requested_state = AXIS_STATE_CLOSED_LOOP_CONTROL
 
 odrv0.axis0.controller.input_pos = 1 # example of positional control
 ```
+
+## 5.4. Motor Tuning
+(Ask John) 
+
+# 6. Controlling the ODrive with a Teensy Microcontroller (or Equivalent)
+Attach a 3 wire jumper ribbon from the microcontroller to the ODrive with the following connections:
+- (Teensy) -> (ODrive)
+- GND -> GND
+- Rx -> Tx (GPIO1)
+- Tx -> Rx (GPIO2)
+## Downloading PlatformIO in VSCode to Run Scripts
+This is my recommended method, but if you have a preferred way of interfacing with Arduino-based MCs, then feel free to use any other method.
+1. Download the PlatformIO extension in VSCode
+   1. Follow any related installation instructions
+2. Click on the option "Clone Git Project" from the PlatformIO menu
+3. Configure the Port the microcontroller is connected to in the file `platformio.ini`
+   1. Change the value of `monitor_port` to suit your specific use case.
