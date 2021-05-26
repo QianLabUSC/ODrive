@@ -7,19 +7,9 @@
 #include <TimeLib.h>
 #include <string>
 
-// Printing with stream operator helper functions
-template <class T>
-inline Print &operator<<(Print &obj, T arg)
-{
-    obj.print(arg);
-    return obj;
-}
-template <>
-inline Print &operator<<(Print &obj, float arg)
-{
-    obj.print(arg, 4);
-    return obj;
-}
+// Local Imports
+#include "drive_config.hpp"
+#include "inline_print.hpp"
 
 ////////////////////////////////
 // Set up serial pins to the ODrive
