@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <HardwareSerial.h>
 #include <SoftwareSerial.h>
-#include "..\lib\ODriveArduino\ODriveArduino.h"
+#include "../lib/ODriveArduino/ODriveArduino.h"
 #include <cstdlib>
 #include <cstdio>
 #include <TimeLib.h>
