@@ -39,7 +39,7 @@ public:
 void configure(HardwareSerial odrive_serial, int axis);
 
 /**
- * 21.05.26 John Bush's current ODrive Motor.
- * Model: ???
+ * *21.05.26 John Bush's current ODrive Motor.
+ * Configured for the T-Motor U8II KV150 w/ AS5047P rotary encoder.
  */
 const DriveConfig TEST_CONFIG;
