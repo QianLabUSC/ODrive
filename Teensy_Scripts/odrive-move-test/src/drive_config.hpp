@@ -37,3 +37,9 @@ public:
 };
 
 void configure(HardwareSerial odrive_serial, int axis);
+
+/**
+ * 21.05.26 John Bush's current ODrive Motor.
+ * Model: ???
+ */
+const DriveConfig TEST_CONFIG;

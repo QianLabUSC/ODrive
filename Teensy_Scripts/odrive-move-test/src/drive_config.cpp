@@ -42,3 +42,17 @@ void configure(HardwareSerial odrive_serial, int axis, DriveConfig *config)
     odrive_serial << "w axis" << axis << ".controller.config.vel_gain" << config->velocity_gain << '\n';
     odrive_serial << "w axis" << axis << ".controller.config.vel_integrator_gain" << config->velocity_integrator_gain << '\n';
 }
+
+const DriveConfig TEST_CONFIG = DriveConfig(
+    15.0f,                      // vel_limit
+    15.0f,                      // current_lim
+    21,                         // pole_pairs
+    0.061f,                     // torque_constant
+    "MOTOR_TYPE_HIGH_CURRENT",  // motor_type
+    7,                          // abs_spi_cs_gpio_pin
+    "ENCODER_MODE_SPI_ABS_AMS", // mode
+    16384,                      // cpr
+    150,                        // pos_gain
+    0.3f,                       // vel_gain
+    1.5                         // vel_integrator_gain
+)
