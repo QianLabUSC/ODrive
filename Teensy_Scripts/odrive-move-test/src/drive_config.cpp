@@ -28,7 +28,7 @@ DriveConfig::DriveConfig(
     this->velocity_integrator_gain = velocity_integrator_gain;
 }
 
-void configure(HardwareSerial odrive_serial, int axis, DriveConfig *config)
+void configure(HardwareSerial odrive_serial, int axis, const DriveConfig *config)
 {
     odrive_serial << "w axis" << axis << ".controller.config.vel_limit " << config->velocity_limit << '\n';
     odrive_serial << "w axis" << axis << ".motor.config.current_lim " << config->current_limit << '\n';

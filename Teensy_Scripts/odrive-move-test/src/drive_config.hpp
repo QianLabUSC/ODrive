@@ -36,7 +36,7 @@ public:
     float velocity_integrator_gain;
 };
 
-void configure(HardwareSerial odrive_serial, int axis);
+void configure(HardwareSerial odrive_serial, int axis, const DriveConfig *config);
 
 /**
  * *21.05.26 John Bush's current ODrive Motor.

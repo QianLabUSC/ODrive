@@ -39,26 +39,8 @@ void setup()
 
     /**
    * *Motor configuration setup. 
-   * Configured for the T-Motor U8II KV150 w/ AS5047P rotary encoder.
    */
-    for (int axis = 0; axis < NUM_MOTORS; ++axis)
-    {
-        odrive_serial << "w axis" << axis << ".controller.config.vel_limit " << 15.0f << '\n';
-        odrive_serial << "w axis" << axis << ".motor.config.current_lim " << 15.0f << '\n';
-        odrive_serial << "w axis" << axis << ".motor.config.pole_pairs" << 21 << '\n';
-        odrive_serial << "w axis" << axis << ".motor.config.torque_constant" << 0.061f << '\n';
-        odrive_serial << "w axis" << axis << ".motor.config.motor_type"
-                      << "MOTOR_TYPE_HIGH_CURRENT" << '\n';
-        odrive_serial << "w axis" << axis << ".encoder.config.abs_spi_cs_gpio_pin" << 7 + axis << '\n';
-        odrive_serial << "w axis" << axis << ".encoder.config.mode"
-                      << "ENCODER_MODE_SPI_ABS_AMS" << '\n';
-        odrive_serial << "w axis" << axis << ".encoder.config.cpr" << 16384 << '\n';
-        odrive_serial << "w axis" << axis << ".controller.config.pos_gain" << 150 << '\n';
-        odrive_serial << "w axis" << axis << ".controller.config.vel_gain" << 0.3f << '\n';
-        odrive_serial << "w axis" << axis << ".controller.config.vel_integrator_gain" << 1.5 << '\n';
-
-        // This ends up writing something like "w axis0.motor.config.current_lim 10.0\n"
-    }
+    configure(odrive_serial, 0, &TEST_CONFIG);
 
     // serial monitor interface
     Serial.println("Ready!");
@@ -308,7 +290,6 @@ void loop()
         if (c == 'b')
         {
             Serial.println("Buelher Clock");
-
         }
     }
 }
