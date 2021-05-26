@@ -310,4 +310,15 @@ void loop()
             odrive.SetVelocity(0, 1);
         }
 
+        /**
+		 * @input: 'b'
+         * !Note: In Development
+		 * @brief: runs a Buelher Clock
+		 */
+        if (c == 'b')
+        {
+            Serial.println("Buelher Clock");
+
+        }
+    }
 }
