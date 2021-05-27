@@ -13,5 +13,5 @@ float ks = 23.8732; //proportional gain (N*m/rad)
 float tau = 0.0616; //torque constant (N*m/A)
 float R = 0.085;	//phase resistance (Ohms)
 
-float torqueEst(int polling_rate);
-void printTorqueEst(int polling_rate);
+float torqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate = 0);
+void printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate = 0);

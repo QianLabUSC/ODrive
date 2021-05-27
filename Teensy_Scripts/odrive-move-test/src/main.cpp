@@ -4,7 +4,6 @@
 #include "../lib/ODriveArduino/ODriveArduino.h"
 #include <cstdlib>
 #include <cstdio>
-#include <TimeLib.h>
 #include <string>
 #include <TorqueHelpers.h>
 #include <util.h>
@@ -154,9 +153,9 @@ void loop()
 
 				//odrive.SetPosition(1, pos_m1);
 				delay(50);
-				if (torqueEst(0) > 0.1f)
+				if (torqueEst(odrive, odrive_serial) > 0.1f)
 				{
-					printTorqueEst(0);
+					printTorqueEst(odrive, odrive_serial);
 					break;
 				}
 			}
@@ -186,7 +185,7 @@ void loop()
 			odrive_serial << "w axis" << 0 << ".controller.input_mode " << 1 << "\n";
 			while (Serial.read() != 'q')
 			{
-				printTorqueEst(50);
+				printTorqueEst(odrive, odrive_serial);
 			}
 		}
 
@@ -217,7 +216,7 @@ void loop()
 				//  	printTorqueEst(0);
 				// }
 				delay(1);
-				printTorqueEst(0);
+				printTorqueEst(odrive, odrive_serial);
 				delay(1);
 				i++;
 				odrive.SetPosition(0, ph);
@@ -245,6 +244,7 @@ void loop()
 		/**
 		 * @input: 'v'
 		 * @brief: runs a velocity setting test
+		 * ! FUNCTION DOES NOT WORK
 		 */
 		if (c == 'v')
 		{
