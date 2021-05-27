@@ -25,7 +25,7 @@ inline Print &operator<<(Print &obj, float arg)
 // Set up serial pins to the ODrive
 ////////////////////////////////
 
-HardwareSerial& odrive_serial = Serial1;
+HardwareSerial &odrive_serial = Serial1;
 
 // ODrive object
 ODriveArduino odrive(odrive_serial);
@@ -36,7 +36,7 @@ int NUM_MOTORS = 1;
 // TORQUE ESTIMATION CONSTANTS
 float ks = 23.8732; //proportional gain (N*m/rad)
 float tau = 0.0616; //torque constant (N*m/A)
-float R = 0.085; //phase resistance (Ohms)
+float R = 0.085;	//phase resistance (Ohms)
 
 void setup()
 {
@@ -92,18 +92,18 @@ void setup()
 		requested_state = ODriveArduino::AXIS_STATE_FULL_CALIBRATION_SEQUENCE;
 		Serial << "Axis" << axis << ": Requesting state " << requested_state << '\n';
 		odrive.run_state(axis, requested_state, true);
-	
+
 		/**
 		 * Changing to Closed Loop Control
 		 */
 		requested_state = ODriveArduino::AXIS_STATE_CLOSED_LOOP_CONTROL;
 		Serial << "Axis" << axis << ": Requesting state " << requested_state << '\n';
 		odrive.run_state(axis, requested_state, false /*don't wait*/);
-		
+
 		// Changes motor controller input mode to input PASSTHROUGH mode
 		odrive_serial << "w axis" << axis << ".controller.input_mode " << 1 << "\n";
 	}
-	
+
 	// serial monitor interface
 	Serial.println("Motor Armed & Ready");
 	Serial.println("Command Menu:");
@@ -138,7 +138,7 @@ float torqueEst(int polling_rate)
 {
 	delay(polling_rate); //defines polling rate (delay_ ms)
 	char time[12];
-	
+
 	formatTime(time); //gets the time (minutes:seconds:milliseconds)
 
 	//get motor setpoint
@@ -150,14 +150,14 @@ float torqueEst(int polling_rate)
 	float actualpos = odrive.readFloat();
 
 	//calculate torque estimate
-	return  (float) ( (ks * tau * (setpoint - actualpos)) / R );
+	return (float)((ks * tau * (setpoint - actualpos)) / R);
 }
 
 void printTorqueEst(int polling_rate)
 {
 	delay(polling_rate); //defines polling rate (delay_ ms)
 	char time[12];
-	
+
 	formatTime(time); //gets the time (minutes:seconds:milliseconds)
 
 	//get motor setpoint
@@ -175,8 +175,6 @@ void printTorqueEst(int polling_rate)
 	float vel = odrive.readFloat();
 
 	Serial << "| " << time << " | " << setpoint << "  | " << actualpos << "  | " << extTorque << " | " << vel << " |\n";
-
-	
 }
 
 // MAIN CONTROL LOOP
@@ -189,7 +187,7 @@ void loop()
 		/**
 		 * @input: 0 or 1
 		 * @brief: Run calibration sequence
-		 */ 
+		 */
 		if (c == '0' || c == '1')
 		{
 			int motornum = c - '0';
@@ -200,11 +198,11 @@ void loop()
 			if (!odrive.run_state(motornum, requested_state, true))
 				return;
 		}
-		
+
 		/**
 		 * @input: 'l'
 		 * @brief: starts closed loop control
-		 */ 
+		 */
 		if (c == 'l')
 		{
 			//int motornum = c-'0';
@@ -215,11 +213,11 @@ void loop()
 			if (!odrive.run_state(0, requested_state, false /*don't wait*/))
 				return;
 		}
-		
+
 		/**
 		 * @input: 's'
 		 * @brief: Runs a test movement on motor 0
-		 */ 
+		 */
 		if (c == 's')
 		{
 			Serial.println("Executing test move");
@@ -231,7 +229,8 @@ void loop()
 
 				//odrive.SetPosition(1, pos_m1);
 				delay(50);
-				if (torqueEst(0) > 0.1f) {
+				if (torqueEst(0) > 0.1f)
+				{
 					printTorqueEst(0);
 					break;
 				}
@@ -281,14 +280,14 @@ void loop()
 			delay(4000);
 			Serial.println("Starting...");
 			odrive_serial << "r axis" << 0 << ".encoder.pos_estimate\n";
-			
+
 			int i = 0;
 			Serial << "|   TIME   |  SET POS  | ACTUAL POS | EST TORQUE |  VELOCITY  |\n";
 			for (float ph = 0.0f; ph < 1.5f; ph += 0.01f)
 			{
 				//float pos_m0 = 2.0f * sin(ph);
 				//float pos_m1 = 2.0f * sin(ph);
-				
+
 				// if (i % 50 == 0) {
 				//  	printTorqueEst(0);
 				// }
@@ -298,12 +297,10 @@ void loop()
 				i++;
 				odrive.SetPosition(0, ph);
 				//odrive.SetPosition(1, pos_m1);
-				
 			}
 			Serial.println("************************");
 			Serial.println("*****TEST COMPLETED*****");
 			Serial.println("************************");
-			
 		}
 
 		/**
@@ -329,18 +326,17 @@ void loop()
 			// odrive_serial << "w axis" << 0 << "controller.config.control_mode " << "2" << "\n";
 			// odrive_serial << "w axis" << 0 << "controller.config.input_mode " << "INPUT_MODE_PASSTHROUGH" << "\n";
 			// odrive_serial << "w axis" << 0 << "controller.input_vel " << "0" << "\n";
-			
+
 			int requested_state;
 			requested_state = ODriveArduino::AXIS_STATE_CLOSED_LOOP_CONTROL;
 			if (!odrive.run_state(0, requested_state, false))
 				return;
 			Serial.println("Velocity Test");
-			
-			
+
 			//odrive_serial << "ss" << '\n';
 			//odrive_serial << "sr" << '\n';
 			odrive.SetVelocity(0, 3, .12);
-			
+
 			//odrive_serial << "odrv0.axis0.controller.input_vel " << "2" << '\n';
 			//odrive_serial << "v 0 2 1 \n";
 			//delay(10000);
