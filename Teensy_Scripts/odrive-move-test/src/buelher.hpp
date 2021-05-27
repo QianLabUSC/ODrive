@@ -1,3 +1,40 @@
+#include <string>
+
+class LegConfig
+{
+    LegConfig(
+        int servoID,
+        bool clockwise,
+        int zeroing);
+
+    // Motor's Identifier
+    // corresponds to `axis` in ODrive system
+    int servoID;
+
+    // Whether the motor turns clockwise or counter-clockwise
+    bool clockwise;
+
+    // how far to turn to leg to zero it (deg)
+    // bounded 0-360
+    int zeroing;
+};
+
+class Gait
+{
+    Gait(
+        std::string name,
+        int right_fore,
+        int left_fore,
+        int right_hind,
+        int left_hind);
+
+    std::string name;
+    int right_fore;
+    int left_fore;
+    int right_hind;
+    int left_hind;
+};
+
 /**
  * *Buelher Clock
  * Defines the parameters for a 2 phase rotation.
@@ -49,37 +86,3 @@ class BuelherClock
     Gait gait;
 };
 
-class LegConfig
-{
-    LegConfig(
-        int servoID,
-        bool clockwise,
-        int zeroing);
-
-    // Motor's Identifier
-    // corresponds to `axis` in ODrive system
-    int servoID;
-
-    // Whether the motor turns clockwise or counter-clockwise
-    bool clockwise;
-
-    // how far to turn to leg to zero it (deg)
-    // bounded 0-360
-    int zeroing;
-};
-
-class Gait
-{
-    Gait(
-        char *name,
-        int right_fore,
-        int left_fore,
-        int right_hind,
-        int left_hind);
-
-    char *name;
-    int right_fore;
-    int left_fore;
-    int right_hind;
-    int left_hind;
-};

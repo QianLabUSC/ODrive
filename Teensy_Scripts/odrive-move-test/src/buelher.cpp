@@ -1,4 +1,5 @@
-#include "buelher.hpp";
+#include "buelher.hpp"
+#include <string>
 
 BuelherClock::BuelherClock(
     float time_slow,
@@ -33,7 +34,7 @@ LegConfig::LegConfig(
 }
 
 Gait::Gait(
-    char *name,
+    std::string name,
     int right_fore,
     int left_fore,
     int right_hind,
