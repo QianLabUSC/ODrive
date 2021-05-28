@@ -275,8 +275,23 @@ void loop()
         if (c == 'b')
         {
             Serial.println("Executing Buelher Clock. Send 'q' to stop.");
+
+            // max duration in milliseconds
+            const long dur = 5000;
+
+            // flag boolean to kill loop
             bool cont = true;
-            while (cont)
+
+            // time string
+            char time[12];
+
+            // set a start time
+            long start = millis();
+
+            /**
+             * Loop Until Time Elapses or Q is pressed.
+             */
+            while (cont && millis() - start < dur)
             {
                 Serial.println("Running...");
                 if (Serial.read() == 'q')
@@ -284,7 +299,8 @@ void loop()
                     cont = false;
                     continue;
                 }
-                
+                formatTime(time); //gets the time (minutes:seconds:milliseconds)
+                Serial << "| " << time << "\n";
             }
         }
     }
