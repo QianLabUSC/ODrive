@@ -285,20 +285,22 @@ void loop()
             // time string
             char time[12];
 
-            // set a start time
+            // track time since loop start
             long start = millis();
-
+            long elapsed = millis() - start;
             /**
              * Loop Until Time Elapses or Q is pressed.
              */
-            while (cont && millis() - start < dur)
+            while (cont && elapsed < dur)
             {
+                elapsed = millis() - start;
                 Serial.println("Running...");
                 if (Serial.read() == 'q')
                 {
                     cont = false;
                     continue;
                 }
+
                 formatTime(time); //gets the time (minutes:seconds:milliseconds)
                 Serial << "| " << time << "\n";
             }
