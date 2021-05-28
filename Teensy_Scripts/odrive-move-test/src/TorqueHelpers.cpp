@@ -1,7 +1,25 @@
 #include "TorqueHelpers.h"
 
 
-float torqueEst(ODriveArduino odrive, HardwareSerial& odrive_serial, int polling_rate = 0)
+void formatTime(char *out)
+{
+	int minutes = minute();
+	int seconds = second();
+	unsigned long time = millis();
+	int ms = int(time % 1000);
+
+	char buffer[12];
+
+	sprintf(buffer, "%d:%d:%d", minutes, seconds, ms);
+
+	for (int i = 0; i < 10; i++)
+	{
+		out[i] = buffer[i];
+	}
+}
+
+
+float torqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate = 0)
 {
 	delay(polling_rate); //defines polling rate (delay_ ms)
 	char time[12];
@@ -20,7 +38,7 @@ float torqueEst(ODriveArduino odrive, HardwareSerial& odrive_serial, int polling
 	return (float)((ks * tau * (setpoint - actualpos)) / R);
 }
 
-void printTorqueEst(ODriveArduino odrive, HardwareSerial& odrive_serial, int polling_rate = 0)
+void printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate = 0)
 {
 	delay(polling_rate); //defines polling rate (delay_ ms)
 	char time[12];

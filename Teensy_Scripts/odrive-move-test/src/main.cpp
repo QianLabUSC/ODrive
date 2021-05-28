@@ -5,8 +5,9 @@
 #include <cstdlib>
 #include <cstdio>
 #include <string>
-#include <TorqueHelpers.h>
-#include <util.h>
+
+#include "TorqueHelpers.h"
+#include "UtilityHelpers.hpp"
 
 ////////////////////////////////
 // Set up serial pins to the ODrive
@@ -153,9 +154,9 @@ void loop()
 
 				//odrive.SetPosition(1, pos_m1);
 				delay(50);
-				if (torqueEst(odrive, odrive_serial) > 0.1f)
+				if (torqueEst(odrive, odrive_serial, 0) > 0.1f)
 				{
-					printTorqueEst(odrive, odrive_serial);
+					printTorqueEst(odrive, odrive_serial, 0);
 					break;
 				}
 			}
@@ -185,7 +186,7 @@ void loop()
 			odrive_serial << "w axis" << 0 << ".controller.input_mode " << 1 << "\n";
 			while (Serial.read() != 'q')
 			{
-				printTorqueEst(odrive, odrive_serial);
+				printTorqueEst(odrive, odrive_serial, 0);
 			}
 		}
 
@@ -216,7 +217,7 @@ void loop()
 				//  	printTorqueEst(0);
 				// }
 				delay(1);
-				printTorqueEst(odrive, odrive_serial);
+				printTorqueEst(odrive, odrive_serial, 0);
 				delay(1);
 				i++;
 				odrive.SetPosition(0, ph);
