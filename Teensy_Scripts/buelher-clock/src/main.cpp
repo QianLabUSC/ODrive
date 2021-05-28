@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <string>
+#include <math.h> /* fmod */
 
 #include "TorqueHelpers.h"
 #include "UtilityHelpers.hpp"
@@ -26,7 +27,11 @@ int NUM_MOTORS = 1;
 // returns position (deg, 0 ≤ x ≤ 360)
 float getPosition(long elapsed, BuelherClock clock)
 {
-    elapsed %= clock.period();
+    float s_elapsed = float(elapsed) / 1000.0f;
+    
+    // wrap value to within [0, period]
+    s_elapsed = fmod(s_elapsed, clock.period());
+    
     if (elapsed <= clock.time_i())
         return clock.omega_fast() * elapsed;
     else if (elapsed <= clock.time_f())
@@ -302,6 +307,7 @@ void loop()
             // track time since loop start
             long start = millis();
             long elapsed = millis() - start;
+
             /**
              * Loop Until Time Elapses or Q is pressed.
              */
