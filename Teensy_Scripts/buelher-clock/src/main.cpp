@@ -321,6 +321,10 @@ void loop()
                     continue;
                 }
 
+                float ref_angle = getPosition(curr_time);
+                // TODO: Set Angle
+                // odrive.SetPosition(0, pos_m0);
+
                 formatTime(time); //gets the time (minutes:seconds:milliseconds)
                 Serial << "| " << time << "\n";
             }
