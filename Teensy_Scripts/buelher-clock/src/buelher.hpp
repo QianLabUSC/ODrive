@@ -42,6 +42,7 @@ class Gait
  */
 class BuelherClock
 {
+public:
     BuelherClock(
         float time_slow,
         float time_fast,
@@ -59,9 +60,6 @@ class BuelherClock
 
     // time spent in the fast phase of rotation
     float time_fast;
-
-    // time to complete one full rotation
-    float period();
 
     // angle to enter slow phase (deg)
     // bounded 0-360
@@ -88,4 +86,27 @@ class BuelherClock
 
     /** Gait Parameters */
     Gait gait;
+
+    // time to complete one full rotation
+    float period();
+
+    // Angular size of the slow region
+    // - Unit: degrees
+    float d_theta();
+
+    // Target angular speed during slow phase.
+    // - Unit: degrees / second
+    float omega_slow();
+
+    // Target angular speed during fast phase.
+    // - Unit: degrees / second
+    float omega_fast();
+
+    // Time in period to enter slow phase
+    // - Unit: seconds
+    float time_i();
+
+    // Time in period to exit slow phase
+    // - Unit: seconds
+    float time_f();
 };

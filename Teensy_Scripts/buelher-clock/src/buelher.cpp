@@ -28,6 +28,31 @@ float BuelherClock::period()
     return this->time_fast + this->time_slow;
 }
 
+float BuelherClock::d_theta()
+{
+    return this->theta_f - this->theta_i;
+}
+
+float BuelherClock::omega_slow()
+{
+    return this->d_theta() / this->time_slow;
+}
+
+float BuelherClock::omega_fast()
+{
+    return (360 - this->d_theta()) / this->time_fast;
+}
+
+float BuelherClock::time_i()
+{
+    return this->theta_i / this->omega_fast();
+}
+
+float BuelherClock::time_f()
+{
+    return this->time_i() + (this->d_theta() / this->omega_slow());
+}
+
 LegConfig::LegConfig(
     int servoID,
     bool clockwise,
