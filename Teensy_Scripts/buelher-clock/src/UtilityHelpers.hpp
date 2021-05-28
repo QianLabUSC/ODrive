@@ -1,3 +1,6 @@
+#ifndef UTILITYHELPERS_HPP
+#define UTILITYHELPERS_HPP
+
 #include <HardwareSerial.h>
 #include <SoftwareSerial.h>
 
@@ -14,3 +17,5 @@ inline Print &operator<<(Print &obj, float arg)
     obj.print(arg, 4);
     return obj;
 }
+
+#endif
