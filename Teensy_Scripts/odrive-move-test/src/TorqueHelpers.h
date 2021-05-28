@@ -1,3 +1,6 @@
+#ifndef TORQUEHELPERS_H
+#define TORQUEHELPERS_H
+
 #include <Arduino.h>
 #include <HardwareSerial.h>
 #include <SoftwareSerial.h>
@@ -6,12 +9,16 @@
 #include <cstdio>
 #include <TimeLib.h>
 #include <string>
-#include <util.h>
+#include "UtilityHelpers.hpp"
+
 
 // TORQUE ESTIMATION CONSTANTS
-float ks = 23.8732; //proportional gain (N*m/rad)
-float tau = 0.0616; //torque constant (N*m/A)
-float R = 0.085;	//phase resistance (Ohms)
+const float ks = 23.8732; //proportional gain (N*m/rad)
+const float tau = 0.0616; //torque constant (N*m/A)
+const float R = 0.085;	//phase resistance (Ohms)
 
-float torqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate = 0);
-void printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate = 0);
+void formatTime(char *out);
+float torqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate);
+void printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate);
+
+#endif
