@@ -60,6 +60,9 @@ class BuelherClock
     // time spent in the fast phase of rotation
     float time_fast;
 
+    // time to complete one full rotation
+    float period();
+
     // angle to enter slow phase (deg)
     // bounded 0-360
     int theta_i;
@@ -86,4 +89,3 @@ class BuelherClock
     /** Gait Parameters */
     Gait gait;
 };
-

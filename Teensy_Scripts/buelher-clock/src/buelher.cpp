@@ -23,6 +23,11 @@ BuelherClock::BuelherClock(
 {
 }
 
+float BuelherClock::period()
+{
+    return this->time_fast + this->time_slow;
+}
+
 LegConfig::LegConfig(
     int servoID,
     bool clockwise,
