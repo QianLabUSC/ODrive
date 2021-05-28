@@ -8,6 +8,7 @@
 
 #include "TorqueHelpers.h"
 #include "UtilityHelpers.hpp"
+#include "buelher.hpp"
 
 ////////////////////////////////
 // Set up serial pins to the ODrive
@@ -20,6 +21,19 @@ ODriveArduino odrive(odrive_serial);
 
 // NUMBER OF MOTORS CONNECTED TO ODRIVE
 int NUM_MOTORS = 1;
+
+// get clockwork leg position at given time
+// returns position (deg, 0 ≤ x ≤ 360)
+float getPosition(long elapsed, BuelherClock clock)
+{
+    elapsed %= clock.period();
+    if (elapsed <= clock.time_i)
+        return clock.omega_fast * elapsed;
+    else if (elapsed <= self.time_f)
+        return clock.theta_i + ((elapsed - clock.time_i) * clock.omega_slow);
+    else
+        return clock.theta_f + ((elapsed - clock.time_f) * clock.omega_fast);
+}
 
 void setup()
 {
