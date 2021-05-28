@@ -266,5 +266,53 @@ void loop()
             //delay(10000);
             //odrive_serial << "w axis" << 0 << "controller.input_vel " << "0" << "\n";
         }
+
+        /**
+		 * @input: 'b'
+         * !Note: In Development
+		 * @brief: runs a Buelher Clock
+		 */
+        if (c == 'b')
+        {
+            Serial.println("Executing Buelher Clock. Send 'q' to stop.");
+            int dir = 1;
+            bool cont = true;
+            float err = 0.3;
+            while (cont)
+            {
+                Serial.println("Running...");
+                if (Serial.read() == 'q')
+                {
+                    cont = false;
+                    continue;
+                }
+                float vel = .25 * dir;
+                odrive.SetVelocity(0, vel);
+                bool contact = false;
+                while (!contact)
+                {
+                    float ks = 23.8732; //proportional gain
+                    float tau = 0.0616; //torque constant
+                    float R = 85;
+
+                    odrive_serial << "r axis" << 0 << ".controller.pos_setpoint\n";
+                    float setpoint = odrive.readFloat();
+
+                    odrive_serial << "r axis" << 0 << ".encoder.pos_estimate\n";
+                    float actualpos = odrive.readFloat();
+
+                    /**
+             * @brief Implementing torque estimation equation (1) from Kenneally
+             * "Actuator Transparency and the Energetic Cost of Proprioception"
+             */
+                    float extTorque = (ks * tau * (setpoint - actualpos)) / R;
+                    if (abs(extTorque) > err)
+                    {
+                        contact = true;
+                        dir *= -1;
+                    }
+                }
+            }
+        }
     }
 }
