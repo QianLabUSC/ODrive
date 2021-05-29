@@ -326,7 +326,7 @@ void loop()
                 // odrive.SetPosition(0, pos_m0);
 
                 formatTime(time); //gets the time (minutes:seconds:milliseconds)
-                Serial << "| " << time << "\n";
+                Serial << "| " << time << "| " << ref_angle << "\n";
             }
             Serial << "DONE\n";
         }
