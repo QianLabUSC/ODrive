@@ -28,16 +28,16 @@ int NUM_MOTORS = 1;
 float getPosition(long elapsed, BuelherClock clock)
 {
     float s_elapsed = float(elapsed) / 1000.0f;
-    
+
     // wrap value to within [0, period]
     s_elapsed = fmod(s_elapsed, clock.period());
-    
-    if (elapsed <= clock.time_i())
-        return clock.omega_fast() * elapsed;
-    else if (elapsed <= clock.time_f())
-        return clock.theta_i + ((elapsed - clock.time_i()) * clock.omega_slow());
+
+    if (s_elapsed <= clock.time_i())
+        return clock.omega_fast() * s_elapsed;
+    else if (s_elapsed <= clock.time_f())
+        return clock.theta_i + ((s_elapsed - clock.time_i()) * clock.omega_slow());
     else
-        return clock.theta_f + ((elapsed - clock.time_f()) * clock.omega_fast());
+        return clock.theta_f + ((s_elapsed - clock.time_f()) * clock.omega_fast());
 }
 
 void setup()
