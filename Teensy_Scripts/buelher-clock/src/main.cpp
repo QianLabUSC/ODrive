@@ -29,15 +29,24 @@ float getPosition(long elapsed, BuelherClock clock)
 {
     float s_elapsed = float(elapsed) / 1000.0f;
 
-    // wrap value to within [0, period]
+    // whole number period
+    int rotations = int(s_elapsed / clock.period());
+
+    // fractional period
     s_elapsed = fmod(s_elapsed, clock.period());
 
+    // whole rotations
+    float angle = rotations * 360.0f;
+    
+    // add fractional rotation
     if (s_elapsed <= clock.time_i())
-        return clock.omega_fast() * s_elapsed;
+        angle += clock.omega_fast() * s_elapsed;
     else if (s_elapsed <= clock.time_f())
-        return clock.theta_i + ((s_elapsed - clock.time_i()) * clock.omega_slow());
+        angle += clock.theta_i + ((s_elapsed - clock.time_i()) * clock.omega_slow());
     else
-        return clock.theta_f + ((s_elapsed - clock.time_f()) * clock.omega_fast());
+        angle += clock.theta_f + ((s_elapsed - clock.time_f()) * clock.omega_fast());
+
+    return angle;
 }
 
 void setup()
@@ -324,11 +333,13 @@ void loop()
                 float ref_angle = getPosition(elapsed, EXAMPLE);
                 float ref_rad = 6.28318530718f / 360.0f;
                 float pos_m0 = 2.0f * cos(ref_rad);
-                odrive.SetPosition(0, pos_m0);
+                
+                // TEMP DISABLED
+                // odrive.SetPosition(0, pos_m0);
 
                 // wait a bit
                 long temp = millis();
-                
+
                 formatTime(time); //gets the time (minutes:seconds:milliseconds)
                 Serial << "| " << time << "| " << ref_angle << "\n";
             }
