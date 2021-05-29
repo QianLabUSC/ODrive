@@ -1,6 +1,8 @@
 #include <string>
 #include <TimeLib.h>
 
+#include "gait.hpp"
+
 class LegConfig
 {
 public:
@@ -19,23 +21,6 @@ public:
     // how far to turn to leg to zero it (deg)
     // bounded 0-360
     int zeroing;
-};
-
-class Gait
-{
-public:
-    Gait(
-        std::string name,
-        int right_fore,
-        int left_fore,
-        int right_hind,
-        int left_hind);
-
-    std::string name;
-    int right_fore;
-    int left_fore;
-    int right_hind;
-    int left_hind;
 };
 
 /**
@@ -113,7 +98,7 @@ public:
     float time_f();
 };
 
-const BuelherClock TROTTING = BuelherClock(
+const BuelherClock EXAMPLE = BuelherClock(
     2.0,       // time_slow,
     2.0,       // time_fast,
     60,        // theta_i,
@@ -135,9 +120,4 @@ const BuelherClock TROTTING = BuelherClock(
         69,    // servoID
         false, // clockwise
         88),   // zeroing
-    Gait(
-        "ZERO",
-        0,
-        180,
-        180,
-        0));
+    TROTTING);
