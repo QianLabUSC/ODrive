@@ -328,6 +328,7 @@ void loop()
                 formatTime(time); //gets the time (minutes:seconds:milliseconds)
                 Serial << "| " << time << "\n";
             }
+            Serial << "DONE\n";
         }
     }
 }
