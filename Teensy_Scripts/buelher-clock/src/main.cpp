@@ -321,7 +321,7 @@ void loop()
                     continue;
                 }
 
-                float ref_angle = getPosition(curr_time);
+                float ref_angle = getPosition(elapsed, TROTTING);
                 // TODO: Set Angle
                 // odrive.SetPosition(0, pos_m0);
 
