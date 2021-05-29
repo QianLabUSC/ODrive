@@ -314,17 +314,21 @@ void loop()
             while (cont && elapsed < dur)
             {
                 elapsed = millis() - start;
-                Serial.println("Running...");
                 if (Serial.read() == 'q')
                 {
                     cont = false;
                     continue;
                 }
 
+                // TODO: Fix Angle to not Wrap to 0
                 float ref_angle = getPosition(elapsed, EXAMPLE);
-                // TODO: Set Angle
-                // odrive.SetPosition(0, pos_m0);
+                float ref_rad = 6.28318530718f / 360.0f;
+                float pos_m0 = 2.0f * cos(ref_rad);
+                odrive.SetPosition(0, pos_m0);
 
+                // wait a bit
+                long temp = millis();
+                
                 formatTime(time); //gets the time (minutes:seconds:milliseconds)
                 Serial << "| " << time << "| " << ref_angle << "\n";
             }
