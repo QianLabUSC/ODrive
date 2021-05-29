@@ -112,3 +112,36 @@ public:
     // - Unit: seconds
     float time_f();
 };
+
+const BuelherClock TROTTING = BuelherClock(
+    2.0, // float time_slow,
+    2.0, // float time_fast,
+    60,  // int theta_i,
+    120, // int theta_f,
+    30,  // int damp,
+    LegConfig(
+        101,  //int servoID,
+        true, //bool clockwise,
+        37    //int zeroing,
+        ),    // right_fore,
+    LegConfig(
+        241,   // int servoID,
+        false, // bool clockwise,
+        38     // int zeroing,
+        ),     // left_fore,
+    LegConfig(
+        42,   // int servoID,
+        true, // bool clockwise,
+        312   // int zeroing,
+        ),    // right_hind,
+    LegConfig(
+        69,    //int servoID,
+        false, //bool clockwise,
+        88     //int zeroing,
+        ),     // left_hind,
+    Gait(
+        "ZERO",
+        0,
+        180,
+        180,
+        0));
