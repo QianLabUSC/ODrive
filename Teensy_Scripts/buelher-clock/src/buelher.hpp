@@ -114,31 +114,27 @@ public:
 };
 
 const BuelherClock TROTTING = BuelherClock(
-    2.0, // float time_slow,
-    2.0, // float time_fast,
-    60,  // int theta_i,
-    120, // int theta_f,
-    30,  // int damp,
-    LegConfig(
-        101,  //int servoID,
-        true, //bool clockwise,
-        37    //int zeroing,
-        ),    // right_fore,
-    LegConfig(
-        241,   // int servoID,
-        false, // bool clockwise,
-        38     // int zeroing,
-        ),     // left_fore,
-    LegConfig(
-        42,   // int servoID,
-        true, // bool clockwise,
-        312   // int zeroing,
-        ),    // right_hind,
-    LegConfig(
-        69,    //int servoID,
-        false, //bool clockwise,
-        88     //int zeroing,
-        ),     // left_hind,
+    2.0,       // time_slow,
+    2.0,       // time_fast,
+    60,        // theta_i,
+    120,       // theta_f,
+    30,        // damp,
+    LegConfig( // right_fore
+        101,   // servoID,
+        true,  // clockwise,
+        37),   // zeroing,
+    LegConfig( // left_fore
+        241,   // servoID
+        false, // clockwise
+        38),   // zeroing
+    LegConfig( // right_hind
+        42,    // servoID
+        true,  // clockwise
+        312),  // zeroing
+    LegConfig( // left_hind
+        69,    // servoID
+        false, // clockwise
+        88),   // zeroing
     Gait(
         "ZERO",
         0,
