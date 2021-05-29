@@ -3,6 +3,7 @@
 
 class LegConfig
 {
+public:
     LegConfig(
         int servoID,
         bool clockwise,
@@ -22,6 +23,7 @@ class LegConfig
 
 class Gait
 {
+public:
     Gait(
         std::string name,
         int right_fore,
