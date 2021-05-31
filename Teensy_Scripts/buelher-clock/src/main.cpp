@@ -37,7 +37,7 @@ float getPosition(long elapsed, BuelherClock clock)
 
     // whole rotations
     float angle = rotations * 360.0f;
-    
+
     // add fractional rotation
     if (s_elapsed <= clock.time_i())
         angle += clock.omega_fast() * s_elapsed;
@@ -329,19 +329,15 @@ void loop()
                     continue;
                 }
 
-                // TODO: Fix Angle to not Wrap to 0
                 float ref_angle = getPosition(elapsed, EXAMPLE);
-                float ref_rad = 6.28318530718f / 360.0f;
-                float pos_m0 = 2.0f * cos(ref_rad);
-                
-                // TEMP DISABLED
-                // odrive.SetPosition(0, pos_m0);
-
-                // wait a bit
-                long temp = millis();
+                float ref_rots = ref_angle / 360.0f;
+                odrive.SetPosition(
+                    0,       // motor axis
+                    ref_rots // num rotations
+                );
 
                 formatTime(time); //gets the time (minutes:seconds:milliseconds)
-                Serial << "| " << time << "| " << ref_angle << "\n";
+                Serial << "| " << time << "| " << ref_angle << "| " << ref_rots << "\n";
             }
             Serial << "DONE\n";
         }
