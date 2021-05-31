@@ -126,6 +126,7 @@ void setup()
     Serial.println("	'k' -> shows position and torque information in a loop");
     Serial.println("	'p' -> reads motor positions in a 10s loop");
     Serial.println("	'q' -> Sends motors to IDLE STATE");
+    Serial.println("	'c' -> Execute Buelher Clock");
 }
 
 // MAIN CONTROL LOOP
@@ -300,7 +301,7 @@ void loop()
          * !Note: In Development
 		 * @brief: runs a Buelher Clock
 		 */
-        if (c == 'b')
+        if (c == 'c')
         {
             Serial.println("Executing Buelher Clock. Send 'q' to stop.");
 
