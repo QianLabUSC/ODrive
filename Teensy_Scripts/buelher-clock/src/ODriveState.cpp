@@ -5,7 +5,7 @@
 #include <cstdio>
 
 #include "UtilityHelpers.hpp"
-#include "loop_control.hpp"
+#include "ODriveState.hpp"
 /**
  * Put motor into closed loop control mode
  */

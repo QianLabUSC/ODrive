@@ -10,7 +10,7 @@
 #include "TorqueHelpers.h"
 #include "UtilityHelpers.hpp"
 #include "buelher.hpp"
-#include "loop_control.hpp"
+#include "ODriveState.hpp"
 
 ////////////////////////////////
 // Set up serial pins to the ODrive
