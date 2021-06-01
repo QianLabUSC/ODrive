@@ -57,6 +57,8 @@ float getPosition(long elapsed, BuelherClock clock, int wrap = INT32_MAX)
     else
         angle += clock.theta_f + ((s_elapsed - clock.time_f()) * clock.omega_fast());
 
+
+
     return angle;
 }
 
@@ -345,13 +347,8 @@ void loop()
                 // TODO: Fix Angle to not Wrap to 0
                 float ref_angle = getPosition(elapsed, EXAMPLE);
                 float ref_rots = (1.0f / 360.0f) * ref_angle;
-                float pos_m0 = 2.0f * cos(ref_rots);
-
-                // TEMP DISABLED
+                
                 odrive.SetPosition(0, ref_rots);
-
-                // wait a bit
-                long temp = millis();
 
                 formatTime(time); //gets the time (minutes:seconds:milliseconds)
                 Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| " << ref_rots << "\n";
