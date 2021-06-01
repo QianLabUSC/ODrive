@@ -132,10 +132,7 @@ void setup()
     Serial.println("	'0' or '1' -> calibrate respective motor (you must do this before you can command movement)");
     Serial.println("	'l' -> enter closed loop control.");
     Serial.println("	's' -> execute test movement");
-    Serial.println("	'r' -> execute proprioceptive move test");
     Serial.println("	'b' -> reads bus voltage");
-    Serial.println("	'k' -> shows position and torque information in a loop");
-    Serial.println("	'p' -> reads motor positions in a 10s loop");
     Serial.println("	'q' -> Sends motors to IDLE STATE");
     Serial.println("	'c' -> Execute Buelher Clock");
 }
@@ -205,65 +202,6 @@ void loop()
         {
             odrive_serial << "r vbus_voltage\n";
             Serial << "Vbus voltage: " << odrive.readFloat() << '\n';
-        }
-
-        /**
-		 * @input: 'k'
-		* @brief: Reads the encoder input and calculates a torque vector
-		* 		with timestamp.
-		* 
-		* @output: prints in format:
-		* 
-		* 		[time] | [Set Pos] | [Actual Pos] | [Torque Est.]
-		*/
-        if (c == 'k')
-        {
-            Serial << "|   TIME   |  SET POS  | ACTUAL POS | EST TORQUE |\n";
-            odrive_serial << "w axis" << 0 << ".controller.input_mode " << 3 << "\n";
-            odrive.SetPosition(0, 0);
-            odrive_serial << "w axis" << 0 << ".controller.input_mode " << 1 << "\n";
-            while (Serial.read() != 'q')
-            {
-                printTorqueEst(odrive, odrive_serial, 0);
-            }
-        }
-
-        /**
-		 * @input: 'r'
-		 * @brief: runs a proprioceptive test movement on motor 0.
-		 * 
-		 * !NOTE: this function does not work as intended
-		 * @full: should rotate the motor at .25 rot/s until contact is detected, and then switch direction
-		 */
-        if (c == 'r')
-        {
-            Serial.println("Executing proprioceptive test. Send 'q' to stop.");
-            //char s = Serial.read();
-            odrive.SetPosition(0, 0);
-            delay(4000);
-            Serial.println("Starting...");
-            odrive_serial << "r axis" << 0 << ".encoder.pos_estimate\n";
-
-            int i = 0;
-            Serial << "|   TIME   |  SET POS  | ACTUAL POS | EST TORQUE |  VELOCITY  |\n";
-            for (float ph = 0.0f; ph < 1.5f; ph += 0.01f)
-            {
-                //float pos_m0 = 2.0f * sin(ph);
-                //float pos_m1 = 2.0f * sin(ph);
-
-                // if (i % 50 == 0) {
-                //  	printTorqueEst(0);
-                // }
-                delay(1);
-                printTorqueEst(odrive, odrive_serial, 0);
-                delay(1);
-                i++;
-                odrive.SetPosition(0, ph);
-                //odrive.SetPosition(1, pos_m1);
-            }
-            Serial.println("************************");
-            Serial.println("*****TEST COMPLETED*****");
-            Serial.println("************************");
         }
 
         /**
