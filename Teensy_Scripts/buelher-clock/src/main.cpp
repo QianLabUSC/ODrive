@@ -283,7 +283,6 @@ void loop()
                     continue;
                 }
 
-                // TODO: Fix Angle to not Wrap to 0
                 float ref_angle = getPosition(elapsed, EXAMPLE, 1);
                 float ref_rots = (1.0f / 360.0f) * ref_angle;
                 
