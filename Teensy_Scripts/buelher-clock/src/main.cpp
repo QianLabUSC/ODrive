@@ -23,8 +23,6 @@ ODriveArduino odrive(odrive_serial);
 // NUMBER OF MOTORS CONNECTED TO ODRIVE
 int NUM_MOTORS = 1;
 
-// 
-// 
 /**
  * Finds clockwork leg position at given time
  * @param elapsed time since experiement began\
@@ -58,7 +56,7 @@ float getPosition(long elapsed, BuelherClock clock, int wrap = INT32_MAX)
         angle += clock.theta_f + ((s_elapsed - clock.time_f()) * clock.omega_fast());
 
     // wrap angle around
-    angle = fmod(angle, float(360*wrap));
+    angle = fmod(angle, float(360 * wrap));
 
     return angle;
 }
@@ -121,9 +119,10 @@ void setup()
         // Changes motor controller input mode to input PASSTHROUGH mode
         odrive_serial << "w axis" << axis << ".controller.input_mode " << 3 << "\n";
 
-        if (checkError(0, odrive, odrive_serial)) {
-			Serial.println("Error in Motor Axis 0");
-		}
+        if (checkError(0, odrive, odrive_serial))
+        {
+            Serial.println("Error in Motor Axis 0");
+        }
     }
 
     // serial monitor interface
