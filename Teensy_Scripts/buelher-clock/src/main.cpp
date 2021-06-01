@@ -112,7 +112,7 @@ void setup()
         odrive.run_state(axis, requested_state, false /*don't wait*/);
 
         // Changes motor controller input mode to input PASSTHROUGH mode
-        odrive_serial << "w axis" << axis << ".controller.input_mode " << 1 << "\n";
+        odrive_serial << "w axis" << axis << ".controller.input_mode " << 3 << "\n";
 
         if (checkError(0, odrive, odrive_serial)) {
 			Serial.println("Error in Motor Axis 0");
