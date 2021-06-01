@@ -87,7 +87,13 @@ void setup()
 		 * The config commands end up writing something like "w axis0.motor.config.current_lim 10.0\n"
 		 **/
         odrive_serial << "w axis" << axis << ".controller.config.vel_limit " << 20.0f << '\n';
+        
+        /**
+         * Change to circular (rather than absolute) setpoints.
+         * Docs: https://docs.odriverobotics.com/#circular-position-control
+         */
         odrive_serial << "w axis" << axis << ".controller.config.circular_setpoints " << true << '\n';
+        
         odrive_serial << "w axis" << axis << ".motor.config.current_lim " << 4.0f << '\n';
         odrive_serial << "w axis" << axis << ".motor.config.pole_pairs" << 21 << '\n';
         odrive_serial << "w axis" << axis << ".motor.config.torque_constant" << 0.061f << '\n';
