@@ -164,15 +164,7 @@ void loop()
 		 * @brief: starts closed loop control
 		 */
         if (c == 'l')
-        {
-            //int motornum = c-'0';
-            int requested_state;
-
-            requested_state = ODriveArduino::AXIS_STATE_CLOSED_LOOP_CONTROL;
-            Serial << "Axis" << c << ": Requesting state " << requested_state << '\n';
-            if (!odrive.run_state(0, requested_state, false /*don't wait*/))
-                return;
-        }
+            loop_control(c,odrive);
 
         /**
 		 * @input: 's'
@@ -209,41 +201,7 @@ void loop()
 		 * @brief: sets motor state to IDLE
 		 */
         if (c == 'q')
-        {
-            int requested_state;
-
-            requested_state = ODriveArduino::AXIS_STATE_IDLE;
-            Serial << "Axis" << c << ": Requesting state: IDLE (1)" << '\n';
-            if (!odrive.run_state(0, requested_state, false))
-                return;
-        }
-
-        /**
-		 * @input: 'v'
-		 * @brief: runs a velocity setting test
-		 * ! FUNCTION DOES NOT WORK
-		 */
-        if (c == 'v')
-        {
-            // odrive_serial << "w axis" << 0 << "controller.config.control_mode " << "2" << "\n";
-            // odrive_serial << "w axis" << 0 << "controller.config.input_mode " << "INPUT_MODE_PASSTHROUGH" << "\n";
-            // odrive_serial << "w axis" << 0 << "controller.input_vel " << "0" << "\n";
-
-            int requested_state;
-            requested_state = ODriveArduino::AXIS_STATE_CLOSED_LOOP_CONTROL;
-            if (!odrive.run_state(0, requested_state, false))
-                return;
-            Serial.println("Velocity Test");
-
-            //odrive_serial << "ss" << '\n';
-            //odrive_serial << "sr" << '\n';
-            odrive.SetVelocity(0, 3, .12);
-
-            //odrive_serial << "odrv0.axis0.controller.input_vel " << "2" << '\n';
-            //odrive_serial << "v 0 2 1 \n";
-            //delay(10000);
-            //odrive_serial << "w axis" << 0 << "controller.input_vel " << "0" << "\n";
-        }
+            idle_state(c, odrive);
 
         /**
 		 * @input: 'b'
@@ -292,7 +250,7 @@ void loop()
             }
             // return motor to idle state on interrupt or completion
             idle_state(c, odrive);
-            
+
             Serial << "DONE\n";
         }
     }
