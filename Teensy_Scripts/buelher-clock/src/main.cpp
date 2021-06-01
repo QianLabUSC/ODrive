@@ -318,6 +318,10 @@ void loop()
             long start = millis();
             long elapsed = millis() - start;
 
+            printTorqueEst(odrive, odrive_serial, 0);
+            odrive_serial << "r axis" << 0 << ".encoder.set_linear_count(0)\n";
+            printTorqueEst(odrive, odrive_serial, 0);
+
             /**
              * Loop Until Time Elapses or Q is pressed.
              */
@@ -330,15 +334,19 @@ void loop()
                     continue;
                 }
 
+                // TODO: Fix Angle to not Wrap to 0
                 float ref_angle = getPosition(elapsed, EXAMPLE);
-                float ref_rots = ref_angle / 360.0f;
-                odrive.SetPosition(
-                    0,       // motor axis
-                    ref_rots // num rotations
-                );
+                float ref_rots = (1.0f / 360.0f) * ref_angle;
+                float pos_m0 = 2.0f * cos(ref_rots);
+
+                // TEMP DISABLED
+                odrive.SetPosition(0, ref_rots);
+
+                // wait a bit
+                long temp = millis();
 
                 formatTime(time); //gets the time (minutes:seconds:milliseconds)
-                Serial << "| " << time << "| " << ref_angle << "| " << ref_rots << "\n";
+                Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| " << ref_rots << "\n";
             }
             Serial << "DONE\n";
         }
