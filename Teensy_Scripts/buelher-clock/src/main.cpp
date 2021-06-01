@@ -290,7 +290,9 @@ void loop()
                 formatTime(time); //gets the time (minutes:seconds:milliseconds)
                 Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| " << ref_rots << "\n";
             }
+            // return motor to idle state on interrupt or completion
             idle_state(c, odrive);
+            
             Serial << "DONE\n";
         }
     }
