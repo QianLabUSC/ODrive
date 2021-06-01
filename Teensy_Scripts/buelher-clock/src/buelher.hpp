@@ -98,6 +98,9 @@ public:
     // Time in period to exit slow phase
     // - Unit: seconds
     float time_f();
+
+    /* OTHER FUNCTIONS */
+    float getPosition(long elapsed, int wrap = INT32_MAX);
 };
 
 const BuelherClock EXAMPLE = BuelherClock(
