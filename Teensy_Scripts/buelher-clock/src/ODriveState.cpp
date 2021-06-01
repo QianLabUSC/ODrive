@@ -6,6 +6,7 @@
 
 #include "UtilityHelpers.hpp"
 #include "ODriveState.hpp"
+#include "TorqueHelpers.h" /* formatTime */
 #include "buelher.hpp"
 
 void loop_control(char c, ODriveArduino odrive)

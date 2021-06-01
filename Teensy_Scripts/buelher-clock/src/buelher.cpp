@@ -1,5 +1,4 @@
 #include "buelher.hpp"
-#include "TorqueHelpers.h" /* formatTime */
 #include <math.h> /* fmod */
 
 BuelherClock::BuelherClock(
