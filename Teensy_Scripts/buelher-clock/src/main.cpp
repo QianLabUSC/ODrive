@@ -303,7 +303,7 @@ void loop()
             Serial.println("Executing Buelher Clock. Send 'q' to stop.");
 
             // max duration in milliseconds
-            const long dur = 5000;
+            const long dur = 50000;
 
             // flag boolean to kill loop
             bool cont = true;
