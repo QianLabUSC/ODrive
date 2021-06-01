@@ -10,6 +10,7 @@
 #include "TorqueHelpers.h"
 #include "UtilityHelpers.hpp"
 #include "buelher.hpp"
+#include "loop_control.hpp"
 
 ////////////////////////////////
 // Set up serial pins to the ODrive
@@ -252,7 +253,10 @@ void loop()
         if (c == 'c')
         {
             Serial.println("Executing Buelher Clock. Send 'q' to stop.");
-
+            
+            // MUST enter closed loop mode before starting movement
+            loop_control(c, odrive);
+            
             // max duration in milliseconds
             const long dur = 50000;
 
@@ -280,7 +284,7 @@ void loop()
 
                 float ref_angle = getPosition(elapsed, EXAMPLE, 1);
                 float ref_rots = (1.0f / 360.0f) * ref_angle;
-                
+
                 odrive.SetPosition(0, ref_rots);
 
                 formatTime(time); //gets the time (minutes:seconds:milliseconds)
