@@ -253,10 +253,10 @@ void loop()
         if (c == 'c')
         {
             Serial.println("Executing Buelher Clock. Send 'q' to stop.");
-            
+
             // MUST enter closed loop mode before starting movement
             loop_control(c, odrive);
-            
+
             // max duration in milliseconds
             const long dur = 50000;
 
@@ -290,6 +290,7 @@ void loop()
                 formatTime(time); //gets the time (minutes:seconds:milliseconds)
                 Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| " << ref_rots << "\n";
             }
+            idle_state(c, odrive);
             Serial << "DONE\n";
         }
     }
