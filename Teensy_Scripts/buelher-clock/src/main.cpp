@@ -5,7 +5,6 @@
 #include <cstdlib>
 #include <cstdio>
 #include <string>
-#include <math.h> /* fmod */
 
 #include "TorqueHelpers.h"
 #include "UtilityHelpers.hpp"
@@ -23,44 +22,6 @@ ODriveArduino odrive(odrive_serial);
 
 // NUMBER OF MOTORS CONNECTED TO ODRIVE
 int NUM_MOTORS = 1;
-
-/**
- * Finds clockwork leg position at given time
- * @param elapsed time since experiement began\
- *          - units: milliseconds
- * @param clock parameters for Buelher Clock
- * @param wrap rotations to modulo over
- *          - units: rotations
- *          - default: very large number, effectively no wrapping
- * @return target angular position 
- *          - units: degrees
- */
-float getPosition(long elapsed, BuelherClock clock, int wrap = INT32_MAX)
-{
-    float s_elapsed = float(elapsed) / 1000.0f;
-
-    // whole number period
-    int rotations = int(s_elapsed / clock.period());
-
-    // fractional period
-    s_elapsed = fmod(s_elapsed, clock.period());
-
-    // whole rotations
-    float angle = rotations * 360.0f;
-
-    // add fractional rotation
-    if (s_elapsed <= clock.time_i())
-        angle += clock.omega_fast() * s_elapsed;
-    else if (s_elapsed <= clock.time_f())
-        angle += clock.theta_i + ((s_elapsed - clock.time_i()) * clock.omega_slow());
-    else
-        angle += clock.theta_f + ((s_elapsed - clock.time_f()) * clock.omega_fast());
-
-    // wrap angle around
-    angle = fmod(angle, float(360 * wrap));
-
-    return angle;
-}
 
 void setup()
 {
