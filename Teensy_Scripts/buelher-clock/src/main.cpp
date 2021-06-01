@@ -57,7 +57,8 @@ float getPosition(long elapsed, BuelherClock clock, int wrap = INT32_MAX)
     else
         angle += clock.theta_f + ((s_elapsed - clock.time_f()) * clock.omega_fast());
 
-
+    // wrap angle around
+    angle = fmod(angle, float(360*wrap));
 
     return angle;
 }
@@ -345,7 +346,7 @@ void loop()
                 }
 
                 // TODO: Fix Angle to not Wrap to 0
-                float ref_angle = getPosition(elapsed, EXAMPLE);
+                float ref_angle = getPosition(elapsed, EXAMPLE, 1);
                 float ref_rots = (1.0f / 360.0f) * ref_angle;
                 
                 odrive.SetPosition(0, ref_rots);
