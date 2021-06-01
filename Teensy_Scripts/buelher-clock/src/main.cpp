@@ -104,13 +104,6 @@ void setup()
         Serial << "Axis" << axis << ": Requesting state " << requested_state << '\n';
         odrive.run_state(axis, requested_state, true);
 
-        /**
-		 * Changing to Closed Loop Control
-		 */
-        requested_state = ODriveArduino::AXIS_STATE_CLOSED_LOOP_CONTROL;
-        Serial << "Axis" << axis << ": Requesting state " << requested_state << '\n';
-        odrive.run_state(axis, requested_state, false /*don't wait*/);
-
         // Changes motor controller input mode to input PASSTHROUGH mode
         odrive_serial << "w axis" << axis << ".controller.input_mode " << 3 << "\n";
 
@@ -331,11 +324,6 @@ void loop()
              */
             while (cont && elapsed < dur)
             {
-                if (checkError(0, odrive, odrive_serial)) {
-					Serial.println("Error in Motor Axis 0");
-					break;
-				}
-
                 elapsed = millis() - start;
                 if (Serial.read() == 'q')
                 {
