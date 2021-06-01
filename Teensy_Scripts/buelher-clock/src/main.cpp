@@ -208,7 +208,7 @@ void loop()
                     continue;
                 }
 
-                float ref_angle = getPosition(elapsed, EXAMPLE, 1);
+                float ref_angle = EXAMPLE.getPosition(elapsed, 1);
                 float ref_rots = (1.0f / 360.0f) * ref_angle;
 
                 odrive.SetPosition(0, ref_rots);
