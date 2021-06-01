@@ -31,7 +31,6 @@ void idle_state(char c, ODriveArduino odrive)
 
 void buelher_clock(char c, ODriveArduino odrive, BuelherClock config)
 {
-
     // MUST enter closed loop mode before starting movement
     loop_control(c, odrive);
 
@@ -68,6 +67,7 @@ void buelher_clock(char c, ODriveArduino odrive, BuelherClock config)
         formatTime(time); //gets the time (minutes:seconds:milliseconds)
         Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| " << ref_rots << "\n";
     }
+    
     // return motor to idle state on interrupt or completion
     idle_state(c, odrive);
 }
