@@ -74,6 +74,8 @@ public:
     /** Gait Parameters */
     Gait gait;
 
+    /* COMPUTED PARAMETERS */
+
     // time to complete one full rotation
     float period();
 
