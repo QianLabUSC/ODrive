@@ -61,3 +61,11 @@ void printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int poll
 
 	Serial << "| " << time << " | " << setpoint << "  | " << actualpos << "  | " << extTorque << " | " << vel << " |\n";
 }
+
+bool checkError(int axis, ODriveArduino odrive, HardwareSerial odrive_serial)
+{
+	int errorNum;
+	odrive_serial << "r axis" << 0 << "error\n";
+	errorNum = odrive.readInt();
+	return errorNum;
+}

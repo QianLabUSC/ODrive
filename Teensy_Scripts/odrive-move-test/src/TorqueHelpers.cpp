@@ -18,7 +18,16 @@ void formatTime(char *out)
 	}
 }
 
-
+/**
+ * @param polling_rate: if called in loop, will determine the polling rate of the loop (through delay)
+ * @param odrive: ODriveArduino object
+ * @param odrive_serial: serial object connection to ODrive
+ * 
+ * @return float value representing torque estimate (N*m)
+ * 
+ * @brief
+ * 		calculates the estimated external torque on the motor
+ */
 float torqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate = 0)
 {
 	delay(polling_rate); //defines polling rate (delay_ ms)
@@ -31,13 +40,23 @@ float torqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_
 	float setpoint = odrive.readFloat();
 
 	//get the actual position from the encoder
-	odrive_serial << "r axis" << 0 << ".encoder.pos_estimate\n";
+	odrive_serial << "r axis" << 0 << ".encoder.pos_circular\n";
 	float actualpos = odrive.readFloat();
 
 	//calculate torque estimate
 	return (float)((ks * tau * (setpoint - actualpos)) / R);
 }
 
+/**
+ * @param polling_rate: if called in loop, will determine the polling rate of the loop (through delay)
+ * @param odrive: ODriveArduino object
+ * @param odrive_serial: serial object connection to ODrive
+ * 
+ * @return float value representing torque estimate (N*m)
+ * 
+ * @brief
+ * 		calculates the estimated external torque on the motor and prints data to Serial bus
+ */
 void printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate = 0)
 {
 	delay(polling_rate); //defines polling rate (delay_ ms)
@@ -50,7 +69,7 @@ void printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int poll
 	float setpoint = odrive.readFloat();
 
 	//get the actual position from the encoder
-	odrive_serial << "r axis" << 0 << ".encoder.pos_estimate\n";
+	odrive_serial << "r axis" << 0 << ".encoder.pos_circular\n";
 	float actualpos = odrive.readFloat();
 
 	//calculate torque estimate
@@ -59,5 +78,22 @@ void printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int poll
 	odrive_serial << "r axis" << 0 << ".encoder.vel_estimate\n";
 	float vel = odrive.readFloat();
 
-	Serial << "| " << time << " | " << setpoint << "  | " << actualpos << "  | " << extTorque << " | " << vel << " |\n";
+	Serial.printf("| %-8s | %-6.4f | %-6.4f | %-6.4f | %-6.4f |", time, setpoint, actualpos, extTorque, vel);
+}
+
+/**
+ * @param axis: axis number to check
+ * @param odrive: ODriveArduino object
+ * @param odrive_serial: serial object connection to ODrive
+ * 
+ * @brief checks the ODrive Axis for errors
+ * @return 	TRUE: there is an error in @param axis
+ * 			FALSE: there is no error in @param axis
+ */ 
+bool checkError(int axis, ODriveArduino odrive, HardwareSerial odrive_serial)
+{
+	int errorNum;
+	odrive_serial << "r axis" << 0 << "error\n";
+	errorNum = odrive.readInt();
+	return errorNum;
 }
