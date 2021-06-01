@@ -5,11 +5,11 @@
 #include <cstdlib>
 #include <cstdio>
 #include <string>
-#include <math.h> /* fmod */
 
 #include "TorqueHelpers.h"
 #include "UtilityHelpers.hpp"
 #include "buelher.hpp"
+#include "ODriveState.hpp"
 
 ////////////////////////////////
 // Set up serial pins to the ODrive
@@ -22,45 +22,6 @@ ODriveArduino odrive(odrive_serial);
 
 // NUMBER OF MOTORS CONNECTED TO ODRIVE
 int NUM_MOTORS = 1;
-
-// 
-// 
-/**
- * Finds clockwork leg position at given time
- * @param elapsed time since experiement began\
- *          - units: milliseconds
- * @param clock parameters for Buelher Clock
- * @param wrap rotations to modulo over
- *          - units: rotations
- *          - default: very large number, effectively no wrapping
- * @return target angular position 
- *          - units: degrees
- */
-float getPosition(long elapsed, BuelherClock clock, int wrap = INT32_MAX)
-{
-    float s_elapsed = float(elapsed) / 1000.0f;
-
-    // whole number period
-    int rotations = int(s_elapsed / clock.period());
-
-    // fractional period
-    s_elapsed = fmod(s_elapsed, clock.period());
-
-    // whole rotations
-    float angle = rotations * 360.0f;
-
-    // add fractional rotation
-    if (s_elapsed <= clock.time_i())
-        angle += clock.omega_fast() * s_elapsed;
-    else if (s_elapsed <= clock.time_f())
-        angle += clock.theta_i + ((s_elapsed - clock.time_i()) * clock.omega_slow());
-    else
-        angle += clock.theta_f + ((s_elapsed - clock.time_f()) * clock.omega_fast());
-
-
-
-    return angle;
-}
 
 void setup()
 {
@@ -87,6 +48,13 @@ void setup()
 		 * The config commands end up writing something like "w axis0.motor.config.current_lim 10.0\n"
 		 **/
         odrive_serial << "w axis" << axis << ".controller.config.vel_limit " << 20.0f << '\n';
+        
+        /**
+         * Change to circular (rather than absolute) setpoints.
+         * Docs: https://docs.odriverobotics.com/#circular-position-control
+         */
+        odrive_serial << "w axis" << axis << ".controller.config.circular_setpoints " << true << '\n';
+        
         odrive_serial << "w axis" << axis << ".motor.config.current_lim " << 4.0f << '\n';
         odrive_serial << "w axis" << axis << ".motor.config.pole_pairs" << 21 << '\n';
         odrive_serial << "w axis" << axis << ".motor.config.torque_constant" << 0.061f << '\n';
@@ -120,9 +88,10 @@ void setup()
         // Changes motor controller input mode to input PASSTHROUGH mode
         odrive_serial << "w axis" << axis << ".controller.input_mode " << 3 << "\n";
 
-        if (checkError(0, odrive, odrive_serial)) {
-			Serial.println("Error in Motor Axis 0");
-		}
+        if (checkError(0, odrive, odrive_serial))
+        {
+            Serial.println("Error in Motor Axis 0");
+        }
     }
 
     // serial monitor interface
@@ -131,10 +100,7 @@ void setup()
     Serial.println("	'0' or '1' -> calibrate respective motor (you must do this before you can command movement)");
     Serial.println("	'l' -> enter closed loop control.");
     Serial.println("	's' -> execute test movement");
-    Serial.println("	'r' -> execute proprioceptive move test");
     Serial.println("	'b' -> reads bus voltage");
-    Serial.println("	'k' -> shows position and torque information in a loop");
-    Serial.println("	'p' -> reads motor positions in a 10s loop");
     Serial.println("	'q' -> Sends motors to IDLE STATE");
     Serial.println("	'c' -> Execute Buelher Clock");
 }
@@ -166,15 +132,7 @@ void loop()
 		 * @brief: starts closed loop control
 		 */
         if (c == 'l')
-        {
-            //int motornum = c-'0';
-            int requested_state;
-
-            requested_state = ODriveArduino::AXIS_STATE_CLOSED_LOOP_CONTROL;
-            Serial << "Axis" << c << ": Requesting state " << requested_state << '\n';
-            if (!odrive.run_state(0, requested_state, false /*don't wait*/))
-                return;
-        }
+            loop_control(c,odrive);
 
         /**
 		 * @input: 's'
@@ -207,104 +165,11 @@ void loop()
         }
 
         /**
-		 * @input: 'k'
-		* @brief: Reads the encoder input and calculates a torque vector
-		* 		with timestamp.
-		* 
-		* @output: prints in format:
-		* 
-		* 		[time] | [Set Pos] | [Actual Pos] | [Torque Est.]
-		*/
-        if (c == 'k')
-        {
-            Serial << "|   TIME   |  SET POS  | ACTUAL POS | EST TORQUE |\n";
-            odrive_serial << "w axis" << 0 << ".controller.input_mode " << 3 << "\n";
-            odrive.SetPosition(0, 0);
-            odrive_serial << "w axis" << 0 << ".controller.input_mode " << 1 << "\n";
-            while (Serial.read() != 'q')
-            {
-                printTorqueEst(odrive, odrive_serial, 0);
-            }
-        }
-
-        /**
-		 * @input: 'r'
-		 * @brief: runs a proprioceptive test movement on motor 0.
-		 * 
-		 * !NOTE: this function does not work as intended
-		 * @full: should rotate the motor at .25 rot/s until contact is detected, and then switch direction
-		 */
-        if (c == 'r')
-        {
-            Serial.println("Executing proprioceptive test. Send 'q' to stop.");
-            //char s = Serial.read();
-            odrive.SetPosition(0, 0);
-            delay(4000);
-            Serial.println("Starting...");
-            odrive_serial << "r axis" << 0 << ".encoder.pos_estimate\n";
-
-            int i = 0;
-            Serial << "|   TIME   |  SET POS  | ACTUAL POS | EST TORQUE |  VELOCITY  |\n";
-            for (float ph = 0.0f; ph < 1.5f; ph += 0.01f)
-            {
-                //float pos_m0 = 2.0f * sin(ph);
-                //float pos_m1 = 2.0f * sin(ph);
-
-                // if (i % 50 == 0) {
-                //  	printTorqueEst(0);
-                // }
-                delay(1);
-                printTorqueEst(odrive, odrive_serial, 0);
-                delay(1);
-                i++;
-                odrive.SetPosition(0, ph);
-                //odrive.SetPosition(1, pos_m1);
-            }
-            Serial.println("************************");
-            Serial.println("*****TEST COMPLETED*****");
-            Serial.println("************************");
-        }
-
-        /**
 		 * @input: 'q'
 		 * @brief: sets motor state to IDLE
 		 */
         if (c == 'q')
-        {
-            int requested_state;
-
-            requested_state = ODriveArduino::AXIS_STATE_IDLE;
-            Serial << "Axis" << c << ": Requesting state: IDLE (1)" << '\n';
-            if (!odrive.run_state(0, requested_state, false))
-                return;
-        }
-
-        /**
-		 * @input: 'v'
-		 * @brief: runs a velocity setting test
-		 * ! FUNCTION DOES NOT WORK
-		 */
-        if (c == 'v')
-        {
-            // odrive_serial << "w axis" << 0 << "controller.config.control_mode " << "2" << "\n";
-            // odrive_serial << "w axis" << 0 << "controller.config.input_mode " << "INPUT_MODE_PASSTHROUGH" << "\n";
-            // odrive_serial << "w axis" << 0 << "controller.input_vel " << "0" << "\n";
-
-            int requested_state;
-            requested_state = ODriveArduino::AXIS_STATE_CLOSED_LOOP_CONTROL;
-            if (!odrive.run_state(0, requested_state, false))
-                return;
-            Serial.println("Velocity Test");
-
-            //odrive_serial << "ss" << '\n';
-            //odrive_serial << "sr" << '\n';
-            odrive.SetVelocity(0, 3, .12);
-
-            //odrive_serial << "odrv0.axis0.controller.input_vel " << "2" << '\n';
-            //odrive_serial << "v 0 2 1 \n";
-            //delay(10000);
-            //odrive_serial << "w axis" << 0 << "controller.input_vel " << "0" << "\n";
-        }
+            idle_state(c, odrive);
 
         /**
 		 * @input: 'b'
@@ -314,6 +179,9 @@ void loop()
         if (c == 'c')
         {
             Serial.println("Executing Buelher Clock. Send 'q' to stop.");
+
+            // MUST enter closed loop mode before starting movement
+            loop_control(c, odrive);
 
             // max duration in milliseconds
             const long dur = 50000;
@@ -328,10 +196,6 @@ void loop()
             long start = millis();
             long elapsed = millis() - start;
 
-            printTorqueEst(odrive, odrive_serial, 0);
-            odrive_serial << "r axis" << 0 << ".encoder.set_linear_count(0)\n";
-            printTorqueEst(odrive, odrive_serial, 0);
-
             /**
              * Loop Until Time Elapses or Q is pressed.
              */
@@ -344,15 +208,17 @@ void loop()
                     continue;
                 }
 
-                // TODO: Fix Angle to not Wrap to 0
-                float ref_angle = getPosition(elapsed, EXAMPLE);
+                float ref_angle = EXAMPLE.getPosition(elapsed, 1);
                 float ref_rots = (1.0f / 360.0f) * ref_angle;
-                
+
                 odrive.SetPosition(0, ref_rots);
 
                 formatTime(time); //gets the time (minutes:seconds:milliseconds)
                 Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| " << ref_rots << "\n";
             }
+            // return motor to idle state on interrupt or completion
+            idle_state(c, odrive);
+
             Serial << "DONE\n";
         }
     }

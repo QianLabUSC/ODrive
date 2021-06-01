@@ -74,6 +74,8 @@ public:
     /** Gait Parameters */
     Gait gait;
 
+    /* COMPUTED PARAMETERS */
+
     // time to complete one full rotation
     float period();
 
@@ -96,6 +98,9 @@ public:
     // Time in period to exit slow phase
     // - Unit: seconds
     float time_f();
+
+    /* OTHER FUNCTIONS */
+    float getPosition(long elapsed, int wrap = INT32_MAX);
 };
 
 const BuelherClock EXAMPLE = BuelherClock(

@@ -1,4 +1,5 @@
 #include "buelher.hpp"
+#include <math.h> /* fmod */
 
 BuelherClock::BuelherClock(
     float time_slow,
@@ -62,3 +63,40 @@ LegConfig::LegConfig(
 {
 }
 
+/**
+ * Finds clockwork leg position at given time
+ * @param elapsed time since experiement began\
+ *          - units: milliseconds
+ * @param clock parameters for Buelher Clock
+ * @param wrap rotations to modulo over
+ *          - units: rotations
+ *          - default: very large number, effectively no wrapping
+ * @return target angular position 
+ *          - units: degrees
+ */
+float BuelherClock::getPosition(long elapsed, int wrap = INT32_MAX)
+{
+    float s_elapsed = float(elapsed) / 1000.0f;
+
+    // whole number period
+    int rotations = int(s_elapsed / period());
+
+    // fractional period
+    s_elapsed = fmod(s_elapsed, period());
+
+    // whole rotations
+    float angle = rotations * 360.0f;
+
+    // add fractional rotation
+    if (s_elapsed <= time_i())
+        angle += omega_fast() * s_elapsed;
+    else if (s_elapsed <= time_f())
+        angle += theta_i + ((s_elapsed - time_i()) * omega_slow());
+    else
+        angle += theta_f + ((s_elapsed - time_f()) * omega_fast());
+
+    // wrap angle around
+    angle = fmod(angle, float(360 * wrap));
+
+    return angle;
+}
