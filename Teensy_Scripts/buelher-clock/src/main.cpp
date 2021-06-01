@@ -23,9 +23,20 @@ ODriveArduino odrive(odrive_serial);
 // NUMBER OF MOTORS CONNECTED TO ODRIVE
 int NUM_MOTORS = 1;
 
-// get clockwork leg position at given time
-// returns position (deg, 0 ≤ x ≤ 360)
-float getPosition(long elapsed, BuelherClock clock)
+// 
+// 
+/**
+ * Finds clockwork leg position at given time
+ * @param elapsed time since experiement began\
+ *          - units: milliseconds
+ * @param clock parameters for Buelher Clock
+ * @param wrap rotations to modulo over
+ *          - units: rotations
+ *          - default: very large number, effectively no wrapping
+ * @return target angular position 
+ *          - units: degrees
+ */
+float getPosition(long elapsed, BuelherClock clock, int wrap = INT32_MAX)
 {
     float s_elapsed = float(elapsed) / 1000.0f;
 
