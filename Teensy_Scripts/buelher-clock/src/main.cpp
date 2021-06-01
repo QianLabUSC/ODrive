@@ -267,10 +267,6 @@ void loop()
             long start = millis();
             long elapsed = millis() - start;
 
-            printTorqueEst(odrive, odrive_serial, 0);
-            odrive_serial << "r axis" << 0 << ".encoder.set_linear_count(0)\n";
-            printTorqueEst(odrive, odrive_serial, 0);
-
             /**
              * Loop Until Time Elapses or Q is pressed.
              */
