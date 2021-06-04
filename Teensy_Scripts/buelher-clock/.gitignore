@@ -4,6 +4,4 @@
 .vscode/launch.json
 .vscode/ipch
 
-# due to Windows / Unix Holy War
-**/platformio.ini
 *.log
