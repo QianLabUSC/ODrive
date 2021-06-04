@@ -13,7 +13,7 @@
 // Set up serial pins to the ODrive
 ////////////////////////////////
 
-HardwareSerial& odrive_serial = Serial1;
+HardwareSerial &odrive_serial = Serial1;
 
 // ODrive object
 ODriveArduino odrive(odrive_serial);
@@ -23,7 +23,6 @@ ODriveArduino odrive(odrive_serial);
 int NUM_MOTORS = 1;
 
 int WORKSPACE = 0.75f;
-
 
 void setup()
 {
@@ -36,85 +35,104 @@ void setup()
 		; // wait for Arduino Serial Monitor to open
 
 	Serial.println("ODriveArduino");
-	Serial.println("Setting parameters...");
 	Serial.println(odrive.getBoardInfo()); //prints the firmware version of the ODrive (confirms connection)
+	Serial.println("Setting parameters...");
 
-	odrive_serial << "config.brake_resistance " << 0.5f << "\n";
+	odrive_serial << "config.brake_resistance " << 0.5f << '\n';
+	odrive_serial << "config.dc_max_negative_current " << 3 << '\n'; 
+	//odrv0.config.max_regen_current = 4
+	odrive_serial << "config.max_regen_current " << 3 << '\n'; 
+
+	odrive_serial << "w axis" << 0 << ".motor.config.pre_calibrated " << false << '\n';
+
+	//odrive.motor_calibrated(0);
 	/**
    * *Motor configuration setup. 
    * Configured for the T-Motor U8II KV150 w/ AS5048A rotary encoder.
    */
 	for (int axis = 0; axis < NUM_MOTORS; ++axis)
 	{
-		/**
-		 * U8II Motor and Encoder Configuration Setup
-		 * The config commands end up writing something like "w axis0.motor.config.current_lim 10.0\n"
-		 **/
-		odrive_serial << "w axis" << axis << ".controller.config.vel_limit " << 50.0f << '\n';
-		odrive_serial << "w axis" << axis << ".motor.config.current_lim " << 15.0f << '\n';
-		odrive_serial << "w axis" << axis << ".motor.config.pole_pairs" << 21 << '\n';
-		odrive_serial << "w axis" << axis << ".motor.config.torque_constant" << 0.061f << '\n';
-		odrive_serial << "w axis" << axis << ".motor.config.motor_type"
-					  << "MOTOR_TYPE_HIGH_CURRENT" << '\n';
-		odrive_serial << "w axis" << axis << ".encoder.config.abs_spi_cs_gpio_pin" << 7 + axis << '\n';
-		odrive_serial << "w axis" << axis << ".encoder.config.mode"
-					  << "ENCODER_MODE_SPI_ABS_AMS" << '\n';
-		odrive_serial << "w axis" << axis << ".encoder.config.cpr" << 16384 << '\n';
+		if (odrive.motor_calibrated(axis)) {
+			Serial.println("Motor pre-calibrated!");
+			odrive_serial << "sr\n";
+		}
+		else {
+			Serial.println("Motor calibration underway...");
+			/**
+			 * U8II Motor and Encoder Configuration Setup
+			 * The config commands end up writing something like "w axis0.motor.config.current_lim 10.0\n"
+			 **/
 
-		/**
-		 * OLD TUNING VALUES
-		 * 		Pos_Gain = 186.7
-		 * 		Vel_Gain = 0.304
-		 * 		Vel_Int_Gain = 0.893
-		 */
-		odrive_serial << "w axis" << axis << ".controller.config.pos_gain" << 150 << '\n';
-		odrive_serial << "w axis" << axis << ".controller.config.vel_gain" << 0.304f << '\n';
-		odrive_serial << "w axis" << axis << ".controller.config.vel_integrator_gain" << 1.5f << '\n';
+			odrive_serial << "w axis" << axis << ".controller.config.vel_limit " << 50.0f << '\n';
+			odrive_serial << "w axis" << axis << ".motor.config.current_lim " << 4.20f << '\n';
+			odrive_serial << "w axis" << axis << ".motor.config.pole_pairs" << 21 << '\n';
+			odrive_serial << "w axis" << axis << ".motor.config.torque_constant" << 0.061f << '\n';
+			odrive_serial << "w axis" << axis << ".motor.config.motor_type"
+						<< "MOTOR_TYPE_HIGH_CURRENT" << '\n';
+			odrive_serial << "w axis" << axis << ".encoder.config.abs_spi_cs_gpio_pin" << 7 + axis << '\n';
+			odrive_serial << "w axis" << axis << ".encoder.config.mode"
+						<< "ENCODER_MODE_SPI_ABS_AMS" << '\n';
+			odrive_serial << "w axis" << axis << ".encoder.config.cpr" << 16384 << '\n';
 
+			/**
+			 * OLD TUNING VALUES
+			 * 		Pos_Gain = 186.7
+			 * 		Vel_Gain = 0.304
+			 * 		Vel_Int_Gain = 0.893
+			 */
+			odrive_serial << "w axis" << axis << ".controller.config.pos_gain" << 150 << '\n';
+			odrive_serial << "w axis" << axis << ".controller.config.vel_gain" << 0.304f << '\n';
+			odrive_serial << "w axis" << axis << ".controller.config.vel_integrator_gain" << 1.5f << '\n';
 
-		odrive_serial << ".save_configuration()" << '\n';
-		odrive_serial << ".reboot()" << '\n';
+			odrive_serial << ".ss" << '\n';
 
-		// /**
-		//  * Startup Calibration for ODrive
-		//  */
-		// int requested_state;
-		// requested_state = ODriveArduino::AXIS_STATE_FULL_CALIBRATION_SEQUENCE;
-		// Serial << "Axis" << axis << ": Requesting state " << requested_state << '\n';
-		// odrive.run_state(axis, requested_state, true);
+			/**
+			 * Initial Calibration for ODrive
+			 */
+			int requested_state;
+			requested_state = ODriveArduino::AXIS_STATE_FULL_CALIBRATION_SEQUENCE;
+			Serial << "Axis" << axis << ": Requesting state " << requested_state << '\n';
+			odrive.run_state(axis, requested_state, true);
 
-		// /**
-		//  * Changing to Closed Loop Control
-		//  */
-		// requested_state = ODriveArduino::AXIS_STATE_CLOSED_LOOP_CONTROL;
-		// Serial << "Axis" << axis << ": Requesting state " << requested_state << '\n';
-		// odrive.run_state(axis, requested_state, false /*don't wait*/);
+			/**
+			 * Sets up ODrive Axis to be configured for next run.
+			 */
+			odrive_serial << "w axis" << axis << ".motor.config.pre_calibrated " << true << '\n';
+			odrive_serial << "w axis" << axis << ".config.startup_encoder_offset_calibration " << 1 << '\n';
+			odrive_serial << "w axis" << axis << ".config.startup_closed_loop_control " << 1 << '\n';
+			
+			//Changes motor controller input mode to input PASSTHROUGH mode
+			odrive_serial << "w axis" << axis << ".controller.input_mode " << 1 << '\n';
+			
+			// Change motor to Circular Position Setpoints
+			odrive_serial << "w axis " << axis << ".controller.config.circular_setpoints " << true << '\n';
+			odrive_serial << "w axis " << axis << ".controller.config.circular_setpoints_range " << WORKSPACE << '\n';
 
-		// Changes motor controller input mode to input PASSTHROUGH mode
-		//odrive_serial << "w axis" << axis << ".controller.input_mode " << 3 << "\n";
-
-		// Changes motor controller input mode to input TRAP TRAJECTORY mode
-		//odrive_serial << "w axis" << axis << ".controller.input_mode " << 5 << "\n";
-
-		//odrive_serial << "w axis" << axis << ".trap_traj.config.vel_limit " << 3.0f << "\n";
-
-		// Change motor to Circular Position Setpoints
-		odrive_serial << "w axis " << axis << ".controller.config.circular_setpoints " << 1 << "\n";
-
+			odrive_serial << "ss\n";
+			odrive_serial << "sr\n";
+		}
 		// Resets the motor position to Zero
 		odrive.SetPosition(axis, 0);
 	}
 
 	// Calibration Error Checks
-	if (checkError(0, odrive, odrive_serial)) {
+	if (checkError(0, odrive, odrive_serial))
+	{
 		Serial.println("Error in Motor Axis 0");
 	}
-	if (checkError(1, odrive, odrive_serial)) {
+	else if (checkError(1, odrive, odrive_serial))
+	{
 		Serial.println("Error in Motor Axis 1");
+	} 
+	else 
+	{
+		Serial.println("**********************************");
+		Serial.println("*****CONFIGURATION SUCCESSFUL*****");
+		Serial.println("**********************************");
 	}
 
 	// serial monitor interface
-	Serial.println("Motor Armed & Ready");
+	Serial.println("\nMotor Armed & Ready");
 	Serial.println("Command Menu:");
 	Serial.println("	'0' or '1' -> calibrate respective motor");
 	Serial.println("	'l' -> enter closed loop control.");
@@ -125,7 +143,6 @@ void setup()
 	Serial.println("	'p' -> reads motor positions in a 10s loop");
 	Serial.println("	'q' -> Sends motors to IDLE STATE");
 }
-
 
 // MAIN CONTROL LOOP
 void loop()
@@ -171,19 +188,19 @@ void loop()
 		if (c == 's')
 		{
 			Serial.println("Executing test move");
-			for (float ph = 0.0f; ph < 6.28318530718f; ph += 0.01f)
+			for (float ph = 0.0f; ph < 1.75f; ph += 0.01f)
 			{
-				float pos_m0 = fmod(2.0f * cos(ph), WORKSPACE);
+				float pos_m0 = ph;
 				//float pos_m1 = fmod(2.0f * sin(ph), WORKSPACE);
-				
+				//Serial.printf("Position: %.3f", pos_m0);
 				odrive.SetPosition(0, pos_m0);
 				//odrive.SetPosition(1, pos_m1);
-				
-				delay(50);
-				float torque = torqueEst(odrive, odrive_serial, 0);
+
+				delay(5);
+				//float torque = torqueEst(odrive, odrive_serial, 0);
 				// if (torque > 0.1f)
 				// {
-					Serial.printf("Exit Torque: %f", torque);
+				// 	Serial.printf("Exit Torque: %f", torque);
 				// 	printTorqueEst(odrive, odrive_serial, 0);
 				// 	break;
 				// }
@@ -209,9 +226,9 @@ void loop()
 		if (c == 'k')
 		{
 			Serial << "|   TIME   |  SET POS  | ACTUAL POS | EST TORQUE |\n";
-			odrive_serial << "w axis" << 0 << ".controller.input_mode " << 3 << "\n";
+			odrive_serial << "w axis" << 0 << ".controller.input_mode " << 3 << '\n';
 			odrive.SetPosition(0, 0);
-			//odrive_serial << "w axis" << 0 << ".controller.input_mode " << 1 << "\n";
+			//odrive_serial << "w axis" << 0 << ".controller.input_mode " << 1 << '\n';
 			while (Serial.read() != 'q')
 			{
 				printTorqueEst(odrive, odrive_serial, 0);
@@ -238,7 +255,8 @@ void loop()
 			Serial << "|   TIME   |  SET POS  | ACTUAL POS | EST TORQUE |  VELOCITY  |\n";
 			for (float ph = 0.0f; ph < 1.5f; ph += 0.01f)
 			{
-				if (checkError(0, odrive, odrive_serial)) {
+				if (checkError(0, odrive, odrive_serial))
+				{
 					Serial.println("Error in Motor Axis 0");
 					break;
 				}
@@ -279,8 +297,7 @@ void loop()
 		 */
 		if (c == '.')
 		{
-			odrive_serial << ".reboot()" << '\n';
+			odrive_serial << "sr\n";
 		}
-
 	}
 }

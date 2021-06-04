@@ -38,6 +38,8 @@ public:
     bool run_state(int axis, int requested_state, bool wait_for_idle, float timeout = 10.0f);
     String getBoardInfo();
 
+    int motor_calibrated(int axis);
+
 private:
     String readString();
 

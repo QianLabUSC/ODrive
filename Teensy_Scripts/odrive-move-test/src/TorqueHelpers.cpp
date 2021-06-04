@@ -79,6 +79,7 @@ void printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int poll
 	float vel = odrive.readFloat();
 
 	Serial.printf("| %-8s | %-6.4f | %-6.4f | %-6.4f | %-6.4f |", time, setpoint, actualpos, extTorque, vel);
+	Serial << '\n';
 }
 
 /**

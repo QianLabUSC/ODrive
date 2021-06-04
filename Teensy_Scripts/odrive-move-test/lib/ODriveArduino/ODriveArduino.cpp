@@ -79,6 +79,13 @@ bool ODriveArduino::run_state(int axis, int requested_state, bool wait_for_idle,
     return timeout_ctr > 0;
 }
 
+int ODriveArduino::motor_calibrated(int axis) {
+    serial_ << "r axis" << axis << ".motor.config.pre_calibrated\n";
+    int calibrated = readInt();
+    return calibrated;
+}
+
+
 String ODriveArduino::readString() {
     String str = "";
     static const unsigned long timeout = 1000;
@@ -102,3 +109,5 @@ String ODriveArduino::getBoardInfo(){
 	String res = readString() + ", " + readString() + ", " + readString() + "\n";
 	return res;
 }
+
+
