@@ -50,9 +50,23 @@ float ODriveArduino::readFloat() {
     return readString().toFloat();
 }
 
+float ODriveArduino::GetSetpoint(int motor_number) {
+    serial_ << "r axis" << motor_number << ".controller.pos_setpoint\n";
+    return ODriveArduino::readFloat();
+}
+
 float ODriveArduino::GetVelocity(int motor_number){
 	serial_<< "r axis" << motor_number << ".encoder.vel_estimate\n";
 	return ODriveArduino::readFloat();
+}
+
+float ODriveArduino::GetPosition(int motor_number) {
+    serial_ << "r axis" << motor_number << ".encoder.pos_circular\n";
+    return ODriveArduino::readFloat();
+}
+
+float ODriveArduino::GetPosDeviance(int motor_number) {
+    return ( ODriveArduino::GetSetpoint(motor_number) - ODriveArduino::GetPosition(motor_number) );
 }
 
 int32_t ODriveArduino::readInt() {

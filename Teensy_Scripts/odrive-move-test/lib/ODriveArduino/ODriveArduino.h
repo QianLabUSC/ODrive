@@ -29,7 +29,10 @@ public:
     void SetCurrent(int motor_number, float current);
     void TrapezoidalMove(int motor_number, float position);
     // Getters
+    float GetSetpoint(int motor_number);
     float GetVelocity(int motor_number);
+    float GetPosition(int motor_number);
+    float GetPosDeviance(int motor_number);
     // General params
     float readFloat();
     int32_t readInt();

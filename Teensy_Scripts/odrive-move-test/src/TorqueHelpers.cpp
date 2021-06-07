@@ -35,16 +35,17 @@ float torqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_
 
 	formatTime(time); //gets the time (minutes:seconds:milliseconds)
 
-	//get motor setpoint
-	odrive_serial << "r axis" << 0 << ".controller.pos_setpoint\n";
-	float setpoint = odrive.readFloat();
+	// //get motor setpoint
+	// odrive_serial << "r axis" << 0 << ".controller.pos_setpoint\n";
+	// float setpoint = odrive.readFloat();
 
-	//get the actual position from the encoder
-	odrive_serial << "r axis" << 0 << ".encoder.pos_circular\n";
-	float actualpos = odrive.readFloat();
+	// //get the actual position from the encoder
+	// odrive_serial << "r axis" << 0 << ".encoder.pos_circular\n";
+	// float actualpos = odrive.readFloat();
 
-	//calculate torque estimate
-	return (float)((ks * tau * (setpoint - actualpos)) / R);
+	// //calculate torque estimate
+	// return (float)((ks * tau * (setpoint - actualpos)) / R);
+	return (float)(ks * tau * (odrive.GetPosDeviance(0))) / R;
 }
 
 /**
@@ -64,21 +65,29 @@ void printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int poll
 
 	formatTime(time); //gets the time (minutes:seconds:milliseconds)
 
-	//get motor setpoint
-	odrive_serial << "r axis" << 0 << ".controller.pos_setpoint\n";
-	float setpoint = odrive.readFloat();
+	// //get motor setpoint
+	// odrive_serial << "r axis" << 0 << ".controller.pos_setpoint" << '\n';
+	// float setpoint = odrive.readFloat();
 
-	//get the actual position from the encoder
-	odrive_serial << "r axis" << 0 << ".encoder.pos_circular\n";
-	float actualpos = odrive.readFloat();
+	// //get the actual position from the encoder
+	// //odrive_serial << "r axis" << 0 << ".encoder.pos_circular" << '\n';
+	// //float actualpos = odrive.readFloat();
+	// float actualpos = odrive.GetPosition(0);
 
-	//calculate torque estimate
-	float extTorque = (ks * tau * (setpoint - actualpos)) / R;
+	// //calculate torque estimate
+	// float extTorque = (ks * tau * (setpoint - actualpos)) / R;
 
-	odrive_serial << "r axis" << 0 << ".encoder.vel_estimate\n";
-	float vel = odrive.readFloat();
+	// float vel = odrive.GetVelocity(0);
 
-	Serial.printf("| %-8s | %-6.4f | %-6.4f | %-6.4f | %-6.4f |", time, setpoint, actualpos, extTorque, vel);
+	// Serial.printf("| %-8s | %-6.4f | %-6.4f | %-6.4f | %-6.4f |", time, setpoint, actualpos, extTorque, vel);
+	// Serial << '\n';
+
+
+	float extTorque = (ks * tau * (odrive.GetPosDeviance(0))) / R;
+
+	float vel = odrive.GetVelocity(0);
+
+	Serial.printf("| %-8s | %-6.4f | %-6.4f |", time, extTorque, vel);
 	Serial << '\n';
 }
 

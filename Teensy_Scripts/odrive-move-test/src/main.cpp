@@ -43,7 +43,7 @@ void setup()
 	//odrv0.config.max_regen_current = 4
 	odrive_serial << "config.max_regen_current " << 3 << '\n'; 
 
-	odrive_serial << "w axis" << 0 << ".motor.config.pre_calibrated " << false << '\n';
+	odrive_serial << "w axis" << 0 << ".motor.config.pre_calibrated " << true << '\n';
 
 	//odrive.motor_calibrated(0);
 	/**
@@ -106,13 +106,13 @@ void setup()
 			
 			// Change motor to Circular Position Setpoints
 			odrive_serial << "w axis " << axis << ".controller.config.circular_setpoints " << true << '\n';
-			odrive_serial << "w axis " << axis << ".controller.config.circular_setpoints_range " << WORKSPACE << '\n';
+			odrive_serial << "w axis " << axis << ".controller.config.circular_setpoints_range " << 0.75f << '\n';
 
 			odrive_serial << "ss\n";
 			odrive_serial << "sr\n";
 		}
 		// Resets the motor position to Zero
-		odrive.SetPosition(axis, 0);
+		odrive.SetPosition(axis, 0.1);
 	}
 
 	// Calibration Error Checks
@@ -142,6 +142,7 @@ void setup()
 	Serial.println("	'k' -> shows position and torque information in a loop");
 	Serial.println("	'p' -> reads motor positions in a 10s loop");
 	Serial.println("	'q' -> Sends motors to IDLE STATE");
+
 }
 
 // MAIN CONTROL LOOP
@@ -188,7 +189,7 @@ void loop()
 		if (c == 's')
 		{
 			Serial.println("Executing test move");
-			for (float ph = 0.0f; ph < 1.75f; ph += 0.01f)
+			for (float ph = 0.10f; ph < 1.75f; ph += 0.002f)
 			{
 				float pos_m0 = ph;
 				//float pos_m1 = fmod(2.0f * sin(ph), WORKSPACE);
@@ -196,14 +197,17 @@ void loop()
 				odrive.SetPosition(0, pos_m0);
 				//odrive.SetPosition(1, pos_m1);
 
-				delay(5);
-				//float torque = torqueEst(odrive, odrive_serial, 0);
-				// if (torque > 0.1f)
-				// {
-				// 	Serial.printf("Exit Torque: %f", torque);
-				// 	printTorqueEst(odrive, odrive_serial, 0);
-				// 	break;
-				// }
+				delay(1);
+				float torque = torqueEst(odrive, odrive_serial, 0);
+				float angleDeviance = odrive.GetPosDeviance(0);
+				if (torque > 0.075f || angleDeviance > 0.3f)
+				{
+					Serial.printf("Exit Torque: %f", torque);
+					Serial.println("\n");
+					printTorqueEst(odrive, odrive_serial, 0);
+					odrive.SetPosition(0, pos_m0 - 0.02f);
+					ph = 2;
+				}
 			}
 		}
 
@@ -226,9 +230,7 @@ void loop()
 		if (c == 'k')
 		{
 			Serial << "|   TIME   |  SET POS  | ACTUAL POS | EST TORQUE |\n";
-			odrive_serial << "w axis" << 0 << ".controller.input_mode " << 3 << '\n';
 			odrive.SetPosition(0, 0);
-			//odrive_serial << "w axis" << 0 << ".controller.input_mode " << 1 << '\n';
 			while (Serial.read() != 'q')
 			{
 				printTorqueEst(odrive, odrive_serial, 0);
@@ -289,6 +291,15 @@ void loop()
 			Serial << "Axis" << c << ": Requesting state: IDLE (1)" << '\n';
 			if (!odrive.run_state(0, requested_state, false))
 				return;
+		}
+
+		/**
+		 * @input: 'z'
+		 * @brief: sets motor position to zero
+		 */
+		if (c == 'z')
+		{
+			odrive.SetPosition(0, 0.10);
 		}
 
 		/**
