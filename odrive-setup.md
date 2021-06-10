@@ -5,11 +5,11 @@
     - [1.2.2. Per motor parts:](#122-per-motor-parts)
     - [1.2.3. Other Parts/Tools:](#123-other-partstools)
 - [2. Assembly](#2-assembly)
-  - [2.1. Encoder Module Assembly for AS5047P Encoder](#21-encoder-module-assembly-for-as5047p-encoder)
+  - [2.1. AS5047P Encoder Assembly](#21-as5047p-encoder-assembly)
     - [2.1.1. Encoder Resistor Configuration](#211-encoder-resistor-configuration)
     - [2.1.2. Encoder Voltage Selector](#212-encoder-voltage-selector)
     - [2.1.3. Encoder Header Pin](#213-encoder-header-pin)
-  - [2.2. Encoder Assembly for AS5048A Encoder](#22-encoder-assembly-for-as5048a-encoder)
+  - [2.2. AS5048A Encoder Assembly](#22-as5048a-encoder-assembly)
     - [2.2.1. Header Pin Installation](#221-header-pin-installation)
   - [2.3. Encoder Magnet Assembly](#23-encoder-magnet-assembly)
   - [2.4. Mounting the Encoder](#24-mounting-the-encoder)
@@ -43,8 +43,8 @@ ODrive allows for precise control of up to 2 BLDC motors and 2 rotary encoders. 
 - [ ] *OPTIONAL:* 2x XT60 connector pairs
 ### 1.2.2. Per motor parts:
 - [ ] 1x U8II KV150 BLDC motor (or similar motor)
-- [ ] 1x AS5047P rotary encoder board and included magnet (AS5047P-TS_EK_AB)
-- [ ] 1x 0 ohm 0603 package resistor (if you fry the one included on the encoder)
+- [ ] 1x AS5047P **OR** AS5048A rotary encoder board and included magnet (AS5047P-TS_EK_AB or AS5048A-TS_EK_AB)
+- [ ] 1x (for AS5047P ONLY) 0 ohm 0603 package resistor (if you fry the one included on the encoder)
 - [ ] 1x Encoder mounting plate (redesigned plate in progress)
 - [ ] 1x motor mount
 - [ ] 4x M2.5 x 8mm socket head screws
@@ -65,7 +65,12 @@ ODrive allows for precise control of up to 2 BLDC motors and 2 rotary encoders. 
 - [ ] file/sandpaper
 
 # 2. Assembly
-## 2.1. Encoder Module Assembly for AS5047P Encoder
+**NOTES:**
+
+- **THE AS5048A ENCODER IS RECOMMENDED**
+- **if you need help soldering, check out [this tutorial](https://www.makerspaces.com/how-to-solder/)**
+
+## 2.1. AS5047P Encoder Assembly
 **NOTE: "front" refers to the side with pin labels and the actual encoder chip, while "back" refers to the side with the serial number sticker.**
 ### 2.1.1. Encoder Resistor Configuration
 1. The AS5047P encoder package is made to work in either a 3.3V or 5V (default) power configuration, and for our purposes we need to select the 3.3V operation setting. On the eval board, notice the 0 ohm 0603 package resistor at R1 on the front of the board. 
@@ -79,10 +84,12 @@ ODrive allows for precise control of up to 2 BLDC motors and 2 rotary encoders. 
       2. Solder a jumper wire between [5V] and [3.3V] on the **back** of the board.
 ### 2.1.3. Encoder Header Pin
 1. Solder the 2x8 pin header so that it protrudes from the **back** of the board.
-## 2.2. Encoder Assembly for AS5048A Encoder
+## 2.2. AS5048A Encoder Assembly
 ### 2.2.1. Header Pin Installation
-1. The AS5048A/B Encoder has a 1x8 pinout. Solder a 1x8 right angle header pin into the pin holes in the encoder board.
-2. For 3V operation necessary for the ODrive, we must short the 3.3V and 5V pins of the board. To do this, solder a short piece of wire between the two pins. 
+1. The AS5048A/B Encoder has a 1x8 pinout, but we don't use the 5V pin. Solder a 1x7 right angle header into pin holes 3.3V through GND on the encoder board.
+   1. Solder the 1x7 pin header so that it protrudes from the **back** of the board.
+2. For 3V operation necessary for the ODrive, we must short the 3.3V and 5V pins of the board. To do this, solder a short piece of wire between the 3.3V pin and the 5V contact. 
+3. **It is crucial that the header is soldered in correctly for calibration to succeed. Check that there are no cold solder joints**
 ## 2.3. Encoder Magnet Assembly
 <br><img src="/images/magnet_screw.jpg" alt="diagram: screw with spacer nuts"
 title="diagram: screw with spacer nuts" width="300" height="200" />
@@ -90,10 +97,9 @@ title="diagram: screw with spacer nuts" width="300" height="200" />
 title="diagram: magnet and nut assembly" width="300" height="200" />
 
 1. Take an M4 x 14mm screw and screw 2 nuts fully onto it to act as spacers.
-2. Take a third M4 nut and **CAREFULLY** glue the provided encoder magnet onto one side of the nut, making sure to center the magnet on the nut. 
-   1. **NOTE: IT IS CRUCIAL THAT THIS MAGNET IS CENTERED WITHIN 0.5mm** 
+2. Use the magnet alignment jig to glue the magnet onto the center of an M4 nut 
 3. Remove the plastic dust cover from the bottom of the U8II motor.
-4. From the top side of the motor, drop the M4 screw assembly into the center, through the hole in the center of the motor. From the bottom side, screw on the magnet-nut assembly and tighten the nut onto the screw with an allen key and hex wrench.
+4. From the top side of the motor, drop the M4 screw assembly into the center, through the hole in the center of the motor. From the bottom side, screw on the magnet-nut assembly and tighten the nut onto the screw with an hex key and wrench.
 ## 2.4. Mounting the Encoder
 1. Print one of the encoder mounts included under "CAD Files" in this repo
 2. Embed Thin Profile M2.5 hex nuts into the provided locations in the encoder mount.
@@ -107,8 +113,8 @@ title="diagram: magnet and nut assembly" width="300" height="200" />
 4. Pass the jumper wires through the wire pass-thru if using the encoder mount for aluminum extrusions.
 5. Attach the encoder to the mount with 4x M2.5 x 8mm socket head screws.
 ## 2.5. Putting it All Together
-1. Attach the motor to the mount with M4 x 14mm screws
-2. Attach the motor mount to a board or install standoffs through the four outer mounting points as desired
+1. Attach the motor to the mount with M4 x 10mm or M4 x 14mmscrews
+2. Attach the motor mount to an aluminum rail or install standoffs through the four outer mounting points as desired
 
 # 3. Setting up the ODrive Board and connecting motors and encoders
 ### 3.0.1. Powering the Odrive
