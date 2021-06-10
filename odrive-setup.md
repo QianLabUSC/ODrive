@@ -194,6 +194,8 @@ odrv0.axis0.motor.config.calibration_current = 15
 odrv0.axis0.motor.config.pole_pairs = 21
 odrv0.axis0.motor.config.torque_constant = 0.055
 odrv0.axis0.motor.config.motor_type = MOTOR_TYPE_HIGH_CURRENT
+odrv0.config.dc_max_negative_current = -3
+odrv0.config.max_regen_current = 3
 ```
 ## 5.2. Encoder Calibration
 The GPIO pin configuration has to correspond to the GPIO pin the encoder is connected to. GPIO pins 1 and 2 are reserved for UART communication from the Teensy Board.
