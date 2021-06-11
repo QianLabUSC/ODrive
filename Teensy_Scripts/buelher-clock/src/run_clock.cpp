@@ -32,10 +32,7 @@ void run_clock(char c, ODriveArduino odrive)
     {
         elapsed = millis() - start;
         if (Serial.read() == 'q')
-        {
-            cont = false;
-            continue;
-        }
+            break;
 
         float ref_angle = EXAMPLE.getPosition(elapsed, 1);
         float ref_rots = (1.0f / 360.0f) * ref_angle;
