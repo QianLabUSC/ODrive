@@ -77,30 +77,30 @@ public:
     /* COMPUTED PARAMETERS */
 
     // time to complete one full rotation
-    float period();
+    float period() const;
 
     // Angular size of the slow region
     // - Unit: degrees
-    float d_theta();
+    float d_theta() const;
 
     // Target angular speed during slow phase.
     // - Unit: degrees / second
-    float omega_slow();
+    float omega_slow() const;
 
     // Target angular speed during fast phase.
     // - Unit: degrees / second
-    float omega_fast();
+    float omega_fast() const;
 
     // Time in period to enter slow phase
     // - Unit: seconds
-    float time_i();
+    float time_i() const;
 
     // Time in period to exit slow phase
     // - Unit: seconds
-    float time_f();
+    float time_f() const;
 
     /* OTHER FUNCTIONS */
-    float getPosition(long elapsed, int wrap = INT32_MAX);
+    float getPosition(long elapsed, int wrap = INT32_MAX) const;
 };
 
 const BuelherClock EXAMPLE = BuelherClock(
