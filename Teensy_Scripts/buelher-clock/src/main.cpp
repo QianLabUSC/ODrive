@@ -62,7 +62,6 @@ void setup()
     Serial.println("Command Menu:");
     Serial.println("	'0' or '1' -> calibrate respective motor (you must do this before you can command movement)");
     Serial.println("	'l' -> enter closed loop control.");
-    Serial.println("	's' -> execute test movement");
     Serial.println("	'b' -> reads bus voltage");
     Serial.println("	'q' -> Sends motors to IDLE STATE");
     Serial.println("	'c' -> Execute Buelher Clock");
@@ -96,29 +95,6 @@ void loop()
 		 */
         if (c == 'l')
             loop_control(c, odrive);
-
-        /**
-		 * @input: 's'
-		 * @brief: Runs a test movement on motor 0
-		 */
-        if (c == 's')
-        {
-            Serial.println("Executing test move");
-            for (float ph = 0.0f; ph < 6.28318530718f; ph += 0.01f)
-            {
-                float pos_m0 = 2.0f * cos(ph);
-                //float pos_m1 = 2.0f * sin(ph);
-                odrive.SetPosition(0, pos_m0);
-
-                //odrive.SetPosition(1, pos_m1);
-                delay(50);
-                if (torqueEst(odrive, odrive_serial, 0) > 0.1f)
-                {
-                    printTorqueEst(odrive, odrive_serial, 0);
-                    break;
-                }
-            }
-        }
 
         // Read bus voltage
         if (c == 'b')
