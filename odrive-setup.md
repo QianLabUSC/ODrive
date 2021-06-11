@@ -231,8 +231,8 @@ Attach a 3 wire jumper ribbon from the microcontroller to the ODrive with the fo
 | Teensy | ODrive     |
 |--------|------------|
 | GND    | GND        |
-| Rx     | Tx (GPIO1) | 
-| Tx     | Rx (GPIO2) | 
+| Rx (0) | Tx (GPIO1) | 
+| Tx (1) | Rx (GPIO2) | 
 
 ## Downloading PlatformIO in VSCode to Run Scripts
 This is my recommended method, but if you have a preferred way of interfacing with Arduino-based MCs, then feel free to use any other method.
