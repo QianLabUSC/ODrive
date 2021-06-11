@@ -70,54 +70,54 @@ void setup()
 // MAIN CONTROL LOOP
 void loop()
 {
-    if (Serial.available())
+    if (Serial.available() == false)
+        return;
+    
+    char c = Serial.read();
+
+    /**
+     * @input: 0 or 1
+     * @brief: Run calibration sequence
+     */
+    if (c == '0' || c == '1')
     {
-        char c = Serial.read();
+        int motornum = c - '0';
+        int requested_state;
 
-        /**
-		 * @input: 0 or 1
-		 * @brief: Run calibration sequence
-		 */
-        if (c == '0' || c == '1')
-        {
-            int motornum = c - '0';
-            int requested_state;
+        requested_state = ODriveArduino::AXIS_STATE_FULL_CALIBRATION_SEQUENCE;
+        Serial << "Axis" << c << ": Requesting state " << requested_state << '\n';
+        if (!odrive.run_state(motornum, requested_state, true))
+            return;
+    }
 
-            requested_state = ODriveArduino::AXIS_STATE_FULL_CALIBRATION_SEQUENCE;
-            Serial << "Axis" << c << ": Requesting state " << requested_state << '\n';
-            if (!odrive.run_state(motornum, requested_state, true))
-                return;
-        }
+    /**
+     * @input: 'l'
+     * @brief: starts closed loop control
+     */
+    if (c == 'l')
+        loop_control(c, odrive);
 
-        /**
-		 * @input: 'l'
-		 * @brief: starts closed loop control
-		 */
-        if (c == 'l')
-            loop_control(c, odrive);
+    // Read bus voltage
+    if (c == 'b')
+    {
+        odrive_serial << "r vbus_voltage\n";
+        Serial << "Vbus voltage: " << odrive.readFloat() << '\n';
+    }
 
-        // Read bus voltage
-        if (c == 'b')
-        {
-            odrive_serial << "r vbus_voltage\n";
-            Serial << "Vbus voltage: " << odrive.readFloat() << '\n';
-        }
+    /**
+     * @input: 'q'
+     * @brief: sets motor state to IDLE
+     */
+    if (c == 'q')
+        idle_state(c, odrive);
 
-        /**
-		 * @input: 'q'
-		 * @brief: sets motor state to IDLE
-		 */
-        if (c == 'q')
-            idle_state(c, odrive);
-
-        /**
-		 * @input: 'b'
-         * !Note: In Development
-		 * @brief: runs a Buelher Clock
-		 */
-        if (c == 'c')
-        {
-            run_clock(c, odrive);
-        }
+    /**
+     * @input: 'b'
+     * !Note: In Development
+     * @brief: runs a Buelher Clock
+     */
+    if (c == 'c')
+    {
+        run_clock(c, odrive);
     }
 }
