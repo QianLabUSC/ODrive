@@ -70,41 +70,46 @@ void loop()
 
     char c = Serial.read();
 
+    switch (Serial.read())
+    {
     /**
      * @input: 0 or 1
      * @brief: Run calibration sequence
      */
-    if (c == '0' || c == '1')
+    case '0':
+    case '1':
         calibrate(c - '0', odrive); // convert char to int
+        break;
 
     /**
      * @input: 'l'
      * @brief: starts closed loop control
      */
-    if (c == 'l')
+    case 'l':
         loop_control(c, odrive);
+        break;
 
     // Read bus voltage
-    if (c == 'b')
-    {
+    case 'b':
         odrive_serial << "r vbus_voltage\n";
         Serial << "Vbus voltage: " << odrive.readFloat() << '\n';
-    }
-
-    /**
-     * @input: 'q'
-     * @brief: sets motor state to IDLE
-     */
-    if (c == 'q')
-        idle_state(c, odrive);
+        break;
 
     /**
      * @input: 'b'
      * !Note: In Development
      * @brief: runs a Buelher Clock
      */
-    if (c == 'c')
-    {
+    case 'c':
         run_clock(c, odrive);
+        break;
+
+    /**
+     * @input: 'q'
+     * @brief: sets motor state to IDLE
+     */
+    case 'q':
+        idle_state(c, odrive);
+        break;
     }
 }
