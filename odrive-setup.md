@@ -124,7 +124,8 @@ title="diagram: magnet and nut assembly" width="300" height="200" />
 2. Solder block connectors to the M0 and M1 connection terminals
 ### 3.0.2. Wiring the Encoder and Motor
 1. Connect the motor power wires to the block terminals (for the U8II, the motor wires are in the order they need to be connected to the ODrive)
-2. Connect the Encoder wires as follows (AS5047P -> ODrive):
+2. Connect the Encoder wires as follows:
+
 | AS5047P | ODrive |
 |---------|--------|
 | 3.3V    | 3.3V   |
