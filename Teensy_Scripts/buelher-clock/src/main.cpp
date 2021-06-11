@@ -11,6 +11,7 @@
 #include "buelher.hpp"
 #include "ODriveState.hpp"
 #include "run_clock.hpp"
+#include "calibrate.hpp"
 
 ////////////////////////////////
 // Set up serial pins to the ODrive
@@ -40,13 +41,7 @@ void setup()
 
     for (int axis = 0; axis < NUM_MOTORS; ++axis)
     {
-        /**
-		 * Startup Calibration for ODrive
-		 */
-        int requested_state;
-        requested_state = ODriveArduino::AXIS_STATE_FULL_CALIBRATION_SEQUENCE;
-        Serial << "Axis" << axis << ": Requesting state " << requested_state << '\n';
-        odrive.run_state(axis, requested_state, true);
+        calibrate(axis, odrive); // Startup Calibration for ODrive
 
         // Changes motor controller input mode to input PASSTHROUGH mode
         odrive_serial << "w axis" << axis << ".controller.input_mode " << 3 << "\n";
@@ -72,7 +67,7 @@ void loop()
 {
     if (Serial.available() == false)
         return;
-    
+
     char c = Serial.read();
 
     /**
@@ -80,15 +75,7 @@ void loop()
      * @brief: Run calibration sequence
      */
     if (c == '0' || c == '1')
-    {
-        int motornum = c - '0';
-        int requested_state;
-
-        requested_state = ODriveArduino::AXIS_STATE_FULL_CALIBRATION_SEQUENCE;
-        Serial << "Axis" << c << ": Requesting state " << requested_state << '\n';
-        if (!odrive.run_state(motornum, requested_state, true))
-            return;
-    }
+        calibrate(c - '0', odrive); // convert char to int
 
     /**
      * @input: 'l'
