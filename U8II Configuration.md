@@ -1,6 +1,6 @@
-# U8II Motor Calibration
+### U8II Motor Configuration
 
-Enter the following commands into the `odrivetool` CLI to calibrate the U8II motor to work with the ODrive board.
+Enter the following commands into the `odrivetool` CLI to configure the U8II motor to work with the ODrive board.
 
 Note: `save_configuration` will cause a reboot, which will cause a temporary disconnect. This is normal.
 
@@ -18,7 +18,7 @@ odrv0.config.brake_resistance = 0.5
 odrv0.save_configuration()
 ```
 
-### AS5047P Encoder Calibration
+### AS5047P Encoder Configuration
 This assumes the encoder's CSN pin is connected to the ODriveBoard's GPIO7 pin. If you change the wiring, replace the pin number.
 ```
 odrv0.axis0.encoder.config.abs_spi_cs_gpio_pin = 7  # or which ever GPIO pin you choose
