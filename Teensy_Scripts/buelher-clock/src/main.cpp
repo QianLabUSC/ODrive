@@ -43,6 +43,17 @@ void setup()
    */
     for (int axis = 0; axis < NUM_MOTORS; ++axis)
     {
+        /**
+		 * Startup Calibration for ODrive
+		 */
+        int requested_state;
+        requested_state = ODriveArduino::AXIS_STATE_FULL_CALIBRATION_SEQUENCE;
+        Serial << "Axis" << axis << ": Requesting state " << requested_state << '\n';
+        odrive.run_state(axis, requested_state, true);
+
+        // Changes motor controller input mode to input PASSTHROUGH mode
+        odrive_serial << "w axis" << axis << ".controller.input_mode " << 3 << "\n";
+
         if (checkError(0, odrive, odrive_serial))
         {
             Serial.println("Error in Motor Axis 0");
@@ -87,7 +98,7 @@ void loop()
 		 * @brief: starts closed loop control
 		 */
         if (c == 'l')
-            loop_control(c,odrive);
+            loop_control(c, odrive);
 
         /**
 		 * @input: 's'
