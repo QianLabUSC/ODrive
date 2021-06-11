@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <string>
 
-#include "TorqueHelpers.h"
+#include "TorqueHelpers.hpp"
 #include "UtilityHelpers.hpp"
 
 ////////////////////////////////

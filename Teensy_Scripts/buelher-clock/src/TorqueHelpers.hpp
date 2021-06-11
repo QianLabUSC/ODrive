@@ -1,5 +1,5 @@
-#ifndef TORQUEHELPERS_H
-#define TORQUEHELPERS_H
+#ifndef TORQUEHELPERS_HPP
+#define TORQUEHELPERS_HPP
 
 #include <Arduino.h>
 #include <HardwareSerial.h>
