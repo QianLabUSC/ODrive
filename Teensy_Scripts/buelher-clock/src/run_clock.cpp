@@ -11,29 +11,23 @@
 
 #include "run_clock.hpp"
 
+// max duration in milliseconds
+#define dur 50000
+
 void run_clock(char c, ODriveArduino odrive)
 {
     Serial.println("Executing Buelher Clock. Send 'q' to stop.");
-
-    // MUST enter closed loop mode before starting movement
-    loop_control(c, odrive);
-
-    // max duration in milliseconds
-    const long dur = 50000;
-
-    // flag boolean to kill loop
-    bool cont = true;
-
-    // time string
-    char time[12];
+    loop_control(c, odrive); // MUST enter closed loop mode before starting movement
+    bool cont = true;        // flag boolean to kill loop
+    char time[12];           // time string
 
     // track time since loop start
     long start = millis();
     long elapsed = millis() - start;
 
     /**
-             * Loop Until Time Elapses or Q is pressed.
-             */
+     * Loop Until Time Elapses or Q is pressed.
+     */
     while (cont && elapsed < dur)
     {
         elapsed = millis() - start;
