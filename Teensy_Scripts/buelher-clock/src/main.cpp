@@ -64,6 +64,8 @@ void setup()
         odrive_serial << "w axis" << axis << ".encoder.config.mode"
                       << "ENCODER_MODE_SPI_ABS_AMS" << '\n';
         odrive_serial << "w axis" << axis << ".encoder.config.cpr" << 16384 << '\n';
+        odrive_serial << "w odrv0.config.dc_max_negative_current" << -1 << '\n';
+        odrive_serial << "w odrv0.config.max_regen_current" << 3 << '\n';
 
         /**
 		 * OLD TUNING VALUES
