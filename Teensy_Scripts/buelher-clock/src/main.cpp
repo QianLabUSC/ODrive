@@ -43,53 +43,6 @@ void setup()
    */
     for (int axis = 0; axis < NUM_MOTORS; ++axis)
     {
-        /**
-		 * U8II Motor and Encoder Configuration Setup
-		 * The config commands end up writing something like "w axis0.motor.config.current_lim 10.0\n"
-		 **/
-        odrive_serial << "w axis" << axis << ".controller.config.vel_limit " << 20.0f << '\n';
-        
-        /**
-         * Change to circular (rather than absolute) setpoints.
-         * Docs: https://docs.odriverobotics.com/#circular-position-control
-         */
-        odrive_serial << "w axis" << axis << ".controller.config.circular_setpoints " << true << '\n';
-        
-        odrive_serial << "w axis" << axis << ".motor.config.current_lim " << 4.0f << '\n';
-        odrive_serial << "w axis" << axis << ".motor.config.pole_pairs" << 21 << '\n';
-        odrive_serial << "w axis" << axis << ".motor.config.torque_constant" << 0.061f << '\n';
-        odrive_serial << "w axis" << axis << ".motor.config.motor_type"
-                      << "MOTOR_TYPE_HIGH_CURRENT" << '\n';
-        odrive_serial << "w axis" << axis << ".encoder.config.abs_spi_cs_gpio_pin" << 7 + axis << '\n';
-        odrive_serial << "w axis" << axis << ".encoder.config.mode"
-                      << "ENCODER_MODE_SPI_ABS_AMS" << '\n';
-        odrive_serial << "w axis" << axis << ".encoder.config.cpr" << 16384 << '\n';
-        odrive_serial << "w odrv0.config.dc_max_negative_current" << -1 << '\n';
-        odrive_serial << "w odrv0.config.max_regen_current" << 3 << '\n';
-
-        /**
-		 * OLD TUNING VALUES
-		 * 		Pos_Gain = 186.7
-		 * 		Vel_Gain = 0.304
-		 * 		Vel_Int_Gain = 0.893
-		 */
-        odrive_serial << "w axis" << axis << ".controller.config.pos_gain" << 150 << '\n';
-        odrive_serial << "w axis" << axis << ".controller.config.vel_gain" << 0.304f << '\n';
-        odrive_serial << "w axis" << axis << ".controller.config.vel_integrator_gain" << 1.5f << '\n';
-        odrive_serial << ".save_configuration()" << '\n';
-        odrive_serial << ".reboot()" << '\n';
-
-        /**
-		 * Startup Calibration for ODrive
-		 */
-        int requested_state;
-        requested_state = ODriveArduino::AXIS_STATE_FULL_CALIBRATION_SEQUENCE;
-        Serial << "Axis" << axis << ": Requesting state " << requested_state << '\n';
-        odrive.run_state(axis, requested_state, true);
-
-        // Changes motor controller input mode to input PASSTHROUGH mode
-        odrive_serial << "w axis" << axis << ".controller.input_mode " << 3 << "\n";
-
         if (checkError(0, odrive, odrive_serial))
         {
             Serial.println("Error in Motor Axis 0");
