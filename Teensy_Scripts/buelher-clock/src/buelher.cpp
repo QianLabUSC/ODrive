@@ -24,32 +24,32 @@ BuelherClock::BuelherClock(
 {
 }
 
-float BuelherClock::period()
+float BuelherClock::period() const
 {
     return this->time_fast + this->time_slow;
 }
 
-float BuelherClock::d_theta()
+float BuelherClock::d_theta() const
 {
     return this->theta_f - this->theta_i;
 }
 
-float BuelherClock::omega_slow()
+float BuelherClock::omega_slow() const
 {
     return this->d_theta() / this->time_slow;
 }
 
-float BuelherClock::omega_fast()
+float BuelherClock::omega_fast() const
 {
     return (360 - this->d_theta()) / this->time_fast;
 }
 
-float BuelherClock::time_i()
+float BuelherClock::time_i() const
 {
     return this->theta_i / this->omega_fast();
 }
 
-float BuelherClock::time_f()
+float BuelherClock::time_f() const
 {
     return this->time_i() + (this->d_theta() / this->omega_slow());
 }
@@ -74,7 +74,7 @@ LegConfig::LegConfig(
  * @return target angular position 
  *          - units: degrees
  */
-float BuelherClock::getPosition(long elapsed, int wrap = INT32_MAX)
+float BuelherClock::getPosition(long elapsed, int wrap = INT32_MAX) const
 {
     float s_elapsed = float(elapsed) / 1000.0f;
 
