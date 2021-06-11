@@ -65,12 +65,12 @@ void setup()
 // MAIN CONTROL LOOP
 void loop()
 {
-    if (Serial.available() == false)
+    while (Serial.available() == false)
         return;
 
     char c = Serial.read();
 
-    switch (Serial.read())
+    switch (c)
     {
     /**
      * @input: 0 or 1
