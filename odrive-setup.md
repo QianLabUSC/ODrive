@@ -125,12 +125,14 @@ title="diagram: magnet and nut assembly" width="300" height="200" />
 ### 3.0.2. Wiring the Encoder and Motor
 1. Connect the motor power wires to the block terminals (for the U8II, the motor wires are in the order they need to be connected to the ODrive)
 2. Connect the Encoder wires as follows (AS5047P -> ODrive):
-   1. 3.3V -> 3.3V
-   2. CSn -> GPIO7 (can be connected to any GPIO pin #3-8, just change motor setup accordingly) 
-   3. CLK -> SCK
-   4. MISO -> MISO
-   5. MOSI -> MOSI
-   6. GND -> GND
+| AS5047P | ODrive |
+|---------|--------|
+| 3.3V    | 3.3V   |
+| CSn     | GPIO7 (can be connected to any GPIO pin #3-8, just change motor setup accordingly) |
+| CLK     | SCK    |
+| MISO    | MISO   |
+| MOSI    | MOSI   |
+| GND     | GND    |
    
 # 4. Anaconda/Odrivetool Setup and Config
 *NOTE: For more additional setup information, consult the **[ODrive Documentation](https://docs.odriverobotics.com/)***
