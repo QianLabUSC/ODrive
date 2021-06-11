@@ -37,10 +37,6 @@ void setup()
     Serial.println("Setting parameters...");
     Serial.println(odrive.getBoardInfo()); //prints the firmware version of the ODrive (confirms connection)
 
-    /**
-   * *Motor configuration setup. 
-   * Configured for the T-Motor U8II KV150 w/ AS5048A rotary encoder.
-   */
     for (int axis = 0; axis < NUM_MOTORS; ++axis)
     {
         /**
