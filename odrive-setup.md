@@ -227,10 +227,13 @@ odrv0.axis0.controller.input_pos = 1 # example of positional control
 
 # 6. Controlling the ODrive with a Teensy Microcontroller (or Equivalent)
 Attach a 3 wire jumper ribbon from the microcontroller to the ODrive with the following connections:
-- (Teensy) -> (ODrive)
-- GND -> GND
-- Rx -> Tx (GPIO1)
-- Tx -> Rx (GPIO2)
+
+| Teensy | ODrive     |
+|--------|------------|
+| GND    | GND        |
+| Rx     | Tx (GPIO1) | 
+| Tx     | Rx (GPIO2) | 
+
 ## Downloading PlatformIO in VSCode to Run Scripts
 This is my recommended method, but if you have a preferred way of interfacing with Arduino-based MCs, then feel free to use any other method.
 1. Download the PlatformIO extension in VSCode
