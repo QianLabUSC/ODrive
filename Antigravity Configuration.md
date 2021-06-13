@@ -9,7 +9,7 @@ Note: `save_configuration` will cause a reboot, which will cause a temporary dis
 odrv0.axis0.motor.config.current_lim = 15
 odrv0.axis0.controller.config.vel_limit = 10
 odrv0.axis0.motor.config.calibration_current = 15
-odrv0.axis0.motor.config.pole_pairs = 9
+odrv0.axis0.motor.config.pole_pairs = 12
 odrv0.axis0.motor.config.torque_constant = 0.022
 odrv0.axis0.motor.config.motor_type = MOTOR_TYPE_HIGH_CURRENT
 odrv0.config.dc_max_negative_current = -1 # prevents the motor from throwing an error when slowing
