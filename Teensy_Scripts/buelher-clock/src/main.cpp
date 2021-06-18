@@ -23,7 +23,7 @@ HardwareSerial &odrive_serial = Serial1;
 ODriveArduino odrive(odrive_serial);
 
 // NUMBER OF MOTORS CONNECTED TO ODRIVE
-int NUM_MOTORS = 1;
+int NUM_MOTORS = 2;
 
 void setup()
 {
