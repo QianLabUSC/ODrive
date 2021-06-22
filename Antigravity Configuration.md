@@ -6,9 +6,9 @@ Enter the following commands into the `odrivetool` CLI to configure the motor to
 Note: `save_configuration` will cause a reboot, which will cause a temporary disconnect. This is normal.
 
 ```
-odrv0.axis0.motor.config.current_lim = 15
+odrv0.axis0.motor.config.current_lim = 5
 odrv0.axis0.controller.config.vel_limit = 10
-odrv0.axis0.motor.config.calibration_current = 15
+odrv0.axis0.motor.config.calibration_current = 5
 odrv0.axis0.motor.config.pole_pairs = 12
 odrv0.axis0.motor.config.torque_constant = 0.022
 odrv0.axis0.motor.config.motor_type = MOTOR_TYPE_HIGH_CURRENT
@@ -20,9 +20,9 @@ odrv0.save_configuration()
 ```
 
 ```
-odrv0.axis1.motor.config.current_lim = 15
+odrv0.axis1.motor.config.current_lim = 5
 odrv0.axis1.controller.config.vel_limit = 10
-odrv0.axis1.motor.config.calibration_current = 15
+odrv0.axis1.motor.config.calibration_current = 5
 odrv0.axis1.motor.config.pole_pairs = 12
 odrv0.axis1.motor.config.torque_constant = 0.022
 odrv0.axis1.motor.config.motor_type = MOTOR_TYPE_HIGH_CURRENT
