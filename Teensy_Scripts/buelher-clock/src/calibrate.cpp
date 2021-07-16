@@ -7,5 +7,9 @@ void calibrate(int axis, ODriveArduino odrive)
 {
     const int requested_state = ODriveArduino::AXIS_STATE_FULL_CALIBRATION_SEQUENCE;
     Serial << "Axis" << axis << ": Requesting state " << requested_state << '\n';
-    odrive.run_state(axis, requested_state, true);
+    odrive.run_state(
+        axis, 
+        requested_state, 
+        false // don't wait
+    );
 }
