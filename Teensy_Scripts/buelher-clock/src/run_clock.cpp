@@ -37,7 +37,7 @@ void run_clock(char c, ODriveArduino odrive)
         float ref_angle = EXAMPLE.getPosition(elapsed, 1);
         float ref_rots = (1.0f / 360.0f) * ref_angle;
 
-        odrive.SetPosition(0, ref_rots);
+        odrive.SetPosition(1, ref_rots);
 
         formatTime(time); //gets the time (minutes:seconds:milliseconds)
         Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| " << ref_rots << "\n";
