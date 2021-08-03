@@ -15,7 +15,7 @@ void loop_control(char c, ODriveArduino odrive)
 
     requested_state = ODriveArduino::AXIS_STATE_CLOSED_LOOP_CONTROL;
     Serial << "Axis" << c << ": Requesting state " << requested_state << '\n';
-    if (!odrive.run_state(1, requested_state, false /*don't wait*/))
+    if (!odrive.run_state(0, requested_state, false /*don't wait*/))
         return;
 }
 
