@@ -57,11 +57,30 @@ class MotorControl:
         theta_h = math.acos((p4[0] - p2[0])/c)
         print("theta_h: " + str(theta_h))
         theta_h3 = theta_h + theta_3
+        print("theta_h3 in degrees: " + str(theta_h3*180/math.pi))
+
+        theta_t = math.pi/2 - theta_n
+        theta_z = theta_t + 2 * theta_3
+        print("theta_z in degrees: " + str(theta_z*180/math.pi))
+
+        if theta_z > math.pi:
+            if theta_h3 < math.pi/2:
+                theta_h3 = math.pi-theta_h3
+        else:
+            if theta_h3 > math.pi/2:
+                theta_h3 = math.pi-theta_h3
+
+                
+        p6xPos = 1
+        if math.pi/2-theta_1 + 2*theta_4 > math.pi:
+            p6xPos = -1
+
         #if(theta_2 < math.pi/2 and theta_h3 > math.pi/2):  FIX THIS ANGLES
             #theta_h3 -= (theta_h3-math.pi/2)
+
         p3 = (p2[0] + self.leg2 * math.cos(theta_h3), p2[1] + self.leg2 * math.sin(theta_h3))
         print("p3: " + str(p3))
-        p6 = (p3[0] - self.leg6 * math.cos(theta_4 - theta_h), p3[1] + self.leg6 * math.sin(theta_4 - theta_h))
+        p6 = (p3[0] - p6xPos*self.leg6 * math.cos(theta_4 - theta_h), p3[1] + self.leg6 * math.sin(theta_4 - theta_h))
         print("p6: " + str(p6))
         return p6
 

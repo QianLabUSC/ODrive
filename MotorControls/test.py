@@ -3,7 +3,7 @@ import numpy as np
 from MotorControl import *
 
 # Data for plotting
-theta_1 = np.arange(0,math.pi,0.1)
+theta_1 = np.arange(0,math.pi/2,0.1)
 theta_2 = np.arange(math.pi/2, math.pi, 0.1)
 
 x = []
@@ -14,8 +14,6 @@ for i in range(len(theta_2)):
     temp = robot.ThetatoXY(theta_1[i], theta_2[i])
     x.append(temp[0])
     y.append(temp[1])
-    print("x: " + str(temp[0]))
-    print("y: " + str(temp[1]))
 
 
 t = x
