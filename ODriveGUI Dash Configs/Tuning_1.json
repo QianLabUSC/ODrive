@@ -1,0 +1,256 @@
+{
+  "name": "Tuning_0",
+  "component": "Dashboard",
+  "id": "deadb33f",
+  "controls": [
+    {
+      "controlType": "CtrlNumeric",
+      "path": "odrives.odrive0.axis1.motor.config.current_lim"
+    },
+    {
+      "controlType": "CtrlNumeric",
+      "path": "odrives.odrive0.axis1.controller.config.vel_limit"
+    },
+    {
+      "controlType": "CtrlSlider",
+      "path": "odrives.odrive0.axis1.controller.config.pos_gain"
+    },
+    {
+      "controlType": "CtrlSlider",
+      "path": "odrives.odrive0.axis1.controller.config.vel_gain"
+    },
+    {
+      "controlType": "CtrlSlider",
+      "path": "odrives.odrive0.axis1.controller.config.vel_integrator_gain"
+    },
+    {
+      "controlType": "CtrlEnum",
+      "path": "odrives.odrive0.axis1.requested_state",
+      "options": [
+        {
+          "text": "Undefined",
+          "value": 0
+        },
+        {
+          "text": "Idle",
+          "value": 1
+        },
+        {
+          "text": "Starup Sequence",
+          "value": 2
+        },
+        {
+          "text": "Full Calibration Sequence",
+          "value": 3
+        },
+        {
+          "text": "Motor Calibration",
+          "value": 4
+        },
+        {
+          "text": "Sensorless Control",
+          "value": 5
+        },
+        {
+          "text": "Encoder Index Search",
+          "value": 6
+        },
+        {
+          "text": "Encoder Offset Calibration",
+          "value": 7
+        },
+        {
+          "text": "Closed Loop Control",
+          "value": 8
+        },
+        {
+          "text": "Lockin Spin",
+          "value": 9
+        },
+        {
+          "text": "Encoder Direction Find",
+          "value": 10
+        },
+        {
+          "text": "Homing",
+          "value": 11
+        }
+      ]
+    },
+    {
+      "controlType": "CtrlFunction",
+      "path": "odrives.odrive0.save_configuration"
+    },
+    {
+      "controlType": "CtrlNumeric",
+      "path": "odrives.odrive0.axis1.encoder.config.bandwidth"
+    }
+  ],
+  "actions": [
+    {
+      "actionType": "Action",
+      "id": "a699c462-cf8d-4b4e-aedf-0b200e84f97a",
+      "path": "odrives.odrive0.axis1.controller.input_pos",
+      "val": 0
+    },
+    {
+      "actionType": "Action",
+      "id": "db267ae4-fdf4-4770-a2d3-eb61de026659",
+      "path": "odrives.odrive0.axis1.controller.input_pos",
+      "val": 0.5
+    },
+    {
+      "actionType": "ActionEnum",
+      "id": "586794f5-5d75-4740-b0d7-e0cde90fa90b",
+      "path": "odrives.odrive0.axis1.requested_state",
+      "options": [
+        {
+          "text": "Undefined",
+          "value": 0
+        },
+        {
+          "text": "Idle",
+          "value": 1
+        },
+        {
+          "text": "Startup Sequence",
+          "value": 2
+        },
+        {
+          "text": "Full Calibration Sequence",
+          "value": 3
+        },
+        {
+          "text": "Motor Calibration",
+          "value": 4
+        },
+        {
+          "text": "Sensorless Control",
+          "value": 5
+        },
+        {
+          "text": "Encoder Index Search",
+          "value": 6
+        },
+        {
+          "text": "Encoder Offset Calibration",
+          "value": 7
+        },
+        {
+          "text": "Closed Loop Control",
+          "value": 8
+        },
+        {
+          "text": "Lockin Spin",
+          "value": 9
+        },
+        {
+          "text": "Encoder Direction Find",
+          "value": 10
+        },
+        {
+          "text": "Homing",
+          "value": 11
+        }
+      ],
+      "val": 8
+    },
+    {
+      "actionType": "ActionEnum",
+      "id": "5ceb55ff-d969-477a-9bb3-e225eb251e72",
+      "path": "odrives.odrive0.axis1.requested_state",
+      "options": [
+        {
+          "text": "Undefined",
+          "value": 0
+        },
+        {
+          "text": "Idle",
+          "value": 1
+        },
+        {
+          "text": "Startup Sequence",
+          "value": 2
+        },
+        {
+          "text": "Full Calibration Sequence",
+          "value": 3
+        },
+        {
+          "text": "Motor Calibration",
+          "value": 4
+        },
+        {
+          "text": "Sensorless Control",
+          "value": 5
+        },
+        {
+          "text": "Encoder Index Search",
+          "value": 6
+        },
+        {
+          "text": "Encoder Offset Calibration",
+          "value": 7
+        },
+        {
+          "text": "Closed Loop Control",
+          "value": 8
+        },
+        {
+          "text": "Lockin Spin",
+          "value": 9
+        },
+        {
+          "text": "Encoder Direction Find",
+          "value": 10
+        },
+        {
+          "text": "Homing",
+          "value": 11
+        }
+      ],
+      "val": 1
+    },
+    {
+      "actionType": "Action",
+      "id": "3f1031a2-7970-4965-bc8a-50a10604e20d",
+      "path": "odrives.odrive0.axis1.controller.config.circular_setpoints"
+    }
+  ],
+  "plots": [
+    {
+      "name": "65a2768d-e61e-4dd5-bf80-dba153838f74",
+      "vars": [
+        {
+          "path": "odrives.odrive0.axis1.controller.input_pos",
+          "color": "#1f77b4"
+        },
+        {
+          "path": "odrives.odrive0.axis1.encoder.pos_estimate",
+          "color": "#ff7f0e"
+        },
+        {
+          "path": "odrives.odrive0.axis1.controller.pos_setpoint",
+          "color": "#2ca02c"
+        },
+        {
+          "path": "odrives.odrive0.axis1.encoder.pos_circular",
+          "color": "#d62728"
+        }
+      ]
+    },
+    {
+      "name": "d9ee2474-3e53-408f-9eab-1656342eb531",
+      "vars": [
+        {
+          "path": "odrives.odrive0.axis1.controller.vel_setpoint",
+          "color": "#1f77b4"
+        },
+        {
+          "path": "odrives.odrive0.axis1.encoder.vel_estimate",
+          "color": "#ff7f0e"
+        }
+      ]
+    }
+  ]
+}
