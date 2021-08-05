@@ -15,9 +15,9 @@ LegConfig::LegConfig(
     int odrv,
     int axis,
     float init_offset,
-    int gyre) : odrv(odrv),
-                axis(axis),
-                init_offset(init_offset),
-                gyre(gyre)
+    bool invert_direction) : odrv(odrv),
+                             axis(axis),
+                             init_offset(init_offset),
+                             invert_direction(invert_direction)
 {
 }

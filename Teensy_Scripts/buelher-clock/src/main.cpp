@@ -10,6 +10,7 @@
 #include "UtilityHelpers.hpp"
 #include "buelher.hpp"
 #include "ODriveState.hpp"
+#include "robo_config.hpp"
 #include "run_clock.hpp"
 #include "calibrate.hpp"
 
@@ -22,8 +23,8 @@ HardwareSerial &odrive_serial = Serial1;
 // ODrive object
 ODriveArduino odrive(odrive_serial);
 
-// NUMBER OF MOTORS CONNECTED TO ODRIVE
-int NUM_MOTORS = 2;
+// Configuration for physical robot.
+RoboConfig conf = TESTING;
 
 void setup()
 {
@@ -39,18 +40,15 @@ void setup()
     Serial.println("Setting parameters...");
     Serial.println(odrive.getBoardInfo()); //prints the firmware version of the ODrive (confirms connection)
 
-    for (int axis = 0; axis < NUM_MOTORS; ++axis)
-    {
-        calibrate(axis, odrive); // Startup Calibration for ODrive
-
-        // Changes motor controller input mode to input PASSTHROUGH mode
-        odrive_serial << "w axis" << axis << ".controller.input_mode " << 3 << "\n";
-
-        if (checkError(0, odrive, odrive_serial))
-        {
-            Serial.println("Error in Motor Axis 0");
-        }
-    }
+    // TODO: formalize setup within RoboConfig. Hard coded for now.
+    calibrate(0, odrive); // Startup Calibration for ODrive
+    calibrate(1, odrive); // Startup Calibration for ODrive
+    odrive_serial << "w axis" << 0 << ".controller.input_mode " << 3 << "\n";
+    odrive_serial << "w axis" << 1 << ".controller.input_mode " << 3 << "\n";
+    if (checkError(0, odrive, odrive_serial))
+        Serial.println("Error in Motor Axis 0");
+    if (checkError(1, odrive, odrive_serial))
+        Serial.println("Error in Motor Axis 1");
 
     // serial monitor interface
     Serial.println("Motor Armed & Ready");

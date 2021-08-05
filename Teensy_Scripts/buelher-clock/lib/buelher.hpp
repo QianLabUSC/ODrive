@@ -3,30 +3,6 @@
 
 #include "gait.hpp"
 
-class LegConfig
-{
-public:
-    LegConfig(
-        int servoID,
-        bool clockwise,
-        int zeroing);
-
-    // Motor's Identifier
-    // corresponds to `axis` in ODrive system
-    int servoID;
-
-    // Whether the motor turns clockwise or counter-clockwise
-    bool clockwise;
-
-    // how far to turn to leg to zero it (deg)
-    // bounded 0-360
-    int zeroing;
-};
-
-/**
- * *Buelher Clock
- * Defines the parameters for a 2 phase rotation.
- */
 class BuelherClock
 {
 public:
