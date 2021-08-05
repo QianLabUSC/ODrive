@@ -66,13 +66,25 @@ public:
     float time_f() const;
 
     /* OTHER FUNCTIONS */
+
+    /**
+     * Finds clockwork leg position at given time
+     * @param elapsed time since experiement began\
+     *          - units: milliseconds
+     * @param clock parameters for Buelher Clock
+     * @param wrap rotations to modulo over
+     *          - units: rotations
+     *          - default: very large number, effectively no wrapping
+     * @return target angular position 
+     *          - units: degrees
+     */
     float getPosition(long elapsed, int wrap = INT32_MAX) const;
 };
 
 const BuelherClock EXAMPLE = BuelherClock(
-    2.0,       // time_slow,
-    2.0,       // time_fast,
-    60,        // theta_i,
-    120,       // theta_f,
-    30,        // damp,
+    2.0, // time_slow,
+    2.0, // time_fast,
+    60,  // theta_i,
+    120, // theta_f,
+    30,  // damp,
     TROTTING);

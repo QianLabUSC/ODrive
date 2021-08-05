@@ -46,17 +46,6 @@ float BuelherClock::time_f() const
     return this->time_i() + (this->d_theta() / this->omega_slow());
 }
 
-/**
- * Finds clockwork leg position at given time
- * @param elapsed time since experiement began\
- *          - units: milliseconds
- * @param clock parameters for Buelher Clock
- * @param wrap rotations to modulo over
- *          - units: rotations
- *          - default: very large number, effectively no wrapping
- * @return target angular position 
- *          - units: degrees
- */
 float BuelherClock::getPosition(long elapsed, int wrap = INT32_MAX) const
 {
     float s_elapsed = float(elapsed) / 1000.0f;
