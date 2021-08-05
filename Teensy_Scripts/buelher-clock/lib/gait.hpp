@@ -1,5 +1,7 @@
 #include <string>
 
+#include "legs.hpp"
+
 /**
  * Configuration object describing a gait in a 4 legged 1 DOF robot.
  */
@@ -12,6 +14,9 @@ public:
         int left_fore,
         int right_hind,
         int left_hind);
+
+    // Option to look up offsets by leg enum.
+    int operator[](const Leg &leg);
 
     std::string name;
 
