@@ -96,7 +96,7 @@ void loop()
         break;
 
     /**
-     * @input: 'b'
+     * @input: 'c'
      * !Note: In Development
      * @brief: runs a Buelher Clock
      */
