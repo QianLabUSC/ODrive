@@ -33,8 +33,15 @@ public:
 };
 
 const Gait TROTTING = Gait(
-    "ZERO",
-    0,
-    180,
-    180,
-    0);
+    "TROT",
+    0,   // right_fore
+    180, // left_fore
+    180, // right_hind
+    0);  // left_hind
+
+const Gait BOUNDING = Gait(
+    "BOUND",
+    0,    // right_fore
+    0,    // left_fore
+    180,  // right_hind
+    180); // left_hind
