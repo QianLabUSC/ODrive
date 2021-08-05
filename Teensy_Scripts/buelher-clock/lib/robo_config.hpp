@@ -7,6 +7,11 @@
 class RoboConfig
 {
 public:
+    RoboConfig(
+        LegConfig right_fore,
+        LegConfig left_fore,
+        LegConfig right_hind,
+        LegConfig left_hind);
     LegConfig right_fore;
     LegConfig left_fore;
     LegConfig right_hind;
