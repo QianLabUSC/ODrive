@@ -69,7 +69,7 @@ public:
 
     /**
      * Finds clockwork leg position at given time
-     * @param elapsed time since experiement began\
+     * @param elapsed time since experiement began  
      *          - units: milliseconds
      * @param clock parameters for Buelher Clock
      * @param wrap rotations to modulo over
