@@ -12,7 +12,7 @@ RoboConfig::RoboConfig(
 }
 
 LegConfig::LegConfig(
-    ODriveArduino odrv,
+    int odrv,
     int axis,
     float init_offset,
     int gyre) : odrv(odrv),

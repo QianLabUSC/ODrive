@@ -25,14 +25,14 @@ class LegConfig
 {
 public:
     LegConfig(
-        ODriveArduino odrv,
+        int odrv,
         int axis,
         float init_offset,
         int gyre);
 
     // Address a specific motor
-    ODriveArduino odrv; // which ODrive board is being addressed
-    int axis;           // which axis (0 or 1) on that board is being addressed
+    int odrv; // which ODrive board is being addressed
+    int axis; // which axis (0 or 1) on that board is being addressed
 
     // Initial angular offset the motor should move to to adopt a neutral position.
     // Should be determined experimentally based on the motor's physical placement.
@@ -43,3 +43,12 @@ public:
     // - -1 opposite
     int gyre;
 };
+
+// - Define Configurations Here:
+
+// 21.08.05 testing config with 2 motors
+const RoboConfig TESTING = RoboConfig(
+    LegConfig(0, 0, 0.0f, +1),
+    LegConfig(0, 1, 0.0f, +1),
+    LegConfig(1, 0, 0.0f, -1),
+    LegConfig(1, 1, 0.0f, -1))
