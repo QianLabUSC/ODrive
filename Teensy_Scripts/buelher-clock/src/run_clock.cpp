@@ -56,3 +56,10 @@ void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive)
 
     Serial << "DONE\n";
 }
+
+// !Note in progress.
+// float getPosition(
+//     RoboConfig conf, // physical robot configuration
+//     Gait gait,
+//     long elapsed,
+//     int wrap = INT32_MAX)
