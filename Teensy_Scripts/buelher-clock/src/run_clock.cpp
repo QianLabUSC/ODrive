@@ -14,7 +14,7 @@
 // max duration in milliseconds
 #define dur 50000
 
-void run_clock(Gait gait, ODriveArduino odrive)
+void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive)
 {
     Serial.println("Executing Buelher Clock. Send 'q' to stop.");
 
@@ -48,7 +48,7 @@ void run_clock(Gait gait, ODriveArduino odrive)
         formatTime(time); //gets the time (minutes:seconds:milliseconds)
         Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| " << ref_rots << "\n";
     }
-    
+
     // return motor to idle state on interrupt or completion
     // TODO: set all 4 legs
     idle_state(0, odrive);
