@@ -2,4 +2,4 @@
 /**
  * Run motor in Buelher clock mode
  */
-void run_clock(char c, ODriveArduino odrive);
+void run_clock(Gait gait, ODriveArduino odrive);

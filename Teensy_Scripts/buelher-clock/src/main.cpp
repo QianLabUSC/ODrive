@@ -101,7 +101,7 @@ void loop()
      * @brief: runs a Buelher Clock
      */
     case 'c':
-        run_clock(c, odrive);
+        run_clock(TROTTING, odrive);
         break;
 
     /**

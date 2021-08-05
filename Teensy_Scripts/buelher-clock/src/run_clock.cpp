@@ -8,7 +8,6 @@
 #include "ODriveState.hpp"
 #include "UtilityHelpers.hpp"
 #include "buelher.hpp"
-#include "gait.hpp"
 
 #include "run_clock.hpp"
 
