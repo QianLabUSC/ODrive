@@ -8,7 +8,12 @@
 #include "ODriveState.hpp"
 #include "TorqueHelpers.hpp" /* formatTime */
 #include "buelher.hpp"
-
+/**
+ * @param c: the axis to set loop control on
+ * - valid values: 0, 1
+ * @param odrive: the ODrive Object
+ * !Note: non blocking, motor may not have closed loop control on return!
+ */
 void loop_control(char c, ODriveArduino odrive)
 {
     int requested_state;
