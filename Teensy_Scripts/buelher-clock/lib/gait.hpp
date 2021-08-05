@@ -1,5 +1,8 @@
 #include <string>
 
+/**
+ * Configuration object describing a gait in a 4 legged 1 DOF robot.
+ */
 class Gait
 {
 public:
