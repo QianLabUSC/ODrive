@@ -1,5 +1,7 @@
 #include "../lib/ODriveArduino/ODriveArduino.h"
 
+#include "legs.hpp"
+
 #ifndef ROBO_CONFIG_H
 #define ROBO_CONFIG_H
 /**
@@ -45,6 +47,11 @@ public:
         LegConfig left_fore,
         LegConfig right_hind,
         LegConfig left_hind);
+
+    // Option to look up by leg enum.
+    // !Note: Read Only!
+    LegConfig operator[](const Leg &leg);
+
     LegConfig right_fore;
     LegConfig left_fore;
     LegConfig right_hind;

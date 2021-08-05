@@ -16,6 +16,7 @@ public:
         int left_hind);
 
     // Option to look up offsets by leg enum.
+    // !Note: Read Only!
     int operator[](const Leg &leg);
 
     std::string name;
