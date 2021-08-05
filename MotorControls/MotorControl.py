@@ -35,6 +35,7 @@ class MotorControl:
         if (theta_2 > math.pi):
             theta_2 = 2 * math.pi - theta_2
         theta_n = math.pi - theta_2
+        print("theta_1: " + str(theta_1))
         print("theta_n: " + str(theta_n))
         p2 = (-1 * self.leg1 * math.cos(theta_n), self.leg1 * math.sin(theta_n))
         #if(abs(p2[0]) - 0.01 < 0):
@@ -59,39 +60,61 @@ class MotorControl:
         theta_h3 = theta_h + theta_3
         print("theta_h3 in degrees: " + str(theta_h3*180/math.pi))
 
-        theta_t = math.pi/2 - theta_n
-        theta_z = theta_t + 2 * theta_3
-        print("theta_z in degrees: " + str(theta_z*180/math.pi))
 
-        if theta_z > math.pi:
-            if theta_h3 < math.pi/2:
-                theta_h3 = math.pi-theta_h3
-        else:
-            if theta_h3 > math.pi/2:
-                theta_h3 = math.pi-theta_h3
+        if theta_h3 > math.pi/2:
+            theta_h3 = math.pi-theta_h3
+
+        p3xPos = 1
+        if math.pi/2 - theta_n + 2 * theta_3 > math.pi:
+            p3xPos = -1
+            
+
+        print("theta_h3 in degrees after conversion: " + str(theta_h3*180/math.pi))
 
                 
         p6xPos = 1
         if math.pi/2-theta_1 + 2*theta_4 > math.pi:
             p6xPos = -1
 
-        #if(theta_2 < math.pi/2 and theta_h3 > math.pi/2):  FIX THIS ANGLES
-            #theta_h3 -= (theta_h3-math.pi/2)
+        print("p6 Negative?: " + str(p6xPos))
+        
+        theta_h4 = theta_4 - theta_h
 
-        p3 = (p2[0] + self.leg2 * math.cos(theta_h3), p2[1] + self.leg2 * math.sin(theta_h3))
+        print("theta_h4 in degrees: " + str(theta_h4*180/math.pi))
+
+
+        if theta_4 + math.pi/2 - theta_1 > math.pi/2:
+            theta_h4 = theta_h + theta_4
+        
+        print("theta_h4 in degrees after conversion: " + str(theta_h4*180/math.pi))
+
+
+        p3 = (p2[0] + p3xPos*self.leg2 * math.cos(theta_h3), p2[1] + self.leg2 * math.sin(theta_h3))
         print("p3: " + str(p3))
-        p6 = (p3[0] - p6xPos*self.leg6 * math.cos(theta_4 - theta_h), p3[1] + self.leg6 * math.sin(theta_4 - theta_h))
+        p6 = (p3[0] - p6xPos*self.leg6 * math.cos(theta_h4), p3[1] + self.leg6 * math.sin(theta_h4))
         print("p6: " + str(p6))
+        print()
         return p6
 
     def ThetatoPolar(self, theta_1, theta_2):
         angle = (theta_2 + theta_1) / 2
-        p2 = (-1 * self.leg1 * math.cos(theta_1), self.leg1 * math.sin(theta_1))
-        p4 = (self.leg4 * math.cos(theta_2), self.leg4 * math.sin(theta_2))
+        theta_n = math.pi-theta_2
+        p2 = (-1 * self.leg1 * math.cos(theta_n), self.leg1 * math.sin(theta_n))
+        p4 = (self.leg4 * math.cos(theta_1), self.leg4 * math.sin(theta_1))
         c = math.sqrt(pow(p4[0] - p2[0], 2) + pow(p4[1] - p2[1], 2))
         theta_h = math.acos((p4[0] - p2[0]) / c)
+        print("p4x: " + str(p4[0]))
+        print("p2x: " + str(p2[0]))
+        print ("c: " + str(c))
+        print("p4x - p2x: " + str(p4[0] - p2[0]))
+        print("p4x - p2x /c: " + str((p4[0] - p2[0])/c))
+        print("theta_h: " + str(theta_h))
         theta_R = 2 * (theta_1 - theta_h)
+        if(theta_1 < theta_n):
+            theta_R = 2 * (theta_1 + theta_h)
+        print("theta_R: " + str(theta_R))
         r = math.sqrt(self.leg4 * self.leg4 + self.leg3 * self.leg3 - 2 * self.leg4 * self.leg3 * math.cos(theta_R))
+        print("r: " + str(r))
         return (r, angle)
 
     def PolartoTheta(self, r, angle):
@@ -100,7 +123,12 @@ class MotorControl:
             cVal = 1
         if (cVal < -1):
             cVal = -1
+        #print("r: " + str(r))
+        #print("phi: "  + str(angle))
+        #print("cVal: " + str(cVal))
         theta_3 = math.acos(cVal)
+        #print("theta_3: " + str(theta_3))
+
         theta_1 = angle - theta_3
         theta_2 = angle + theta_3
         return (theta_1, theta_2)

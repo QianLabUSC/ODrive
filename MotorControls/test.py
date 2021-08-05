@@ -27,5 +27,5 @@ ax.set(xlabel='x', ylabel='y',
        title='Location of Foot When Adjusting Motor Angle')
 ax.grid()
 
-fig.savefig("test.png")
+fig.savefig("AnglesToCartesian.png")
 plt.show()
