@@ -1,5 +1,7 @@
 #include "../lib/ODriveArduino/ODriveArduino.h"
 
+#ifndef ROBO_CONFIG_H
+#define ROBO_CONFIG_H
 /**
  * Defines settings for a particular motor on an ODrive robot.
  */
@@ -57,3 +59,5 @@ const RoboConfig TESTING = RoboConfig(
     LegConfig(0, 1, 0.0f, false),
     LegConfig(1, 0, 0.0f, true),
     LegConfig(1, 1, 0.0f, true));
+
+#endif
