@@ -36,10 +36,6 @@ public:
         int theta_i,
         int theta_f,
         int damp,
-        LegConfig right_fore,
-        LegConfig left_fore,
-        LegConfig right_hind,
-        LegConfig left_hind,
         Gait gait);
 
     // time spent in the slow phase of rotation
@@ -64,12 +60,6 @@ public:
      * !Note: this is a holdover from the LSS, and may not be relevant to ODrive motors
      */
     int damp;
-
-    /** Parameters for each of the Robot's 4 legs */
-    LegConfig right_fore;
-    LegConfig left_fore;
-    LegConfig right_hind;
-    LegConfig left_hind;
 
     /** Gait Parameters */
     Gait gait;
@@ -109,20 +99,4 @@ const BuelherClock EXAMPLE = BuelherClock(
     60,        // theta_i,
     120,       // theta_f,
     30,        // damp,
-    LegConfig( // right_fore
-        101,   // servoID,
-        true,  // clockwise,
-        37),   // zeroing,
-    LegConfig( // left_fore
-        241,   // servoID
-        false, // clockwise
-        38),   // zeroing
-    LegConfig( // right_hind
-        42,    // servoID
-        true,  // clockwise
-        312),  // zeroing
-    LegConfig( // left_hind
-        69,    // servoID
-        false, // clockwise
-        88),   // zeroing
     TROTTING);
