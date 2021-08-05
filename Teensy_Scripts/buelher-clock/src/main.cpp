@@ -23,9 +23,6 @@ HardwareSerial &odrive_serial = Serial1;
 // ODrive object
 ODriveArduino odrive(odrive_serial);
 
-// Configuration for physical robot.
-RoboConfig conf = TESTING;
-
 void setup()
 {
     // ODrive uses 115200 baud
@@ -99,7 +96,7 @@ void loop()
      * @brief: runs a Buelher Clock
      */
     case 'c':
-        run_clock(TROTTING, odrive);
+        run_clock(TESTING, BOUNDING, odrive);
         break;
 
     /**

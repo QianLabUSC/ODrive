@@ -1,5 +1,9 @@
 #include "../lib/ODriveArduino/ODriveArduino.h"
 
+#include "legs.hpp"
+
+#ifndef ROBO_CONFIG_H
+#define ROBO_CONFIG_H
 /**
  * Defines settings for a particular motor on an ODrive robot.
  */
@@ -43,6 +47,11 @@ public:
         LegConfig left_fore,
         LegConfig right_hind,
         LegConfig left_hind);
+
+    // Option to look up by leg enum.
+    // !Note: Read Only!
+    LegConfig operator[](const Leg &leg);
+
     LegConfig right_fore;
     LegConfig left_fore;
     LegConfig right_hind;
@@ -53,7 +62,10 @@ public:
 
 // 21.08.05 testing config with 2 motors
 const RoboConfig TESTING = RoboConfig(
-    LegConfig(0, 0, 0.0f, false),
-    LegConfig(0, 1, 0.0f, false),
-    LegConfig(1, 0, 0.0f, true),
-    LegConfig(1, 1, 0.0f, true));
+    LegConfig(0, 0, 0.0f, false), // right_fore
+    LegConfig(1, 0, 0.0f, true),  // left_fore
+    LegConfig(0, 1, 0.0f, false), // right_hind
+    LegConfig(1, 1, 0.0f, true)   // left_hind
+);
+
+#endif
