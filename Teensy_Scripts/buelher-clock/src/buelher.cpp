@@ -7,19 +7,11 @@ BuelherClock::BuelherClock(
     int theta_i,
     int theta_f,
     int damp,
-    LegConfig right_fore,
-    LegConfig left_fore,
-    LegConfig right_hind,
-    LegConfig left_hind,
     Gait gait) : time_slow(time_slow),
                  time_fast(time_fast),
                  theta_i(theta_i),
                  theta_f(theta_f),
                  damp(damp),
-                 right_fore(right_fore),
-                 left_fore(left_fore),
-                 right_hind(right_hind),
-                 left_hind(left_hind),
                  gait(gait)
 {
 }
@@ -54,26 +46,6 @@ float BuelherClock::time_f() const
     return this->time_i() + (this->d_theta() / this->omega_slow());
 }
 
-LegConfig::LegConfig(
-    int servoID,
-    bool clockwise,
-    int zeroing) : servoID(servoID),
-                   clockwise(clockwise),
-                   zeroing(zeroing)
-{
-}
-
-/**
- * Finds clockwork leg position at given time
- * @param elapsed time since experiement began\
- *          - units: milliseconds
- * @param clock parameters for Buelher Clock
- * @param wrap rotations to modulo over
- *          - units: rotations
- *          - default: very large number, effectively no wrapping
- * @return target angular position 
- *          - units: degrees
- */
 float BuelherClock::getPosition(long elapsed, int wrap = INT32_MAX) const
 {
     float s_elapsed = float(elapsed) / 1000.0f;
