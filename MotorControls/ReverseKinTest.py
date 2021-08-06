@@ -6,8 +6,28 @@ from MotorControl import *
 r = np.arange(17,27,0.5)
 phi = 1.74533 #approx 100 degrees
 
+testPhi = []
+
+for i in range(len(r)):
+    testPhi.append(1.74533)
+
+t = r
+s = testPhi
+
+fig, ax = plt.subplots()
+ax.scatter(t, s)
+
+ax.set(xlabel='r (cm)', ylabel='phi (radians)',
+       title='Desired Toe Location')
+ax.grid()
+
+fig.savefig("DesiredPolar.png")
+plt.show()
+
+
 theta_1 = []
 theta_2 = []
+
 
 robot = MotorControl(10, 20, 20, 10, 1)
 for i in range(len(r)):
@@ -20,7 +40,7 @@ t = theta_1
 s = theta_2
 
 fig, ax = plt.subplots()
-ax.plot(t, s)
+ax.scatter(t, s)
 
 ax.set(xlabel='theta_1 (radians)', ylabel='theta_2 (radians)',
        title='Motor Angles When Adjusting Foot Location')
@@ -43,11 +63,11 @@ x = resultR
 y = resultPhi
 
 fig, ax = plt.subplots()
-ax.plot(x, y)
+ax.scatter(x, y)
 
 ax.set(xlabel='r (cm)', ylabel='phi (radians)',
        title='Foot Location When Adjusting Motor Angles')
 ax.grid()
 
-fig.savefig("ThetatoPolar.png")
+fig.savefig("ResultingPolar.png")
 plt.show()

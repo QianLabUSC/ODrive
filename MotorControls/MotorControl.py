@@ -22,10 +22,20 @@ class MotorControl:
         theta_46 = math.acos(cVal)
         theta_1 = theta_h - theta_46
         p4 = (self.leg4 * math.cos(theta_1), self.leg4 * math.sin(theta_1))
-        theta_6 = math.acos((p4[0] - x) / l46)
+        theta_6Num = p4[0] - x
+        if(theta_6Num > 1):
+            theta_6Num = 1
+        if(theta_6Num < -1):
+            theta_6Num = -1
+        theta_6 = math.acos(theta_6Num/ l46)
         p3 = (x + self.leg3 * math.cos(theta_6), y - self.leg3 * math.sin(theta_6))
         l13 = math.sqrt(pow(p3[0], 2) + pow(p3[1], 2))
-        theta_b = math.acos((self.leg4 * self.leg4 + l13 * l13 - self.leg3 * self.leg3) / (2 * self.leg4 * l13))
+        bVal = (self.leg4 * self.leg4 + l13 * l13 - self.leg3 * self.leg3) / (2 * self.leg4 * l13)
+        if(bVal > 1):
+            bVal = 1
+        if(bVal < -1):
+            bVal = -1
+        theta_b = math.acos(bVal)
         theta_2 = theta_1 - 2 * theta_b
         return (theta_1, theta_2)
 
