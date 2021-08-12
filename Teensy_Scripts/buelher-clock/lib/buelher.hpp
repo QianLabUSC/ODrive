@@ -14,10 +14,16 @@ public:
         int damp,
         Gait gait);
 
-    // time spent in the slow phase of rotation
+    /**
+     * time spent in the slow phase of rotation
+     * @units: seconds
+     */
     float time_slow;
 
-    // time spent in the fast phase of rotation
+    /**
+     * time spent in the fast phase of rotation
+     * @units: seconds
+     */
     float time_fast;
 
     // angle to enter slow phase (deg)
@@ -42,7 +48,10 @@ public:
 
     /* COMPUTED PARAMETERS */
 
-    // time to complete one full rotation
+    /**
+     * time to complete one full rotation
+     * @units: seconds
+     */
     float period() const;
 
     // Angular size of the slow region
