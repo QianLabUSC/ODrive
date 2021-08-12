@@ -39,6 +39,7 @@ public:
 /**
  * Configuration object reflecting the physical / electrical setup
  * of a 4 legged 1 DOF ODrive Robot.
+ * Assumptions: we are using Serial 1 and Serial 2 on the Teensy Arduino.
  */
 class RoboConfig
 {
@@ -56,6 +57,11 @@ public:
     LegConfig operator[](const Leg &leg);
 
     void run_config();
+
+    // !Note: Hard Coded
+    // Based on assumption of wiring.
+    ODriveArduino odrv0 = ODriveArduino(Serial1);
+    ODriveArduino odrv1 = ODriveArduino(Serial2);
 
     LegConfig right_fore;
     LegConfig left_fore;
