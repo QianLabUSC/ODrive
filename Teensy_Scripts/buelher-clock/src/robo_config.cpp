@@ -18,6 +18,9 @@ LegConfig RoboConfig::operator[](const Leg &leg) {
         case Leg::right_hind: return right_hind; break;
         case Leg::left_hind: return left_hind; break;
     };
+    
+    // Should never exit without hitting enum!
+    exit(1);
 }
 
 LegConfig::LegConfig(
