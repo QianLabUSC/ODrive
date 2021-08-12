@@ -71,8 +71,8 @@ public:
 
 // !Note: Define Configurations Here:
 
-// 21.08.05 testing config with 2 motors
-const RoboConfig TESTING = RoboConfig(
+// 21.08.12 testing config with 2 motors
+const RoboConfig CONFIG = RoboConfig(
     LegConfig(Serial1, 0, 0.0f, false), // right_fore
     LegConfig(Serial1, 1, 0.0f, true),  // left_fore
     LegConfig(Serial2, 0, 0.0f, false), // right_hind

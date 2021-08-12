@@ -97,7 +97,7 @@ void loop()
      * @brief: runs a Buelher Clock
      */
     case 'c':
-        run_clock(TESTING, BOUNDING, odrive);
+        run_clock(CONFIG, BOUNDING, odrive);
         break;
 
     /**
