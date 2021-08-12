@@ -48,7 +48,7 @@ public:
         LegConfig right_hind,
         LegConfig left_hind);
 
-    // Option to look up by leg enum.
+    // Option to look up a leg using its enum.
     // !Note: Read Only!
     LegConfig operator[](const Leg &leg);
 
