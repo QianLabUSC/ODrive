@@ -66,8 +66,8 @@ public:
 // 21.08.05 testing config with 2 motors
 const RoboConfig TESTING = RoboConfig(
     LegConfig(Serial1, 0, 0.0f, false), // right_fore
-    LegConfig(Serial1, 0, 0.0f, true),  // left_fore
-    LegConfig(Serial2, 1, 0.0f, false), // right_hind
+    LegConfig(Serial1, 1, 0.0f, true),  // left_fore
+    LegConfig(Serial2, 0, 0.0f, false), // right_hind
     LegConfig(Serial2, 1, 0.0f, true)   // left_hind
 );
 
