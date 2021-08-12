@@ -24,7 +24,7 @@ LegConfig RoboConfig::operator[](const Leg &leg) {
 }
 
 LegConfig::LegConfig(
-    int odrv,
+    HardwareSerial odrv,
     int axis,
     float init_offset,
     bool invert_direction) : odrv(odrv),

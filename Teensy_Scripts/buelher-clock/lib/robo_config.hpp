@@ -1,3 +1,4 @@
+#include <HardwareSerial.h>
 #include "../lib/ODriveArduino/ODriveArduino.h"
 
 #include "legs.hpp"
@@ -11,14 +12,14 @@ class LegConfig
 {
 public:
     LegConfig(
-        int odrv,
+        HardwareSerial odrv,
         int axis,
         float init_offset,
         bool gyre);
 
     // Address a specific motor
     // TODO: get actual HardwareSerial and ODriveArduino object!
-    int odrv; // which ODrive board is being addressed
+    HardwareSerial odrv; // which ODrive board is being addressed
     int axis; // which axis (0 or 1) on that board is being addressed
 
     /**
@@ -62,10 +63,10 @@ public:
 
 // 21.08.05 testing config with 2 motors
 const RoboConfig TESTING = RoboConfig(
-    LegConfig(0, 0, 0.0f, false), // right_fore
-    LegConfig(1, 0, 0.0f, true),  // left_fore
-    LegConfig(0, 1, 0.0f, false), // right_hind
-    LegConfig(1, 1, 0.0f, true)   // left_hind
+    LegConfig(Serial1, 0, 0.0f, false), // right_fore
+    LegConfig(Serial1, 0, 0.0f, true),  // left_fore
+    LegConfig(Serial2, 1, 0.0f, false), // right_hind
+    LegConfig(Serial2, 1, 0.0f, true)   // left_hind
 );
 
 #endif
