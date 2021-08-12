@@ -15,7 +15,7 @@
 // max duration in milliseconds
 #define dur 50000
 
-float getPosition(
+float getRotations(
     Leg leg,                   // Robot's leg enum
     RoboConfig conf,           // physical robot configuration
     Gait gait,                 // robot gait
@@ -53,7 +53,7 @@ float getPosition(
     // wrap angle around
     angle = fmod(angle, float(360 * wrap));
 
-    return angle;
+    return angle * (1.0f / 360.0f); // divide by 360 to convert from degrees to rotations
 }
 
 void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive)
@@ -86,8 +86,8 @@ void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive)
 
         // odrive.SetPosition(0, ref_rots);
         // odrive.SetPosition(1, ref_rots);
-        odrive.SetPosition(0, getPosition(right_fore, conf, gait, EXAMPLE, elapsed));
-        odrive.SetPosition(1, getPosition(right_hind, conf, gait, EXAMPLE, elapsed));
+        odrive.SetPosition(0, getRotations(right_fore, conf, gait, EXAMPLE, elapsed));
+        odrive.SetPosition(1, getRotations(right_hind, conf, gait, EXAMPLE, elapsed));
 
         formatTime(time); //gets the time (minutes:seconds:milliseconds)
         Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| " << ref_rots << "\n";
