@@ -22,7 +22,7 @@ public:
     // Address a specific motor
     // TODO: get actual HardwareSerial and ODriveArduino object!
     HardwareSerial odrv; // which ODrive board is being addressed
-    int axis; // which axis (0 or 1) on that board is being addressed
+    int axis;            // which axis (0 or 1) on that board is being addressed
 
     /**
      * Initial angular offset for a neutral / zero position.
@@ -54,6 +54,8 @@ public:
     // Option to look up a leg using its enum.
     // !Note: Read Only!
     LegConfig operator[](const Leg &leg);
+
+    void run_config();
 
     LegConfig right_fore;
     LegConfig left_fore;
