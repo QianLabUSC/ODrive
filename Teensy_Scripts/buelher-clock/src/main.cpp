@@ -18,15 +18,15 @@
 // Set up serial pins to the ODrive
 ////////////////////////////////
 
-HardwareSerial &odrive_serial = Serial1;
+HardwareSerial &odrive_serial_1 = Serial1;
 
 // ODrive object
-ODriveArduino odrive(odrive_serial);
+ODriveArduino odrive(odrive_serial_1);
 
 void setup()
 {
     // ODrive uses 115200 baud
-    odrive_serial.begin(115200);
+    odrive_serial_1.begin(115200);
 
     // Serial to PC
     Serial.begin(115200);
@@ -40,11 +40,11 @@ void setup()
     // TODO: formalize setup within RoboConfig. Hard coded for now.
     calibrate(0, odrive); // Startup Calibration for ODrive
     calibrate(1, odrive); // Startup Calibration for ODrive
-    odrive_serial << "w axis" << 0 << ".controller.input_mode " << 3 << "\n";
-    odrive_serial << "w axis" << 1 << ".controller.input_mode " << 3 << "\n";
-    if (checkError(0, odrive, odrive_serial))
+    odrive_serial_1 << "w axis" << 0 << ".controller.input_mode " << 3 << "\n";
+    odrive_serial_1 << "w axis" << 1 << ".controller.input_mode " << 3 << "\n";
+    if (checkError(0, odrive, odrive_serial_1))
         Serial.println("Error in Motor Axis 0");
-    if (checkError(1, odrive, odrive_serial))
+    if (checkError(1, odrive, odrive_serial_1))
         Serial.println("Error in Motor Axis 1");
 
     // serial monitor interface
@@ -86,7 +86,7 @@ void loop()
 
     // Read bus voltage
     case 'b':
-        odrive_serial << "r vbus_voltage\n";
+        odrive_serial_1 << "r vbus_voltage\n";
         Serial << "Vbus voltage: " << odrive.readFloat() << '\n';
         break;
 
