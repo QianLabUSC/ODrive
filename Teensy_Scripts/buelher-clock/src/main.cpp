@@ -18,7 +18,8 @@
 // Set up serial pins to the ODrive
 ////////////////////////////////
 
-HardwareSerial &odrive_serial_1 = Serial1;
+// HardwareSerial &odrive_serial_1 = Serial1;
+HardwareSerial &odrive_serial_1 = Serial2;
 
 // ODrive object
 ODriveArduino odrive(odrive_serial_1);
