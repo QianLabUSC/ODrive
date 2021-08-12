@@ -7,6 +7,8 @@
 #define ROBO_CONFIG_H
 /**
  * Defines settings for a particular motor on an ODrive robot.
+ * !Note: This class reflects a physical / electrical setup, and therefore is highly subject to change.
+ * This source code may change a lot!
  */
 class LegConfig
 {
@@ -59,7 +61,7 @@ public:
     LegConfig left_hind;
 };
 
-// - Define Configurations Here:
+// !Note: Define Configurations Here:
 
 // 21.08.05 testing config with 2 motors
 const RoboConfig TESTING = RoboConfig(
