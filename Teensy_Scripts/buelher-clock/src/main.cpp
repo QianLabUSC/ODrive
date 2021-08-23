@@ -21,11 +21,13 @@
 // HardwareSerial &odrive_serial_1 = Serial1;
 HardwareSerial &odrive_serial_1 = Serial2;
 
+// TODO: Remove this
 // ODrive object
 ODriveArduino odrive(odrive_serial_1);
 
 void setup()
 {
+    // TODO: Config in function
     // ODrive uses 115200 baud
     odrive_serial_1.begin(115200);
 
