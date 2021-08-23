@@ -19,7 +19,7 @@
 ////////////////////////////////
 
 // HardwareSerial &odrive_serial_1 = Serial1;
-HardwareSerial &odrive_serial_1 = Serial2;
+HardwareSerial &odrive_serial_1 = Serial1;
 
 // TODO: Remove this
 // ODrive object
