@@ -143,6 +143,15 @@ void setup()
 	Serial.println("	'p' -> reads motor positions in a 10s loop");
 	Serial.println("	'q' -> Sends motors to IDLE STATE");
 
+	for (int i = 0; i < 5; i++) 
+	{
+		float dump = odrive.readFloat();
+		Serial.println("Buffer Clear: ");
+		Serial.printf("%.6f \n", dump);
+	}
+	
+
+
 }
 
 // MAIN CONTROL LOOP
@@ -188,8 +197,14 @@ void loop()
 		 */
 		if (c == 's')
 		{
+			for (int i = 0; i < 3; i++) 
+			{
+				float dump = odrive.readFloat();
+				//Serial.println("Buffer Clear: ");
+				Serial.printf("%.6f \n", dump);
+			}
 			Serial.println("Executing test move");
-			for (float ph = 0.10f; ph < 1.75f; ph += 0.002f)
+			for (float ph = 0.10f; ph < 1.75f; ph += 0.015f)
 			{
 				float pos_m0 = ph;
 				//float pos_m1 = fmod(2.0f * sin(ph), WORKSPACE);
@@ -198,13 +213,14 @@ void loop()
 				//odrive.SetPosition(1, pos_m1);
 
 				delay(1);
-				float torque = torqueEst(odrive, odrive_serial, 0);
-				float angleDeviance = odrive.GetPosDeviance(0);
-				if (torque > 0.075f || angleDeviance > 0.3f)
+
+				float torque = printTorqueEst(odrive, odrive_serial, 0);
+				float angleDeviance = odrive.GetPosDiff(0);
+				if (torque > 0.3f || angleDeviance > 0.3f)
 				{
-					Serial.printf("Exit Torque: %f", torque);
-					Serial.println("\n");
-					printTorqueEst(odrive, odrive_serial, 0);
+					Serial.printf("Exit Torque: %f\n", torque);
+					//Serial.println("\n");
+					//printTorqueEst(odrive, odrive_serial, 0);
 					odrive.SetPosition(0, pos_m0 - 0.02f);
 					ph = 2;
 				}
@@ -304,11 +320,19 @@ void loop()
 
 		/**
 		 * @input: '.'
-		 * @brief: reboots the board
+		 * @brief: clears board errors
 		 */
 		if (c == '.')
 		{
-			odrive_serial << "sr\n";
+			odrive_serial << "sc\n";
 		}
+
+		// Read bus voltage
+		if (c == 'v')
+		{
+			float vel = odrive.GetVelocity(0);
+			Serial << "Motor 0 Velocity: " << vel << '\n';
+		}
+
 	}
 }

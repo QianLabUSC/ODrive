@@ -188,9 +188,9 @@ Out[1]: 11.97055721282959
 The following commands will configure the U8II and AS5047P to 
 ## 5.1. Motor Configuration
 ```
-odrv0.axis0.motor.config.current_lim = 15
+odrv0.axis0.motor.config.current_lim = 4
 odrv0.axis0.controller.config.vel_limit = 10
-odrv0.axis0.motor.config.calibration_current = 15
+odrv0.axis0.motor.config.calibration_current = 4
 odrv0.axis0.motor.config.pole_pairs = 21
 odrv0.axis0.motor.config.torque_constant = 0.055
 odrv0.axis0.motor.config.motor_type = MOTOR_TYPE_HIGH_CURRENT

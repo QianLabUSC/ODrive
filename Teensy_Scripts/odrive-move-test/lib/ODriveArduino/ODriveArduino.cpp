@@ -65,7 +65,7 @@ float ODriveArduino::GetPosition(int motor_number) {
     return ODriveArduino::readFloat();
 }
 
-float ODriveArduino::GetPosDeviance(int motor_number) {
+float ODriveArduino::GetPosDiff(int motor_number) {
     return ( ODriveArduino::GetSetpoint(motor_number) - ODriveArduino::GetPosition(motor_number) );
 }
 

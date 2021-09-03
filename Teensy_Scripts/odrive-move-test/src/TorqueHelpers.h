@@ -19,7 +19,7 @@ const float R = 0.085;	//phase resistance (Ohms)
 
 void formatTime(char *out);
 float torqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate);
-void printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate);
+float printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate);
 
 bool checkError(int axis, ODriveArduino odrive, HardwareSerial odrive_serial);
 

@@ -32,7 +32,7 @@ public:
     float GetSetpoint(int motor_number);
     float GetVelocity(int motor_number);
     float GetPosition(int motor_number);
-    float GetPosDeviance(int motor_number);
+    float GetPosDiff(int motor_number);
     // General params
     float readFloat();
     int32_t readInt();

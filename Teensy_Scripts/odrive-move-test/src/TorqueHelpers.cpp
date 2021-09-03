@@ -1,6 +1,11 @@
 #include "TorqueHelpers.h"
 
-
+/**
+ * @param out: C-string pointer
+ * 
+ * @brief
+ * 		fills @param out with current time in the format [minutes:seconds:milliseconds]
+ */
 void formatTime(char *out)
 {
 	int minutes = minute();
@@ -45,7 +50,7 @@ float torqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_
 
 	// //calculate torque estimate
 	// return (float)((ks * tau * (setpoint - actualpos)) / R);
-	return (float)(ks * tau * (odrive.GetPosDeviance(0))) / R;
+	return (float)(ks * tau * (odrive.GetPosDiff(0))) / R;
 }
 
 /**
@@ -58,37 +63,20 @@ float torqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_
  * @brief
  * 		calculates the estimated external torque on the motor and prints data to Serial bus
  */
-void printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate = 0)
+float printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int polling_rate = 0)
 {
 	delay(polling_rate); //defines polling rate (delay_ ms)
 	char time[12];
 
 	formatTime(time); //gets the time (minutes:seconds:milliseconds)
 
-	// //get motor setpoint
-	// odrive_serial << "r axis" << 0 << ".controller.pos_setpoint" << '\n';
-	// float setpoint = odrive.readFloat();
-
-	// //get the actual position from the encoder
-	// //odrive_serial << "r axis" << 0 << ".encoder.pos_circular" << '\n';
-	// //float actualpos = odrive.readFloat();
-	// float actualpos = odrive.GetPosition(0);
-
-	// //calculate torque estimate
-	// float extTorque = (ks * tau * (setpoint - actualpos)) / R;
-
-	// float vel = odrive.GetVelocity(0);
-
-	// Serial.printf("| %-8s | %-6.4f | %-6.4f | %-6.4f | %-6.4f |", time, setpoint, actualpos, extTorque, vel);
-	// Serial << '\n';
-
-
-	float extTorque = (ks * tau * (odrive.GetPosDeviance(0))) / R;
+	float extTorque = (ks * tau * (odrive.GetPosDiff(0))) / R;
 
 	float vel = odrive.GetVelocity(0);
 
-	Serial.printf("| %-8s | %-6.4f | %-6.4f |", time, extTorque, vel);
-	Serial << '\n';
+	Serial.printf("| Time: %-8s | Torque: %-6.4f | Vel: %-6.4f |\n", time, extTorque, vel);
+
+	return extTorque;
 }
 
 /**
