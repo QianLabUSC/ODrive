@@ -124,13 +124,16 @@ title="diagram: magnet and nut assembly" width="300" height="200" />
 2. Solder block connectors to the M0 and M1 connection terminals
 ### 3.0.2. Wiring the Encoder and Motor
 1. Connect the motor power wires to the block terminals (for the U8II, the motor wires are in the order they need to be connected to the ODrive)
-2. Connect the Encoder wires as follows (AS5047P -> ODrive):
-   1. 3.3V -> 3.3V
-   2. CSn -> GPIO7 (can be connected to any GPIO pin #3-8, just change motor setup accordingly) 
-   3. CLK -> SCK
-   4. MISO -> MISO
-   5. MOSI -> MOSI
-   6. GND -> GND
+2. Connect the Encoder wires as follows:
+
+| AS5047P | ODrive |
+|---------|--------|
+| 3.3V    | 3.3V   |
+| CSn     | GPIO7 (can be connected to any GPIO pin #3-8, just change motor setup accordingly) |
+| CLK     | SCK    |
+| MISO    | MISO   |
+| MOSI    | MOSI   |
+| GND     | GND    |
    
 # 4. Anaconda/Odrivetool Setup and Config
 *NOTE: For more additional setup information, consult the **[ODrive Documentation](https://docs.odriverobotics.com/)***
@@ -227,10 +230,13 @@ odrv0.axis0.controller.input_pos = 1 # example of positional control
 
 # 6. Controlling the ODrive with a Teensy Microcontroller (or Equivalent)
 Attach a 3 wire jumper ribbon from the microcontroller to the ODrive with the following connections:
-- (Teensy) -> (ODrive)
-- GND -> GND
-- Rx -> Tx (GPIO1)
-- Tx -> Rx (GPIO2)
+
+| Teensy | ODrive     |
+|--------|------------|
+| GND    | GND        |
+| Rx (0) | Tx (GPIO1) | 
+| Tx (1) | Rx (GPIO2) | 
+
 ## Downloading PlatformIO in VSCode to Run Scripts
 This is my recommended method, but if you have a preferred way of interfacing with Arduino-based MCs, then feel free to use any other method.
 1. Download the PlatformIO extension in VSCode

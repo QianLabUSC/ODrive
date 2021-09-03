@@ -1,4 +1,4 @@
-#include "TorqueHelpers.h"
+#include "TorqueHelpers.hpp"
 
 /**
  * @param out: C-string pointer

@@ -12,3 +12,15 @@ Gait::Gait(
                      left_hind(left_hind)
 {
 }
+
+int Gait::operator[](const Leg& leg) {
+    switch (leg) {
+        case Leg::right_fore: return right_fore; break;
+        case Leg::left_fore: return left_fore; break;
+        case Leg::right_hind: return right_hind; break;
+        case Leg::left_hind: return left_hind; break;
+    };
+    
+    // Should never be reached!
+    return 0;
+}
