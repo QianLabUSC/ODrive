@@ -32,6 +32,7 @@ void setup()
     // TODO: Config in function
     // ODrive uses 115200 baud
     odrive_serial_1.begin(115200);
+    odrive_serial_2.begin(115200);
 
     // Serial to PC
     Serial.begin(115200);
@@ -41,6 +42,10 @@ void setup()
     Serial.println("ODriveArduino");
     Serial.println("Setting parameters...");
     Serial.println(odrive1.getBoardInfo()); //prints the firmware version of the ODrive (confirms connection)
+    
+    Serial.println("ODriveArduino");
+    Serial.println("Setting parameters...");
+    Serial.println(odrive2.getBoardInfo()); //prints the firmware version of the ODrive (confirms connection)
 
     // TODO: formalize setup within RoboConfig. Hard coded for now.
     calibrate(0, odrive1); // Startup Calibration for ODrive
