@@ -7,4 +7,5 @@
 void run_clock(
     RoboConfig conf,
     Gait gait,
-    ODriveArduino odrive);
+    ODriveArduino odrive1,
+    ODriveArduino odrive2);

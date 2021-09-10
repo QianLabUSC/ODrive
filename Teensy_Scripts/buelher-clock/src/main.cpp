@@ -51,6 +51,16 @@ void setup()
         Serial.println("Error in Motor Axis 0");
     if (checkError(1, odrive1, odrive_serial_1))
         Serial.println("Error in Motor Axis 1");
+    
+    // TODO: formalize setup within RoboConfig. Hard coded for now.
+    calibrate(0, odrive2); // Startup Calibration for ODrive
+    calibrate(1, odrive2); // Startup Calibration for ODrive
+    odrive_serial_2 << "w axis" << 0 << ".controller.input_mode " << 3 << "\n";
+    odrive_serial_2 << "w axis" << 1 << ".controller.input_mode " << 3 << "\n";
+    if (checkError(0, odrive2, odrive_serial_2))
+        Serial.println("Error in Motor Axis 0");
+    if (checkError(1, odrive2, odrive_serial_2))
+        Serial.println("Error in Motor Axis 1");
 
     // serial monitor interface
     Serial.println("Motor Armed & Ready");
@@ -101,7 +111,7 @@ void loop()
      * @brief: runs a Buelher Clock
      */
     case 'c':
-        run_clock(CONFIG, BOUNDING, odrive1);
+        run_clock(CONFIG, BOUNDING, odrive1, odrive2);
         break;
 
     /**
