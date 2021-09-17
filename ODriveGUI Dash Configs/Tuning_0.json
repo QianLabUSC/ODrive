@@ -255,6 +255,15 @@
           "color": "#ff7f0e"
         }
       ]
+    },
+    {
+      "name": "c020755d-145d-461a-b93c-3ea32eca9e82",
+      "vars": [
+        {
+          "path": "odrives.odrive0.axis0.motor.I_bus",
+          "color": "#1f77b4"
+        }
+      ]
     }
   ]
 }
