@@ -95,13 +95,13 @@
       "actionType": "Action",
       "id": "a699c462-cf8d-4b4e-aedf-0b200e84f97a",
       "path": "odrives.odrive0.axis0.controller.input_pos",
-      "val": 0
+      "val": 0.25
     },
     {
       "actionType": "Action",
       "id": "db267ae4-fdf4-4770-a2d3-eb61de026659",
       "path": "odrives.odrive0.axis0.controller.input_pos",
-      "val": 0.5
+      "val": 0.75
     },
     {
       "actionType": "ActionEnum",
