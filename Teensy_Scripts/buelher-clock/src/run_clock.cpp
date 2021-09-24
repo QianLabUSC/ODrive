@@ -67,8 +67,7 @@ void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive1,
         leg.setState(ODriveArduino::AXIS_STATE_CLOSED_LOOP_CONTROL);
     }
 
-    bool cont = true;  // flag boolean to kill loop
-    char time[12];     // time string
+    char time[12];  // time string
 
     // track time since loop start
     long start = millis();
@@ -77,7 +76,7 @@ void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive1,
     /**
      * Loop Until Time Elapses or Q is pressed.
      */
-    while (cont && elapsed < dur) {
+    while (elapsed < dur) {
         elapsed = millis() - start;
         if (Serial.read() == 'q') break;
 
