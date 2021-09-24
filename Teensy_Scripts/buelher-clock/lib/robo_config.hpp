@@ -1,5 +1,8 @@
 #include <HardwareSerial.h>
 
+#include <utility>
+#include <vector>
+
 #include "../lib/ODriveArduino/ODriveArduino.h"
 #include "legs.hpp"
 
@@ -43,19 +46,21 @@ class RoboConfig {
    public:
     static const int MOTOR_COUNT = 4;
 
-    RoboConfig(LegConfig right_fore, LegConfig left_fore, LegConfig right_hind,
-               LegConfig left_hind);
+    RoboConfig(
+        LegConfig right_fore, LegConfig left_fore, LegConfig right_hind,
+        LegConfig left_hind,
+        std::vector<std::pair<ODriveArduino, HardwareSerial>> interfaces);
 
     // Option to look up a leg using its enum.
-    // !Note: Read Only!
+    // - Read Only!
     LegConfig operator[](const Leg &leg);
 
     void run_config();
 
-    // !Note: Hard Coded
-    // Based on assumption of wiring.
-    ODriveArduino odrv0 = ODriveArduino(Serial1);
-    ODriveArduino odrv1 = ODriveArduino(Serial2);
+    // The serial interfaces to the legs.
+    // Programmer must ensure these are the same ODriveArduinos and Serials
+    // passed to the legs.
+    std::vector<std::pair<ODriveArduino, HardwareSerial>> interfaces;
 
     LegConfig right_fore;
     LegConfig left_fore;

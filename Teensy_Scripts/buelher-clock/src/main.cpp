@@ -5,6 +5,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "../lib/ODriveArduino/ODriveArduino.h"
 #include "ODriveState.hpp"
@@ -35,8 +37,9 @@ const RoboConfig CONFIG =
     RoboConfig(LegConfig(Serial1, 0, 0.0f, false),  // right_fore
                LegConfig(Serial1, 1, 0.0f, true),   // left_fore
                LegConfig(Serial2, 0, 0.0f, false),  // right_hind
-               LegConfig(Serial2, 1, 0.0f, true)    // left_hind
-    );
+               LegConfig(Serial2, 1, 0.0f, true),   // left_hind
+               {std::make_pair(odrive1, odrive_serial_1),
+                std::make_pair(odrive2, odrive_serial_2)});
 
 void setup() {
     // TODO: Config in function
