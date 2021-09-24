@@ -52,18 +52,18 @@ class RoboConfig {
     RoboConfig(
         LegConfig right_fore, LegConfig left_fore, LegConfig right_hind,
         LegConfig left_hind,
-        std::vector<std::pair<ODriveArduino, HardwareSerial>> interfaces);
+        std::vector<std::pair<ODriveArduino, HardwareSerial *>> interfaces);
 
     // Option to look up a leg using its enum.
     // - Read Only!
     LegConfig operator[](const Leg &leg);
 
-    void run_config() const;
+    void setup() const;
 
     // The serial interfaces to the legs.
     // Programmer must ensure these are the same ODriveArduinos and Serials
     // passed to the legs.
-    std::vector<std::pair<ODriveArduino, HardwareSerial>> interfaces;
+    std::vector<std::pair<ODriveArduino, HardwareSerial *>> interfaces;
 
     LegConfig right_fore;
     LegConfig left_fore;

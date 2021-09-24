@@ -6,7 +6,7 @@
 RoboConfig::RoboConfig(
     LegConfig right_fore, LegConfig left_fore, LegConfig right_hind,
     LegConfig left_hind,
-    std::vector<std::pair<ODriveArduino, HardwareSerial>> interfaces)
+    std::vector<std::pair<ODriveArduino, HardwareSerial *>> interfaces)
     : interfaces(interfaces),
       right_fore(right_fore),
       left_fore(left_fore),
@@ -14,14 +14,14 @@ RoboConfig::RoboConfig(
       left_hind(left_hind),
       legs({right_fore, left_fore, right_hind, left_hind}) {}
 
-void RoboConfig::run_config() const {
+void RoboConfig::setup() const {
     // /* Serial Start */
-    // for (auto interface : interfaces) {
-    //     interface.second.begin(BAUD);
-    // }
-    // Serial.begin(BAUD);  // Serial to PC
-    // while (!Serial)
-    //     ;  // wait for Arduino Serial Monitor to open
+    for (auto interface : interfaces) {
+        interface.second->begin(BAUD);
+    }
+    Serial.begin(BAUD);  // Serial to PC
+    while (!Serial)
+        ;  // wait for Arduino Serial Monitor to open
 
     // /* Confirm ODrive Connection */
     Serial.println("ODriveArduino");

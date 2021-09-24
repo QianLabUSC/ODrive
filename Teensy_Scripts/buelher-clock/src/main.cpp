@@ -33,7 +33,7 @@ ODriveArduino odrive2(odrive_serial_2);
 // !Note: Define Configurations Here:
 
 // 21.08.12 testing config with 2 motors
-const RoboConfig CONFIG =
+const RoboConfig Robot =
     RoboConfig(LegConfig(std::make_pair(odrive1, odrive_serial_1), 0, 0.0f,
                          false),  // right_fore
                LegConfig(std::make_pair(odrive1, odrive_serial_1), 1, 0.0f,
@@ -42,22 +42,10 @@ const RoboConfig CONFIG =
                          false),  // right_hind
                LegConfig(std::make_pair(odrive2, odrive_serial_2), 1, 0.0f,
                          true),  // left_hind
-               {std::make_pair(odrive1, odrive_serial_1),
-                std::make_pair(odrive2, odrive_serial_2)});
+               {std::make_pair(odrive1, &odrive_serial_1),
+                std::make_pair(odrive2, &odrive_serial_2)});
 
-void setup() {
-    // TODO: Config in function
-    // ODrive uses 115200 baud
-    odrive_serial_1.begin(115200);
-    odrive_serial_2.begin(115200);
-
-    // Serial to PC
-    Serial.begin(115200);
-    while (!Serial)
-        ;  // wait for Arduino Serial Monitor to open
-
-    CONFIG.run_config();
-}
+void setup() { Robot.setup(); }
 
 // MAIN CONTROL LOOP
 void loop() {
@@ -95,7 +83,7 @@ void loop() {
          * @brief: runs a Buelher Clock
          */
         case 'c':
-            run_clock(CONFIG, BOUNDING, odrive1, odrive2);
+            run_clock(Robot, BOUNDING, odrive1, odrive2);
             break;
 
         /**
