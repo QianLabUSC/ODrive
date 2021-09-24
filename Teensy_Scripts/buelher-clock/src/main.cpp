@@ -53,30 +53,8 @@ void loop() {
 
     char c = Serial.read();
 
+    // Currently, no other modes are needed.
     switch (c) {
-        /**
-         * @input: 0 or 1
-         * @brief: Run calibration sequence
-         */
-        case '0':
-        case '1':
-            calibrate(c - '0', odrive1);  // convert char to int
-            break;
-
-        /**
-         * @input: 'l'
-         * @brief: starts closed loop control
-         */
-        case 'l':
-            loop_control(c, odrive1);
-            break;
-
-        // Read bus voltage
-        case 'b':
-            odrive_serial_1 << "r vbus_voltage\n";
-            Serial << "Vbus voltage: " << odrive1.readFloat() << '\n';
-            break;
-
         /**
          * @input: 'c'
          * !Note: In Development
@@ -84,14 +62,6 @@ void loop() {
          */
         case 'c':
             run_clock(Robot, BOUNDING, odrive1, odrive2);
-            break;
-
-        /**
-         * @input: 'q'
-         * @brief: sets motor state to IDLE
-         */
-        case 'q':
-            idle_state(c, odrive1);
             break;
     }
 }

@@ -30,8 +30,9 @@ void RoboConfig::setup() const {
         Serial.println(interface.first.getBoardInfo());
     }
 
+    /* Startup Calibration for ODrive */
     for (LegConfig leg : legs) {
-        calibrate(leg.axis, leg.odrv.first);  // Startup Calibration for ODrive
+        calibrate(leg.axis, leg.odrv.first);
         leg.odrv.second << "w axis" << leg.axis << ".controller.input_mode "
                         << 3 << "\n";
         if (checkError(leg.axis, leg.odrv.first, leg.odrv.second))
