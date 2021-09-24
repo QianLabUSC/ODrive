@@ -15,7 +15,7 @@ RoboConfig::RoboConfig(
       legs({right_fore, left_fore, right_hind, left_hind}) {}
 
 void RoboConfig::setup() const {
-    // /* Serial Start */
+    /* Serial Start */
     for (auto interface : interfaces) {
         interface.second->begin(BAUD);
     }
@@ -23,7 +23,7 @@ void RoboConfig::setup() const {
     while (!Serial)
         ;  // wait for Arduino Serial Monitor to open
 
-    // /* Confirm ODrive Connection */
+    /* Confirm ODrive Connection */
     Serial.println("ODriveArduino");
     Serial.println("Setting parameters...");
     for (auto interface : interfaces) {
