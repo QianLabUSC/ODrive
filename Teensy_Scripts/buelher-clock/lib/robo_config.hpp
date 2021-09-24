@@ -24,7 +24,12 @@ class LegConfig {
     // TODO: get actual HardwareSerial and ODriveArduino object!
     std::pair<ODriveArduino, HardwareSerial>
         odrv;  // which ODrive board is being addressed
-    int axis;  // which axis (0 or 1) on that board is being addressed
+
+    int axis() const { return _axis; };
+    float init_offset() const { return _init_offset; };
+
+   private:
+    int _axis;  // which axis (0 or 1) on that board is being addressed
 
     /**
      * Initial angular offset for a neutral / zero position.
@@ -32,7 +37,7 @@ class LegConfig {
      * @units: rotations
      * @bounds: [0, 1]
      */
-    float init_offset;
+    float _init_offset;
 
     // Indicates whether the motor should rotate normally, or in the opposite
     // direction.

@@ -32,10 +32,10 @@ void RoboConfig::setup() const {
 
     /* Startup Calibration for ODrive */
     for (LegConfig leg : legs) {
-        calibrate(leg.axis, leg.odrv.first);
-        leg.odrv.second << "w axis" << leg.axis << ".controller.input_mode "
+        calibrate(leg.axis(), leg.odrv.first);
+        leg.odrv.second << "w axis" << leg.axis() << ".controller.input_mode "
                         << 3 << "\n";
-        if (checkError(leg.axis, leg.odrv.first, leg.odrv.second))
+        if (checkError(leg.axis(), leg.odrv.first, leg.odrv.second))
             Serial.println("Error in Motor Axis");
     }
 
@@ -71,6 +71,6 @@ LegConfig RoboConfig::operator[](const Leg &leg) {
 LegConfig::LegConfig(std::pair<ODriveArduino, HardwareSerial> odrv, int axis,
                      float init_offset, bool invert_direction)
     : odrv(odrv),
-      axis(axis),
-      init_offset(init_offset),
+      _axis(axis),
+      _init_offset(init_offset),
       invert_direction(invert_direction) {}
