@@ -17,8 +17,8 @@
  */
 class LegConfig {
    public:
-    LegConfig(std::pair<ODriveArduino, HardwareSerial *> odrv, int axis,
-              float init_offset, bool gyre);
+    LegConfig(HardwareSerial *serial_ptr, int axis, float init_offset,
+              bool gyre);
 
     // Access Methods.
     int axis() const { return _axis; };

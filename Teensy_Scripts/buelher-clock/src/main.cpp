@@ -17,22 +17,18 @@
 #include "robo_config.hpp"
 #include "run_clock.hpp"
 
-////////////////////////////////
-// Set up serial pins to the ODrive
-////////////////////////////////
-
 // ! Robot Configuration.
-const RoboConfig Robot = RoboConfig(
-    LegConfig(std::make_pair(ODriveArduino(Serial1), &Serial1), 0, 0.0f,
-              false),  // right_fore
-    LegConfig(std::make_pair(ODriveArduino(Serial1), &Serial1), 1, 0.0f,
-              true),  // left_fore
-    LegConfig(std::make_pair(ODriveArduino(Serial2), &Serial2), 0, 0.0f,
-              false),  // right_hind
-    LegConfig(std::make_pair(ODriveArduino(Serial2), &Serial2), 1, 0.0f,
-              true),  // left_hind
-    {std::make_pair(ODriveArduino(Serial1), &Serial1),
-     std::make_pair(ODriveArduino(Serial2), &Serial2)});
+const RoboConfig Robot =
+    RoboConfig(LegConfig(&Serial1, 0, 0.0f,
+                         false),  // right_fore
+               LegConfig(&Serial1, 1, 0.0f,
+                         true),  // left_fore
+               LegConfig(&Serial2, 0, 0.0f,
+                         false),  // right_hind
+               LegConfig(&Serial2, 1, 0.0f,
+                         true),  // left_hind
+               {std::make_pair(ODriveArduino(Serial1), &Serial1),
+                std::make_pair(ODriveArduino(Serial2), &Serial2)});
 
 void setup() { Robot.setup(); }
 

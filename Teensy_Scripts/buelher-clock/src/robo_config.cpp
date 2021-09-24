@@ -69,9 +69,9 @@ LegConfig RoboConfig::operator[](const Leg &leg) {
     exit(1);
 }
 
-LegConfig::LegConfig(std::pair<ODriveArduino, HardwareSerial *> odrv, int axis,
-                     float init_offset, bool invert_direction)
-    : _odrv(odrv),
+LegConfig::LegConfig(HardwareSerial *serial_ptr, int axis, float init_offset,
+                     bool invert_direction)
+    : _odrv(std::make_pair(ODriveArduino(*serial_ptr), serial_ptr)),
       _axis(axis),
       _init_offset(init_offset),
       invert_direction(invert_direction) {}
