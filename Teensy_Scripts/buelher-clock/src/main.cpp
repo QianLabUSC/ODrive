@@ -61,7 +61,7 @@ void loop() {
          * @brief: runs a Buelher Clock
          */
         case 'c':
-            run_clock(Robot, BOUNDING, odrive1, odrive2);
+            run_clock(Robot, BOUNDING);
             break;
     }
 }

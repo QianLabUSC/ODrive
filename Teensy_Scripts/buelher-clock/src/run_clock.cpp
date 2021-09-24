@@ -58,8 +58,7 @@ float getRotations(Leg leg,                    // Robot's leg enum
             360.0f);  // divide by 360 to convert from degrees to rotations
 }
 
-void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive1,
-               ODriveArduino odrive2) {
+void run_clock(RoboConfig conf, Gait gait) {
     Serial.println("Executing Buelher Clock. Send 'q' to stop.");
 
     // MUST enter closed loop mode before starting movement.
