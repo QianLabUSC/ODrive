@@ -1,18 +1,15 @@
-#include <string>
 #include <TimeLib.h>
+
+#include <string>
 
 #include "gait.hpp"
 
-class BuelherClock
-{
-public:
-    BuelherClock(
-        float time_slow,
-        float time_fast,
-        int theta_i,
-        int theta_f,
-        int damp,
-        Gait gait);
+#ifndef __BUELHER__
+#define __BUELHER__
+class BuelherClock {
+   public:
+    BuelherClock(float time_slow, float time_fast, int theta_i, int theta_f,
+                 int damp, Gait gait);
 
     /**
      * time spent in the slow phase of rotation
@@ -36,10 +33,10 @@ public:
 
     /**
      * Damping factor on speed adjustment.
-     * The smaller the value, the more sensitive the robot is to its angular error.
-     * Small values may cause jerky overcorrection.
-     * Large values may allow falling out of sync.
-     * !Note: this is a holdover from the LSS, and may not be relevant to ODrive motors
+     * The smaller the value, the more sensitive the robot is to its angular
+     * error. Small values may cause jerky overcorrection. Large values may
+     * allow falling out of sync. !Note: this is a holdover from the LSS, and
+     * may not be relevant to ODrive motors
      */
     int damp;
 
@@ -78,22 +75,22 @@ public:
 
     /**
      * Finds clockwork leg position at given time
-     * @param elapsed time since experiement began  
+     * @param elapsed time since experiement began
      *          - units: milliseconds
      * @param clock parameters for Buelher Clock
      * @param wrap rotations to modulo over
      *          - units: rotations
      *          - default: very large number, effectively no wrapping
-     * @return target angular position 
+     * @return target angular position
      *          - units: degrees
      */
     float getPosition(long elapsed, int wrap = INT32_MAX) const;
 };
 
-const BuelherClock EXAMPLE = BuelherClock(
-    2.0, // time_slow,
-    2.0, // time_fast,
-    60,  // theta_i,
-    120, // theta_f,
-    30,  // damp,
-    TROTTING);
+const BuelherClock EXAMPLE = BuelherClock(2.0,  // time_slow,
+                                          2.0,  // time_fast,
+                                          60,   // theta_i,
+                                          120,  // theta_f,
+                                          30,   // damp,
+                                          TROTTING);
+#endif

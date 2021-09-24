@@ -1,5 +1,6 @@
 #include "robo_config.hpp"
 
+#include "../lib/ODriveArduino/ODriveArduino.h"
 #include "TorqueHelpers.hpp"
 #include "calibrate.hpp"
 
@@ -15,7 +16,7 @@ RoboConfig::RoboConfig(
       legs({right_fore, left_fore, right_hind, left_hind}) {}
 
 void RoboConfig::setup() const {
-    // /* Serial Start */
+    /* Serial Start */
     for (auto interface : interfaces) {
         interface.second->begin(BAUD);
     }
@@ -23,18 +24,19 @@ void RoboConfig::setup() const {
     while (!Serial)
         ;  // wait for Arduino Serial Monitor to open
 
-    // /* Confirm ODrive Connection */
+    /* Confirm ODrive Connection */
     Serial.println("ODriveArduino");
     Serial.println("Setting parameters...");
     for (auto interface : interfaces) {
         Serial.println(interface.first.getBoardInfo());
     }
 
+    /* Startup Calibration for ODrive */
     for (LegConfig leg : legs) {
-        calibrate(leg.axis, leg.odrv.first);  // Startup Calibration for ODrive
-        leg.odrv.second << "w axis" << leg.axis << ".controller.input_mode "
-                        << 3 << "\n";
-        if (checkError(leg.axis, leg.odrv.first, leg.odrv.second))
+        calibrate(leg.axis(), leg.odrv().first);
+        *(leg.odrv().second)
+            << "w axis" << leg.axis() << ".controller.input_mode " << 3 << "\n";
+        if (checkError(leg.axis(), leg.odrv().first, *(leg.odrv().second)))
             Serial.println("Error in Motor Axis");
     }
 
@@ -67,9 +69,17 @@ LegConfig RoboConfig::operator[](const Leg &leg) {
     exit(1);
 }
 
-LegConfig::LegConfig(std::pair<ODriveArduino, HardwareSerial> odrv, int axis,
-                     float init_offset, bool invert_direction)
-    : odrv(odrv),
-      axis(axis),
-      init_offset(init_offset),
+LegConfig::LegConfig(HardwareSerial *serial_ptr, int axis, float init_offset,
+                     bool invert_direction)
+    : _odrv(std::make_pair(ODriveArduino(*serial_ptr), serial_ptr)),
+      _axis(axis),
+      _init_offset(init_offset),
       invert_direction(invert_direction) {}
+
+void LegConfig::setPosition(float rotations) {
+    _odrv.first.SetPosition(_axis, rotations);
+}
+
+void LegConfig::setState(ODriveArduino::AxisState_t state) {
+    _odrv.first.run_state(_axis, state, false /*don't wait*/);
+}

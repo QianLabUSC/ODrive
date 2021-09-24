@@ -17,33 +17,18 @@
 #include "robo_config.hpp"
 #include "run_clock.hpp"
 
-////////////////////////////////
-// Set up serial pins to the ODrive
-////////////////////////////////
-
-// HardwareSerial &odrive_serial_1 = Serial1;
-HardwareSerial &odrive_serial_1 = Serial1;
-HardwareSerial &odrive_serial_2 = Serial2;
-
-// TODO: Remove this
-// ODrive object
-ODriveArduino odrive1(odrive_serial_1);
-ODriveArduino odrive2(odrive_serial_2);
-
-// !Note: Define Configurations Here:
-
-// 21.08.12 testing config with 2 motors
+// ! Robot Configuration.
 const RoboConfig Robot =
-    RoboConfig(LegConfig(std::make_pair(odrive1, odrive_serial_1), 0, 0.0f,
+    RoboConfig(LegConfig(&Serial1, 0, 0.0f,
                          false),  // right_fore
-               LegConfig(std::make_pair(odrive1, odrive_serial_1), 1, 0.0f,
+               LegConfig(&Serial1, 1, 0.0f,
                          true),  // left_fore
-               LegConfig(std::make_pair(odrive2, odrive_serial_2), 0, 0.0f,
+               LegConfig(&Serial2, 0, 0.0f,
                          false),  // right_hind
-               LegConfig(std::make_pair(odrive2, odrive_serial_2), 1, 0.0f,
+               LegConfig(&Serial2, 1, 0.0f,
                          true),  // left_hind
-               {std::make_pair(odrive1, &odrive_serial_1),
-                std::make_pair(odrive2, &odrive_serial_2)});
+               {std::make_pair(ODriveArduino(Serial1), &Serial1),
+                std::make_pair(ODriveArduino(Serial2), &Serial2)});
 
 void setup() { Robot.setup(); }
 
@@ -53,45 +38,15 @@ void loop() {
 
     char c = Serial.read();
 
+    // Currently, no other modes are needed.
     switch (c) {
-        /**
-         * @input: 0 or 1
-         * @brief: Run calibration sequence
-         */
-        case '0':
-        case '1':
-            calibrate(c - '0', odrive1);  // convert char to int
-            break;
-
-        /**
-         * @input: 'l'
-         * @brief: starts closed loop control
-         */
-        case 'l':
-            loop_control(c, odrive1);
-            break;
-
-        // Read bus voltage
-        case 'b':
-            odrive_serial_1 << "r vbus_voltage\n";
-            Serial << "Vbus voltage: " << odrive1.readFloat() << '\n';
-            break;
-
         /**
          * @input: 'c'
          * !Note: In Development
          * @brief: runs a Buelher Clock
          */
         case 'c':
-            run_clock(Robot, BOUNDING, odrive1, odrive2);
-            break;
-
-        /**
-         * @input: 'q'
-         * @brief: sets motor state to IDLE
-         */
-        case 'q':
-            idle_state(c, odrive1);
+            run_clock(Robot, BOUNDING);
             break;
     }
 }

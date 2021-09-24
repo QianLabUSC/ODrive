@@ -1,41 +1,16 @@
+#include "ODriveState.hpp"
+
 #include <Arduino.h>
 #include <HardwareSerial.h>
 #include <SoftwareSerial.h>
-#include "../lib/ODriveArduino/ODriveArduino.h"
+
 #include <cstdio>
 
-#include "UtilityHelpers.hpp"
-#include "ODriveState.hpp"
+#include "../lib/ODriveArduino/ODriveArduino.h"
 #include "TorqueHelpers.hpp" /* formatTime */
+#include "UtilityHelpers.hpp"
 #include "buelher.hpp"
-/**
- * @param c: the axis to set loop control on
- * - valid values: 0, 1
- * @param odrive: the ODrive Object
- * !Note: non blocking, motor may not have closed loop control on return!
- */
-void loop_control(char c, ODriveArduino odrive)
-{
-    int requested_state;
-
-    requested_state = ODriveArduino::AXIS_STATE_CLOSED_LOOP_CONTROL;
-    Serial << "Axis" << c << ": Requesting state " << requested_state << '\n';
-    if (!odrive.run_state(c, requested_state, false /*don't wait*/))
-        return;
-}
-
-void idle_state(char c, ODriveArduino odrive)
-{
-    int requested_state;
-
-    requested_state = ODriveArduino::AXIS_STATE_IDLE;
-    Serial << "Axis" << c << ": Requesting state: IDLE (1)" << '\n';
-    if (!odrive.run_state(c, requested_state, false))
-        return;
-}
-
-void buelher_clock(char c, ODriveArduino odrive, BuelherClock config)
-{
+void buelher_clock(char c, ODriveArduino odrive, BuelherClock config) {
     // MUST enter closed loop mode before starting movement
     loop_control(c, odrive);
 
@@ -53,13 +28,11 @@ void buelher_clock(char c, ODriveArduino odrive, BuelherClock config)
     long elapsed = millis() - start;
 
     /**
-             * Loop Until Time Elapses or Q is pressed.
-             */
-    while (cont && elapsed < dur)
-    {
+     * Loop Until Time Elapses or Q is pressed.
+     */
+    while (cont && elapsed < dur) {
         elapsed = millis() - start;
-        if (Serial.read() == 'q')
-        {
+        if (Serial.read() == 'q') {
             cont = false;
             continue;
         }
@@ -69,10 +42,11 @@ void buelher_clock(char c, ODriveArduino odrive, BuelherClock config)
 
         odrive.SetPosition(0, ref_rots);
 
-        formatTime(time); //gets the time (minutes:seconds:milliseconds)
-        Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| " << ref_rots << "\n";
+        formatTime(time);  // gets the time (minutes:seconds:milliseconds)
+        Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| "
+               << ref_rots << "\n";
     }
-    
+
     // return motor to idle state on interrupt or completion
     idle_state(c, odrive);
 }
