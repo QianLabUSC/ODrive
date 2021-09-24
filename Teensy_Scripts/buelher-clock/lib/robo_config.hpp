@@ -29,6 +29,7 @@ class LegConfig {
 
     // Leg Movement
     void setPosition(float rotations);
+    void setState(ODriveArduino::AxisState_t state);
 
    private:
     // Respective ODrive board.

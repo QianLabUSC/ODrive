@@ -62,12 +62,10 @@ void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive1,
                ODriveArduino odrive2) {
     Serial.println("Executing Buelher Clock. Send 'q' to stop.");
 
-    // MUST enter closed loop mode before starting movement
-    // TODO: set all 4 legs
-    loop_control(0, odrive1);
-    loop_control(1, odrive1);
-    loop_control(0, odrive2);
-    loop_control(1, odrive2);
+    // MUST enter closed loop mode before starting movement.
+    for (auto leg : conf.legs) {
+        leg.setState(ODriveArduino::AXIS_STATE_CLOSED_LOOP_CONTROL);
+    }
 
     bool cont = true;  // flag boolean to kill loop
     char time[12];     // time string
@@ -98,18 +96,12 @@ void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive1,
         formatTime(time);  // gets the time (minutes:seconds:milliseconds)
         Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| "
                << ref_rots << "\n";
-
-        // !Note: In Progress
-        // float TEMP1 = getPosition(right_fore, conf, gait, EXAMPLE, elapsed);
-        // float TEMP2 = getPosition(right_hind, conf, gait, EXAMPLE, elapsed);
     }
 
-    // return motor to idle state on interrupt or completion
-    // TODO: set all 4 legs
-    idle_state(0, odrive1);
-    idle_state(1, odrive1);
-    idle_state(0, odrive2);
-    idle_state(1, odrive2);
+    // Idle Motors.
+    for (auto leg : conf.legs) {
+        leg.setState(ODriveArduino::AXIS_STATE_IDLE);
+    }
 
     Serial << "DONE\n";
 }

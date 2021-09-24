@@ -79,3 +79,7 @@ LegConfig::LegConfig(std::pair<ODriveArduino, HardwareSerial *> odrv, int axis,
 void LegConfig::setPosition(float rotations) {
     _odrv.first.SetPosition(_axis, rotations);
 }
+
+void LegConfig::setState(ODriveArduino::AxisState_t state) {
+    _odrv.first.run_state(_axis, state, false /*don't wait*/);
+}
