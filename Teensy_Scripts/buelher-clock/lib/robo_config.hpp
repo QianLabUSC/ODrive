@@ -17,11 +17,13 @@
  */
 class LegConfig {
    public:
-    LegConfig(HardwareSerial odrv, int axis, float init_offset, bool gyre);
+    LegConfig(std::pair<ODriveArduino, HardwareSerial> odrv, int axis,
+              float init_offset, bool gyre);
 
     // Address a specific motor
     // TODO: get actual HardwareSerial and ODriveArduino object!
-    HardwareSerial odrv;  // which ODrive board is being addressed
+    std::pair<ODriveArduino, HardwareSerial>
+        odrv;  // which ODrive board is being addressed
     int axis;  // which axis (0 or 1) on that board is being addressed
 
     /**
@@ -44,6 +46,7 @@ class LegConfig {
  */
 class RoboConfig {
    public:
+    static const int BAUD = 115200;
     static const int MOTOR_COUNT = 4;
 
     RoboConfig(
@@ -66,6 +69,7 @@ class RoboConfig {
     LegConfig left_fore;
     LegConfig right_hind;
     LegConfig left_hind;
+    std::vector<LegConfig> legs;
 };
 
 #endif

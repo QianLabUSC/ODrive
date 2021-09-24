@@ -4,13 +4,45 @@ RoboConfig::RoboConfig(
     LegConfig right_fore, LegConfig left_fore, LegConfig right_hind,
     LegConfig left_hind,
     std::vector<std::pair<ODriveArduino, HardwareSerial>> interfaces)
-    : right_fore(right_fore),
+    : interfaces(interfaces),
+      right_fore(right_fore),
       left_fore(left_fore),
       right_hind(right_hind),
       left_hind(left_hind),
-      interfaces(interfaces) {}
+      legs({right_fore, left_fore, right_hind, left_hind}) {}
 
-void run_config() {}
+void RoboConfig::run_config() {
+    /* Serial Start */
+    for (auto interface : interfaces) {
+        interface.second.begin(BAUD);
+    }
+    Serial.begin(BAUD);  // Serial to PC
+    while (!Serial)
+        ;  // wait for Arduino Serial Monitor to open
+
+    /* Confirm ODrive Connection */
+    Serial.println("ODriveArduino");
+    Serial.println("Setting parameters...");
+    for (auto interface : interfaces) {
+        Serial.println(interface.first.getBoardInfo());
+    }
+
+    for (LegConfig leg : legs) {
+        // calibrate(leg.axis, leg.odrv);  // Startup Calibration for ODrive
+        // odrive_serial_1 << "w axis" << 0 << ".controller.input_mode " << 3
+        //                 << "\n";
+        // if (checkError(0, odrive1, odrive_serial_1))
+        //     Serial.println("Error in Motor Axis 0");
+    }
+
+    Serial.println(
+        "Motor Armed & Ready\n"
+        "Command Menu:\n"
+        "	'l' -> enter closed loop control.\n"
+        "	'b' -> reads bus voltage\n"
+        "	'q' -> Sends motors to IDLE STATE\n"
+        "	'c' -> Execute Buelher Clock\n");
+}
 
 LegConfig RoboConfig::operator[](const Leg &leg) {
     switch (leg) {
@@ -32,8 +64,8 @@ LegConfig RoboConfig::operator[](const Leg &leg) {
     exit(1);
 }
 
-LegConfig::LegConfig(HardwareSerial odrv, int axis, float init_offset,
-                     bool invert_direction)
+LegConfig::LegConfig(std::pair<ODriveArduino, HardwareSerial> odrv, int axis,
+                     float init_offset, bool invert_direction)
     : odrv(odrv),
       axis(axis),
       init_offset(init_offset),

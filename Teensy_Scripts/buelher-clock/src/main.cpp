@@ -33,13 +33,13 @@ ODriveArduino odrive2(odrive_serial_2);
 // !Note: Define Configurations Here:
 
 // 21.08.12 testing config with 2 motors
-const RoboConfig CONFIG =
-    RoboConfig(LegConfig(Serial1, 0, 0.0f, false),  // right_fore
-               LegConfig(Serial1, 1, 0.0f, true),   // left_fore
-               LegConfig(Serial2, 0, 0.0f, false),  // right_hind
-               LegConfig(Serial2, 1, 0.0f, true),   // left_hind
-               {std::make_pair(odrive1, odrive_serial_1),
-                std::make_pair(odrive2, odrive_serial_2)});
+const RoboConfig CONFIG = RoboConfig(
+    LegConfig(std::make_pair(odrive1, Serial1), 0, 0.0f, false),  // right_fore
+    LegConfig(std::make_pair(odrive1, Serial1), 1, 0.0f, true),   // left_fore
+    LegConfig(std::make_pair(odrive2, Serial2), 0, 0.0f, false),  // right_hind
+    LegConfig(std::make_pair(odrive2, Serial2), 1, 0.0f, true),   // left_hind
+    {std::make_pair(odrive1, odrive_serial_1),
+     std::make_pair(odrive2, odrive_serial_2)});
 
 void setup() {
     // TODO: Config in function
@@ -83,15 +83,13 @@ void setup() {
         Serial.println("Error in Motor Axis 1");
 
     // serial monitor interface
-    Serial.println("Motor Armed & Ready");
-    Serial.println("Command Menu:");
     Serial.println(
-        "	'0' or '1' -> calibrate respective motor (you must do this "
-        "before you can command movement)");
-    Serial.println("	'l' -> enter closed loop control.");
-    Serial.println("	'b' -> reads bus voltage");
-    Serial.println("	'q' -> Sends motors to IDLE STATE");
-    Serial.println("	'c' -> Execute Buelher Clock");
+        "Motor Armed & Ready\n"
+        "Command Menu:\n"
+        "	'l' -> enter closed loop control.\n"
+        "	'b' -> reads bus voltage\n"
+        "	'q' -> Sends motors to IDLE STATE\n"
+        "	'c' -> Execute Buelher Clock\n");
 }
 
 // MAIN CONTROL LOOP
