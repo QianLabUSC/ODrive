@@ -56,14 +56,16 @@ float getRotations(
     return angle * (1.0f / 360.0f); // divide by 360 to convert from degrees to rotations
 }
 
-void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive)
+void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive1, ODriveArduino odrive2)
 {
     Serial.println("Executing Buelher Clock. Send 'q' to stop.");
 
     // MUST enter closed loop mode before starting movement
     // TODO: set all 4 legs
-    loop_control(0, odrive);
-    loop_control(1, odrive);
+    loop_control(0, odrive1);
+    loop_control(1, odrive1);
+    loop_control(0, odrive2);
+    loop_control(1, odrive2);
 
     bool cont = true; // flag boolean to kill loop
     char time[12];    // time string
@@ -86,8 +88,10 @@ void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive)
 
         // odrive.SetPosition(0, ref_rots);
         // odrive.SetPosition(1, ref_rots);
-        odrive.SetPosition(0, getRotations(right_fore, conf, gait, EXAMPLE, elapsed));
-        odrive.SetPosition(1, getRotations(right_hind, conf, gait, EXAMPLE, elapsed));
+        odrive1.SetPosition(0, getRotations(right_fore, conf, gait, EXAMPLE, elapsed));
+        odrive1.SetPosition(1, getRotations(right_hind, conf, gait, EXAMPLE, elapsed));
+        odrive2.SetPosition(0, getRotations(right_fore, conf, gait, EXAMPLE, elapsed));
+        odrive2.SetPosition(1, getRotations(right_hind, conf, gait, EXAMPLE, elapsed));
 
         formatTime(time); //gets the time (minutes:seconds:milliseconds)
         Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| " << ref_rots << "\n";
@@ -99,8 +103,10 @@ void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive)
 
     // return motor to idle state on interrupt or completion
     // TODO: set all 4 legs
-    idle_state(0, odrive);
-    idle_state(1, odrive);
+    idle_state(0, odrive1);
+    idle_state(1, odrive1);
+    idle_state(0, odrive2);
+    idle_state(1, odrive2);
 
     Serial << "DONE\n";
 }
