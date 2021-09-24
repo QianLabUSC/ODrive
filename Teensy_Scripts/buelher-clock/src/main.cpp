@@ -34,13 +34,13 @@ ODriveArduino odrive2(odrive_serial_2);
 
 // 21.08.12 testing config with 2 motors
 const RoboConfig Robot =
-    RoboConfig(LegConfig(std::make_pair(odrive1, odrive_serial_1), 0, 0.0f,
+    RoboConfig(LegConfig(std::make_pair(odrive1, &odrive_serial_1), 0, 0.0f,
                          false),  // right_fore
-               LegConfig(std::make_pair(odrive1, odrive_serial_1), 1, 0.0f,
+               LegConfig(std::make_pair(odrive1, &odrive_serial_1), 1, 0.0f,
                          true),  // left_fore
-               LegConfig(std::make_pair(odrive2, odrive_serial_2), 0, 0.0f,
+               LegConfig(std::make_pair(odrive2, &odrive_serial_2), 0, 0.0f,
                          false),  // right_hind
-               LegConfig(std::make_pair(odrive2, odrive_serial_2), 1, 0.0f,
+               LegConfig(std::make_pair(odrive2, &odrive_serial_2), 1, 0.0f,
                          true),  // left_hind
                {std::make_pair(odrive1, &odrive_serial_1),
                 std::make_pair(odrive2, &odrive_serial_2)});
