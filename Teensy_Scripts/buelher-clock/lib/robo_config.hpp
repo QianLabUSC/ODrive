@@ -58,7 +58,7 @@ class RoboConfig {
     // - Read Only!
     LegConfig operator[](const Leg &leg);
 
-    void run_config();
+    void run_config() const;
 
     // The serial interfaces to the legs.
     // Programmer must ensure these are the same ODriveArduinos and Serials

@@ -1,5 +1,8 @@
 #include "robo_config.hpp"
 
+#include "TorqueHelpers.hpp"
+#include "calibrate.hpp"
+
 RoboConfig::RoboConfig(
     LegConfig right_fore, LegConfig left_fore, LegConfig right_hind,
     LegConfig left_hind,
@@ -11,16 +14,16 @@ RoboConfig::RoboConfig(
       left_hind(left_hind),
       legs({right_fore, left_fore, right_hind, left_hind}) {}
 
-void RoboConfig::run_config() {
-    /* Serial Start */
-    for (auto interface : interfaces) {
-        interface.second.begin(BAUD);
-    }
-    Serial.begin(BAUD);  // Serial to PC
-    while (!Serial)
-        ;  // wait for Arduino Serial Monitor to open
+void RoboConfig::run_config() const {
+    // /* Serial Start */
+    // for (auto interface : interfaces) {
+    //     interface.second.begin(BAUD);
+    // }
+    // Serial.begin(BAUD);  // Serial to PC
+    // while (!Serial)
+    //     ;  // wait for Arduino Serial Monitor to open
 
-    /* Confirm ODrive Connection */
+    // /* Confirm ODrive Connection */
     Serial.println("ODriveArduino");
     Serial.println("Setting parameters...");
     for (auto interface : interfaces) {
@@ -28,11 +31,11 @@ void RoboConfig::run_config() {
     }
 
     for (LegConfig leg : legs) {
-        // calibrate(leg.axis, leg.odrv);  // Startup Calibration for ODrive
-        // odrive_serial_1 << "w axis" << 0 << ".controller.input_mode " << 3
-        //                 << "\n";
-        // if (checkError(0, odrive1, odrive_serial_1))
-        //     Serial.println("Error in Motor Axis 0");
+        calibrate(leg.axis, leg.odrv.first);  // Startup Calibration for ODrive
+        leg.odrv.second << "w axis" << leg.axis << ".controller.input_mode "
+                        << 3 << "\n";
+        if (checkError(leg.axis, leg.odrv.first, leg.odrv.second))
+            Serial.println("Error in Motor Axis");
     }
 
     Serial.println(
