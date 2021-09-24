@@ -21,29 +21,18 @@
 // Set up serial pins to the ODrive
 ////////////////////////////////
 
-// HardwareSerial &odrive_serial_1 = Serial1;
-HardwareSerial &odrive_serial_1 = Serial1;
-HardwareSerial &odrive_serial_2 = Serial2;
-
-// TODO: Remove this
-// ODrive object
-ODriveArduino odrive1(odrive_serial_1);
-ODriveArduino odrive2(odrive_serial_2);
-
-// !Note: Define Configurations Here:
-
-// 21.08.12 testing config with 2 motors
-const RoboConfig Robot =
-    RoboConfig(LegConfig(std::make_pair(odrive1, &odrive_serial_1), 0, 0.0f,
-                         false),  // right_fore
-               LegConfig(std::make_pair(odrive1, &odrive_serial_1), 1, 0.0f,
-                         true),  // left_fore
-               LegConfig(std::make_pair(odrive2, &odrive_serial_2), 0, 0.0f,
-                         false),  // right_hind
-               LegConfig(std::make_pair(odrive2, &odrive_serial_2), 1, 0.0f,
-                         true),  // left_hind
-               {std::make_pair(odrive1, &odrive_serial_1),
-                std::make_pair(odrive2, &odrive_serial_2)});
+// ! Robot Configuration.
+const RoboConfig Robot = RoboConfig(
+    LegConfig(std::make_pair(ODriveArduino(Serial1), &Serial1), 0, 0.0f,
+              false),  // right_fore
+    LegConfig(std::make_pair(ODriveArduino(Serial1), &Serial1), 1, 0.0f,
+              true),  // left_fore
+    LegConfig(std::make_pair(ODriveArduino(Serial2), &Serial2), 0, 0.0f,
+              false),  // right_hind
+    LegConfig(std::make_pair(ODriveArduino(Serial2), &Serial2), 1, 0.0f,
+              true),  // left_hind
+    {std::make_pair(ODriveArduino(Serial1), &Serial1),
+     std::make_pair(ODriveArduino(Serial2), &Serial2)});
 
 void setup() { Robot.setup(); }
 
