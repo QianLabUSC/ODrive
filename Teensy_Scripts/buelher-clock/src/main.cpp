@@ -28,6 +28,16 @@ HardwareSerial &odrive_serial_2 = Serial2;
 ODriveArduino odrive1(odrive_serial_1);
 ODriveArduino odrive2(odrive_serial_2);
 
+// !Note: Define Configurations Here:
+
+// 21.08.12 testing config with 2 motors
+const RoboConfig CONFIG =
+    RoboConfig(LegConfig(Serial1, 0, 0.0f, false),  // right_fore
+               LegConfig(Serial1, 1, 0.0f, true),   // left_fore
+               LegConfig(Serial2, 0, 0.0f, false),  // right_hind
+               LegConfig(Serial2, 1, 0.0f, true)    // left_hind
+    );
+
 void setup() {
     // TODO: Config in function
     // ODrive uses 115200 baud
