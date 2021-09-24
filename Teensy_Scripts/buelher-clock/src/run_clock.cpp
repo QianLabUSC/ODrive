@@ -86,16 +86,14 @@ void run_clock(RoboConfig conf, Gait gait, ODriveArduino odrive1,
         float ref_angle = EXAMPLE.getPosition(elapsed, 1);
         float ref_rots = (1.0f / 360.0f) * ref_angle;
 
-        // odrive.SetPosition(0, ref_rots);
-        // odrive.SetPosition(1, ref_rots);
-        odrive1.SetPosition(
-            0, getRotations(right_fore, conf, gait, EXAMPLE, elapsed));
-        odrive1.SetPosition(
-            1, getRotations(right_hind, conf, gait, EXAMPLE, elapsed));
-        odrive2.SetPosition(
-            0, getRotations(right_fore, conf, gait, EXAMPLE, elapsed));
-        odrive2.SetPosition(
-            1, getRotations(right_hind, conf, gait, EXAMPLE, elapsed));
+        conf[right_fore].setPosition(
+            getRotations(right_fore, conf, gait, EXAMPLE, elapsed));
+        conf[right_hind].setPosition(
+            getRotations(right_hind, conf, gait, EXAMPLE, elapsed));
+        conf[left_fore].setPosition(
+            getRotations(left_fore, conf, gait, EXAMPLE, elapsed));
+        conf[left_hind].setPosition(
+            getRotations(left_hind, conf, gait, EXAMPLE, elapsed));
 
         formatTime(time);  // gets the time (minutes:seconds:milliseconds)
         Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| "

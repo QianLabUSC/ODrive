@@ -27,6 +27,9 @@ class LegConfig {
         return _odrv;
     };
 
+    // Leg Movement
+    void setPosition(float rotations);
+
    private:
     // Respective ODrive board.
     std::pair<ODriveArduino, HardwareSerial *> _odrv;

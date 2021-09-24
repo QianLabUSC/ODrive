@@ -1,5 +1,6 @@
 #include "robo_config.hpp"
 
+#include "../lib/ODriveArduino/ODriveArduino.h"
 #include "TorqueHelpers.hpp"
 #include "calibrate.hpp"
 
@@ -74,3 +75,7 @@ LegConfig::LegConfig(std::pair<ODriveArduino, HardwareSerial *> odrv, int axis,
       _axis(axis),
       _init_offset(init_offset),
       invert_direction(invert_direction) {}
+
+void LegConfig::setPosition(float rotations) {
+    _odrv.first.SetPosition(_axis, rotations);
+}
