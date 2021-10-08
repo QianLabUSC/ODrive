@@ -46,7 +46,7 @@ void loop() {
          * @brief: runs a Buelher Clock
          */
         case 'c':
-            run_clock(Robot, BOUNDING);
+            run_clock(Robot, Gait::BOUNDING);
             break;
     }
 }
