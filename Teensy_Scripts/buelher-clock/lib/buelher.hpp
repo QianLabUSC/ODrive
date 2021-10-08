@@ -9,7 +9,7 @@
 class BuelherClock {
    public:
     BuelherClock(float time_slow, float time_fast, int theta_i, int theta_f,
-                 int damp, Gait gait);
+                 int damp, Gait::Gait gait);
 
     /**
      * time spent in the slow phase of rotation
@@ -41,7 +41,7 @@ class BuelherClock {
     int damp;
 
     /** Gait Parameters */
-    Gait gait;
+    Gait::Gait gait;
 
     /* COMPUTED PARAMETERS */
 
@@ -92,5 +92,5 @@ const BuelherClock EXAMPLE = BuelherClock(2.0,  // time_slow,
                                           60,   // theta_i,
                                           120,  // theta_f,
                                           30,   // damp,
-                                          TROTTING);
+                                          Gait::TROTTING);
 #endif

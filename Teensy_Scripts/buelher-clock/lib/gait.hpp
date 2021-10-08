@@ -5,6 +5,7 @@
 #ifndef __GAIT__
 #define __GAIT__
 
+namespace Gait {
 /**
  * Configuration object describing a gait in a 4 legged 1 DOF robot.
  */
@@ -41,4 +42,6 @@ const Gait BOUNDING = Gait("BOUND",
                            0,     // left_fore
                            180,   // right_hind
                            180);  // left_hind
+}  // namespace Gait
+
 #endif

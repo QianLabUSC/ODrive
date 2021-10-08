@@ -5,4 +5,4 @@
 /**
  * Run motor in Buelher clock mode
  */
-void run_clock(RoboConfig conf, Gait gait);
+void run_clock(RoboConfig conf, Gait::Gait gait);
