@@ -4,10 +4,14 @@
 #include <HardwareSerial.h>
 #include <SoftwareSerial.h>
 
+#include <sstream>
+
 #include "../lib/ODriveArduino/ODriveArduino.h"
 #include "UtilityHelpers.hpp"
 
 string Console::cmd_str;
+
+using std::istringstream;
 
 Console::Command Console::listen() {
     if (Serial.available() == false) {
@@ -19,7 +23,6 @@ Console::Command Console::listen() {
     // Note: "Enter" is considered to be a Carriage Return.
     if (c == '\r') {
         Serial.println("");
-        Serial.print("> ");
 
         return interpret();
     } else {
@@ -36,9 +39,22 @@ Console::Command Console::interpret() {
 
     if (cmd == "q") {
         return QUIT;
-    } else if (cmd == "quit") {
-        return QUIT;
-    } else {
-        return UNKNOWN;
     }
+    if (cmd == "quit") {
+        return QUIT;
+    }
+    if (cmd.substr(0, 4) == "gait") {
+        Serial.println(cmd.c_str());
+        istringstream iss(cmd);
+        int L_FORE, R_HIND, L_HIND;
+        iss >> L_FORE;
+        iss >> R_HIND;
+        iss >> L_HIND;
+        Serial << L_FORE << R_HIND << L_HIND;
+        if (iss.fail()) {
+            Serial.println("Could not parse gait.");
+        }
+        return GAIT;
+    }
+    return UNKNOWN;
 }
