@@ -92,8 +92,10 @@ void run_clock(RoboConfig conf, Gait::Gait gait) {
             getRotations(left_hind, conf, gait, EXAMPLE, elapsed));
 
         formatTime(time);  // gets the time (minutes:seconds:milliseconds)
-        Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| "
-               << ref_rots << "\n";
+
+        // Disabled while testing serial in.
+        // Serial << "| " << elapsed / 1000.0f << "| " << ref_angle << "| "
+        //        << ref_rots << "\n";
     }
 
     // Idle Motors.
