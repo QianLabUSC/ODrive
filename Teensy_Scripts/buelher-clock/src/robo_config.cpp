@@ -43,9 +43,6 @@ void RoboConfig::setup() const {
     Serial.println(
         "Motor Armed & Ready\n"
         "Command Menu:\n"
-        "	'l' -> enter closed loop control.\n"
-        "	'b' -> reads bus voltage\n"
-        "	'q' -> Sends motors to IDLE STATE\n"
         "	'c' -> Execute Buelher Clock\n");
 }
 
