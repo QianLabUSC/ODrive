@@ -11,6 +11,7 @@
 #include "TorqueHelpers.hpp"
 #include "UtilityHelpers.hpp"
 #include "buelher.hpp"
+#include "console.h"
 #include "legs.hpp"
 
 // max duration in milliseconds
@@ -77,7 +78,8 @@ void run_clock(RoboConfig conf, Gait::Gait gait) {
      */
     while (elapsed < dur) {
         elapsed = millis() - start;
-        if (Serial.read() == 'q') break;
+        Console::Command cmd = Console::listen();
+        if (cmd == Console::Command::QUIT) break;
 
         float ref_angle = EXAMPLE.getPosition(elapsed, 1);
         float ref_rots = (1.0f / 360.0f) * ref_angle;
