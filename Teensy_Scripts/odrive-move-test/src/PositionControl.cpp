@@ -9,10 +9,10 @@
 /**
  * @brief Returns a pair of motor angles converted to radians
  */
-std::pair<float, float> GetAngles(LegConfig leg)
+void GetAngles(LegConfig leg, float &angle_0, float &angle_1)
 {
-    float angle_0 = leg.odrv().first.GetPosition(0) * 2 * PI;
-    float angle_1 = leg.odrv().first.GetPosition(1) * 2 * PI;
+    angle_0 = leg.odrv().first.GetPosition(0) * 2 * PI;
+    angle_1 = leg.odrv().first.GetPosition(1) * 2 * PI;
 
 // DEBUG OUTPUT
 #ifdef DEBUG
@@ -21,8 +21,6 @@ std::pair<float, float> GetAngles(LegConfig leg)
     Serial.print("DEBUG:: Axis Angle Outputs:\n");
     Serial.print(buffer);
 #endif
-
-    return std::make_pair(angle_0, angle_1);
 }
 
 /**
@@ -33,19 +31,17 @@ std::pair<float, float> GetAngles(LegConfig leg)
  * @return : Pair (Theta, Gamma) representing the motor separation
  *             for the given input parameters
  */
-std::pair<float, float> GetGamma(float L, float Theta)
+void GetGamma(float L, float theta, float &gamma)
 {
-    float gamma = acos((pow(l_1, 2) + pow(L, 2) + pow(l_2, 2)) / (2 * l_2 * L));
+    gamma = acos((pow(l_1, 2) + pow(L, 2) + pow(l_2, 2)) / (2 * l_2 * L));
 
 // DEBUG OUTPUT
 #ifdef DEBUG
     char buffer[80];
-    sprintf(buffer, "Theta: %f, Gamma: %f\n", Theta, gamma);
+    sprintf(buffer, "Theta: %f, Gamma: %f\n", theta, gamma);
     Serial.print("DEBUG:: Theta Gamma Calculation:\n");
     Serial.print(buffer);
 #endif
-
-    return std::make_pair(Theta, gamma);
 }
 
 /**
@@ -56,11 +52,11 @@ std::pair<float, float> GetGamma(float L, float Theta)
  *
  * @return : Returns <Length, Angle, Gamma>
  */
-std::tuple<float, float, float> PhysicalToAbstract(float X, float Y)
+void PhysicalToAbstract(float X, float Y, float &L, float &theta, float &gamma)
 {
-    float L = sqrt(pow(X, 2) + pow(X, 2));
-    float theta = atan2(Y, X);
-    float gamma = (float)acos((pow(l_1, 2) + pow(L, 2) + pow(l_2, 2)) / (2 * l_2 * L));
+    L = sqrt(pow(X, 2) + pow(X, 2));
+    theta = atan2(Y, X);
+    gamma = (float)acos((pow(l_1, 2) + pow(L, 2) + pow(l_2, 2)) / (2 * l_2 * L));
 
 // DEBUG OUTPUT
 #ifdef DEBUG
@@ -69,8 +65,6 @@ std::tuple<float, float, float> PhysicalToAbstract(float X, float Y)
     Serial.print("DEBUG:: Physical to Abstract:\n");
     Serial.print(buffer);
 #endif
-
-    return std::make_tuple(L, theta, gamma);
 }
 
 /**
@@ -78,13 +72,15 @@ std::tuple<float, float, float> PhysicalToAbstract(float X, float Y)
  *          *This function internally calls the motor angles
  * @return : Returns <Length, Angle, Gamma>
  */
-std::tuple<float, float, float> PhysicalToAbstract(LegConfig leg)
+void PhysicalToAbstract(LegConfig leg, float &L, float &theta, float &gamma)
 {
-    std::pair<float, float> angle = GetAngles(leg);
+    float angle_0, angle_1;
 
-    float gamma = (180 - (angle.first + angle.second)) / 2.0f;
-    float theta = angle.first + gamma;
-    float L = sqrt(pow(l_1, 2) + pow(l_2, 2) - 2 * l_1 * l_2 * cos(gamma));
+    GetAngles(leg, angle_0, angle_1);
+
+    gamma = (180 - (angle_0 + angle_1)) / 2.0f;
+    theta = angle_0 + gamma;
+    L = sqrt(pow(l_1, 2) + pow(l_2, 2) - 2 * l_1 * l_2 * cos(gamma));
 
 // DEBUG OUTPUT
 #ifdef DEBUG
@@ -93,8 +89,6 @@ std::tuple<float, float, float> PhysicalToAbstract(LegConfig leg)
     Serial.print("DEBUG:: Physical to Abstract:\n");
     Serial.print(buffer);
 #endif
-
-    return std::tuple<float, float, float>(L, theta, gamma);
 }
 
 /**
@@ -105,10 +99,10 @@ std::tuple<float, float, float> PhysicalToAbstract(LegConfig leg)
  * @return : Pair (X, Y) representing the position of the toe in relation to
  *              the Origin (the hip joint)
  */
-std::pair<float, float> AbstractToPhysical(float L, float Theta)
+void AbstractToPhysical(float L, float Theta, float &x, float &y)
 {
-    float x = L * cos(Theta);
-    float y = L * sin(Theta);
+    x = L * cos(Theta);
+    y = L * sin(Theta);
 
 // DEBUG OUTPUT
 #ifdef DEBUG
@@ -117,8 +111,14 @@ std::pair<float, float> AbstractToPhysical(float L, float Theta)
     Serial.print("DEBUG:: Abstract To Physical:\n");
     Serial.print(buffer);
 #endif
+}
 
-    return std::pair<float, float>(x, y);
+void MoveToPosition(ODriveArduino &odrive, float t)
+{
+}
+
+void RadialTrajectory(float t, float distance, float angle, float &L, float &theta)
+{
 }
 
 // ! MUST FIND WORKSPACE EMPIRICALLY

@@ -11,17 +11,19 @@
 const float l_1 = 0.1;
 const float l_2 = 0.2;
 
-std::pair<float, float> GetAngles(LegConfig leg);
+void GetAngles(LegConfig leg, float& angle_0, float& angle_1);
 
-std::pair<float, float> GetGamma(float L, float Theta);
+void GetGamma(float L, float theta, float& gamma);
 
-std::tuple<float, float, float> PhysicalToAbstract(float X, float Y);
+void PhysicalToAbstract(float X, float Y, float& L, float& theta, float& gamma);
 
-std::tuple<float, float, float> PhysicalToAbstract(LegConfig leg);
+void PhysicalToAbstract(LegConfig leg, float& L, float& theta, float& gamma);
 
-std::pair<float, float> AbstractToPhysical(float L, float Theta);
+void AbstractToPhysical(float L, float Theta, float& x, float& y);
 
+void MoveToPosition(LegConfig leg, float t);
 
+void RadialTrajectory(float t, float distance, float angle, float& L, float& theta);
 
 bool inBounds(float L, float Theta);
 
