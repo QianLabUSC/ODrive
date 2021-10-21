@@ -1,0 +1,185 @@
+{
+  "name": "Tuning",
+  "component": "Dashboard",
+  "id": "deadb33f",
+  "controls": [
+    {
+      "controlType": "CtrlEnum",
+      "path": "odrives.odrive0.axis1.requested_state",
+      "options": [
+        {
+          "text": "Undefined",
+          "value": 0
+        },
+        {
+          "text": "Idle",
+          "value": 1
+        },
+        {
+          "text": "Startup Sequence",
+          "value": 2
+        },
+        {
+          "text": "Full Calibration Sequence",
+          "value": 3
+        },
+        {
+          "text": "Motor Calibration",
+          "value": 4
+        },
+        {
+          "text": "Sensorless Control",
+          "value": 5
+        },
+        {
+          "text": "Encoder Index Search",
+          "value": 6
+        },
+        {
+          "text": "Encoder Offset Calibration",
+          "value": 7
+        },
+        {
+          "text": "Closed Loop Control",
+          "value": 8
+        },
+        {
+          "text": "Lockin Spin",
+          "value": 9
+        },
+        {
+          "text": "Encoder Direction Find",
+          "value": 10
+        },
+        {
+          "text": "Homing",
+          "value": 11
+        },
+        {
+          "text": "Encoder Hall Polarity Calibration",
+          "value": 12
+        },
+        {
+          "text": "Encoder Hall Phase Calibration",
+          "value": 13
+        }
+      ]
+    },
+    {
+      "controlType": "CtrlEnum",
+      "path": "odrives.odrive0.axis1.controller.config.control_mode",
+      "options": [
+        {
+          "text": "Voltage Control",
+          "value": 0
+        },
+        {
+          "text": "Torque Control",
+          "value": 1
+        },
+        {
+          "text": "Velocity Control",
+          "value": 2
+        },
+        {
+          "text": "Position Control",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "controlType": "CtrlBoolean",
+      "path": "odrives.odrive0.axis1.encoder.config.use_index"
+    },
+    {
+      "controlType": "CtrlEnum",
+      "path": "odrives.odrive0.axis1.motor.config.motor_type",
+      "options": [
+        {
+          "text": "High Current",
+          "value": 0
+        },
+        {
+          "text": "Gimbal",
+          "value": 2
+        },
+        {
+          "text": "Induction",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "controlType": "CtrlNumeric",
+      "path": "odrives.odrive0.axis1.motor.config.pole_pairs"
+    },
+    {
+      "controlType": "CtrlNumeric",
+      "path": "odrives.odrive0.axis1.motor.config.torque_constant"
+    },
+    {
+      "controlType": "CtrlSlider",
+      "path": "odrives.odrive0.axis1.controller.config.pos_gain"
+    },
+    {
+      "controlType": "CtrlSlider",
+      "path": "odrives.odrive0.axis1.controller.config.vel_gain"
+    },
+    {
+      "controlType": "CtrlSlider",
+      "path": "odrives.odrive0.axis1.controller.config.vel_integrator_gain"
+    },
+    {
+      "controlType": "CtrlNumeric",
+      "path": "odrives.odrive0.axis1.motor.config.current_lim"
+    },
+    {
+      "controlType": "CtrlBoolean",
+      "path": "odrives.odrive0.axis1.controller.config.enable_overspeed_error"
+    },
+    {
+      "controlType": "CtrlNumeric",
+      "path": "odrives.odrive0.axis1.motor.config.current_control_bandwidth"
+    },
+    {
+      "controlType": "CtrlFunction",
+      "path": "odrives.odrive0.reboot"
+    },
+    {
+      "controlType": "CtrlFunction",
+      "path": "odrives.odrive0.save_configuration"
+    }
+  ],
+  "actions": [
+    {
+      "actionType": "Action",
+      "id": "2a12bf9b-3aa0-4644-a7fc-a19bc39cd20f",
+      "path": "odrives.odrive0.axis1.controller.input_pos",
+      "val": 0.3
+    }
+  ],
+  "plots": [
+    {
+      "name": "a9be17ba-b86f-4b65-99e9-d4057d8c7b6d",
+      "vars": [
+        {
+          "path": "odrives.odrive0.axis1.encoder.pos_estimate",
+          "color": "#1f77b4"
+        },
+        {
+          "path": "odrives.odrive0.axis1.controller.pos_setpoint",
+          "color": "#ff7f0e"
+        }
+      ]
+    },
+    {
+      "name": "829bdf48-58a7-49f5-9016-147257d6edef",
+      "vars": [
+        {
+          "path": "odrives.odrive0.axis1.motor.current_control.Ibus",
+          "color": "#1f77b4"
+        }
+      ]
+    }
+  ]
+}

@@ -91,7 +91,7 @@ float printTorqueEst(ODriveArduino odrive, HardwareSerial odrive_serial, int pol
 bool checkError(int axis, ODriveArduino odrive, HardwareSerial odrive_serial)
 {
 	int errorNum;
-	odrive_serial << "r axis" << 0 << "error\n";
+	odrive_serial << "r axis" << axis << "error\n";
 	errorNum = odrive.readInt();
 	return errorNum;
 }
