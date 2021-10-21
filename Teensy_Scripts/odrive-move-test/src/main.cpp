@@ -10,7 +10,7 @@
 int NUM_MOTORS = 1;
 int WORKSPACE = 0.75f;
 
-const LegConfig Leg = LegConfig(&Serial, 0.0f, 0.0f);
+LegConfig Leg = LegConfig((HardwareSerial*) &Serial, 0.0f, 0.0f);
 
 void setup() { Leg.setup(); }
 

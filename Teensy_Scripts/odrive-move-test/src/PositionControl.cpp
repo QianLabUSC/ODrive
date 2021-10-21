@@ -60,7 +60,7 @@ std::tuple<float, float, float> PhysicalToAbstract(float X, float Y)
 {
     float L = sqrt(pow(X, 2) + pow(X, 2));
     float theta = atan2(Y, X);
-    float gamma = acos((pow(l_1, 2) + pow(L, 2) + pow(l_2, 2)) / (2 * l_2 * L));
+    float gamma = (float)acos((pow(l_1, 2) + pow(L, 2) + pow(l_2, 2)) / (2 * l_2 * L));
 
 // DEBUG OUTPUT
 #ifdef DEBUG
@@ -70,7 +70,7 @@ std::tuple<float, float, float> PhysicalToAbstract(float X, float Y)
     Serial.print(buffer);
 #endif
 
-    return std::tuple<float, float, float>(L, theta, gamma);
+    return std::make_tuple(L, theta, gamma);
 }
 
 /**

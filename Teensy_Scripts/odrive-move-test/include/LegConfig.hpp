@@ -13,6 +13,7 @@ class LegConfig {
         // Constants
         static const int BAUD = 115200;
         static const int MOTOR_COUNT = 2;
+        
         LegConfig(
             HardwareSerial *serial_ptr,
             float axis0_init_offset, 
@@ -22,22 +23,23 @@ class LegConfig {
         //Access Methods
         
         const float init_offset(int axis) const;
-        const std::pair<ODriveArduino, HardwareSerial *> &odrv() const { return _odrv; };
+        std::pair<ODriveArduino, HardwareSerial *> &odrv() { return _odrv; };
         
-        // ODrive Serial Setup
-        void serialSetup() const;
 
-        void legSetup(int calibration_mode = 3) const;
+        // ODrive Serial Setup
+        void serialSetup();
+
+        void legSetup(int calibration_mode = 3);
 
         // Full Leg Setup
-        void setup() const;
+        void setup();
 
         /**
          * @brief checks the ODrive Axis for errors
          * @return 	TRUE: there is an error in @param axis
          * @return  FALSE: there is no error in @param axis
          */ 
-        bool ErrorCheck(int axis) const;
+        bool ErrorCheck(int axis);
         
   
 
@@ -52,8 +54,8 @@ class LegConfig {
          * @units: rotations
          * @bounds: [0,1)
          */
-        float _axis0_init_offset;
-        float _axis1_init_offset; 
+        const float _axis0_init_offset;
+        const float _axis1_init_offset; 
 
 };
 

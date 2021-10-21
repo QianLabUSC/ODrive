@@ -14,7 +14,7 @@ LegConfig::LegConfig(HardwareSerial *serial_ptr, float axis0_init_offset,
       _axis1_init_offset(axis1_init_offset) {}
 
 // ODrive Serial Setup
-void LegConfig::serialSetup() const
+void LegConfig::serialSetup()
 {
     // *Serial Start
     _odrv.second->begin(BAUD);
@@ -30,7 +30,7 @@ void LegConfig::serialSetup() const
     Serial.println(_odrv.first.getBoardInfo());
 }
 
-void LegConfig::legSetup(int calibration_mode = 3) const
+void LegConfig::legSetup(int calibration_mode)
 {
     for (int axis = 0; axis < 2; axis++)
     {
@@ -38,7 +38,7 @@ void LegConfig::legSetup(int calibration_mode = 3) const
          *  RUNS MOTOR CALIBRATION FOR EACH MOTOR IN SEQUENCE
          *  Performs a control lockout until calibration ends.
          */
-        run_state(axis, calibration_mode, true);
+        _odrv.first.run_state(axis, 3, true);
         *(_odrv.second) << "w axis" << axis << ".controller.input_mode " << 3 << "\n";
 
         // * ERROR CHECK SEQUENCE
@@ -62,13 +62,13 @@ void LegConfig::legSetup(int calibration_mode = 3) const
         "	'c' -> Execute Buelher Clock\n");
 }
 
-void LegConfig::setup() const
+void LegConfig::setup()
 {
     serialSetup();
     legSetup();
 }
 
-bool LegConfig::ErrorCheck(int axis) const
+bool LegConfig::ErrorCheck(int axis)
 {
     int errorNum;
     *(_odrv.second) << "r axis" << axis << "error\n";
@@ -87,4 +87,5 @@ const float LegConfig::init_offset(int axis) const
         return _axis1_init_offset;
         break;
     }
+    return 0.0f;
 }
