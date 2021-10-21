@@ -38,7 +38,7 @@ void LegConfig::legSetup(int calibration_mode)
          *  RUNS MOTOR CALIBRATION FOR EACH MOTOR IN SEQUENCE
          *  Performs a control lockout until calibration ends.
          */
-        _odrv.first.run_state(axis, 3, true);
+        _odrv.first.run_state(axis, calibration_mode, true);
         *(_odrv.second) << "w axis" << axis << ".controller.input_mode " << 3 << "\n";
 
         // * ERROR CHECK SEQUENCE
