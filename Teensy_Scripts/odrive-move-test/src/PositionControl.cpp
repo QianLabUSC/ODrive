@@ -4,6 +4,14 @@
 
 #define DEBUG
 
+/**
+ * {L_i, L_f, theta, freq}
+ */
+struct RadialGaitParams radial_gait_params[] = {
+    {NAN, NAN, NAN, NAN},
+
+};
+
 // !Works off of the assumption that axis 1's angle reference is a mirror of axis 0
 // !must change this in case we use an ODrive command to shift axis1's encoder reference
 /**
@@ -68,6 +76,29 @@ void PhysicalToAbstract(float X, float Y, float &L, float &theta, float &gamma)
 }
 
 /**
+ * @brief Finds the Leg angle and motor separation for a given X, Y toe point
+ *
+ * @param X : Toe X position
+ * @param Y : Toe Y position
+ *
+ * @return : Returns <Theta, Gamma>
+ */
+void PhysicalToAbstract(float X, float Y, float &theta, float &gamma)
+{
+    float L = sqrt(pow(X, 2) + pow(X, 2));
+    theta = atan2f(Y, X);
+    gamma = (float)acosf((pow(l_1, 2) + pow(L, 2) + pow(l_2, 2)) / (2 * l_2 * L));
+
+// DEBUG OUTPUT
+#ifdef DEBUG
+    char buffer[80];
+    sprintf(buffer, "Length: %f, Theta: %f, Gamma: %f\n", L, theta, gamma);
+    Serial.print("DEBUG:: Physical to Abstract:\n");
+    Serial.print(buffer);
+#endif
+}
+
+/**
  * @brief Finds the Leg length, angle, and motor separation for a given X, Y toe point
  *          *This function internally calls the motor angles
  * @return : Returns <Length, Angle, Gamma>
@@ -80,7 +111,7 @@ void PhysicalToAbstract(LegConfig leg, float &L, float &theta, float &gamma)
 
     gamma = (180 - (angle_0 + angle_1)) / 2.0f;
     theta = angle_0 + gamma;
-    L = sqrt(pow(l_1, 2) + pow(l_2, 2) - 2 * l_1 * l_2 * cos(gamma));
+    L = sqrt(pow(l_1, 2) + pow(l_2, 2) - 2 * l_1 * l_2 * cosf(gamma));
 
 // DEBUG OUTPUT
 #ifdef DEBUG
@@ -101,8 +132,8 @@ void PhysicalToAbstract(LegConfig leg, float &L, float &theta, float &gamma)
  */
 void AbstractToPhysical(float L, float Theta, float &x, float &y)
 {
-    x = L * cos(Theta);
-    y = L * sin(Theta);
+    x = L * cosf(Theta);
+    y = L * sinf(Theta);
 
 // DEBUG OUTPUT
 #ifdef DEBUG
@@ -117,15 +148,44 @@ void MoveToPosition(ODriveArduino &odrive, float t)
 {
 }
 
-void RadialTrajectory(float t, float distance, float angle, float &L, float &theta)
+/**
+ * @brief Finds the leg position at a given time in a radial movement
+ * 
+ * @param t: time (seconds)
+ * @param gait: struct containing radial movement parameters
+ * @param X: output toe position
+ * @param Y: output Y position
+ * 
+ * @note The function assumes that 2*pi = 1 second
+ */
+void RadialTrajectory(float t, struct RadialGaitParams gait, float &X, float &Y)
 {
+    float theta = gait.theta;
+    float a = gait.L_f - gait.L_i;
+    float b = gait.freq;
+
+    float L = a * cosf(2 * PI * b * t) + a / 2;
+
+    AbstractToPhysical(L, theta, X, Y);
+}
+
+void RadialLegMovement(LegConfig leg, struct RadialGaitParams gait, float t, float& theta, float& gamma) {
+    float x;
+    float y;
+
+    RadialTrajectory(t, gait, x, y);
+    PhysicalToAbstract(x, y, theta, gamma);
+    
+    if (!inBounds(theta, gamma)) { return; }
+    
+    leg.odrv().first.SetCoupledPosition(theta, gamma);
 }
 
 // ! MUST FIND WORKSPACE EMPIRICALLY
 /**
  * @brief Checks whether a current abstract leg position is valid
  */
-bool inBounds(float L, float Theta)
+bool inBounds(float Gamma, float Theta)
 {
     return true;
 }

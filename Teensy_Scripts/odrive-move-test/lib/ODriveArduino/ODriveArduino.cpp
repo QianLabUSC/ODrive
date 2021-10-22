@@ -99,6 +99,30 @@ int ODriveArduino::motor_calibrated(int axis) {
     return calibrated;
 }
 
+/**
+ * @brief Finds the motor angles in Radians from reference of axis0, CCW +
+ */
+void ODriveArduino::GetThetaGamma(float& theta, float& gamma) {
+    float axis_0 = ODriveArduino::GetPosition(0);
+    float axis_1 = ODriveArduino::GetPosition(1) + PI; // Transforms axis_1 encoder reading
+
+    theta = (axis_1 - axis_0) / 2;
+    gamma = axis_1 - theta;
+}
+
+void ODriveArduino::FindMotorAngles(float theta, float gamma, float& axis_0, float& axis_1) {
+    axis_0 = theta - gamma;
+    axis_1 = theta + gamma - PI;
+}
+
+void ODriveArduino::SetCoupledPosition(float theta, float gamma) {
+    float axis_0 = theta - gamma;
+    float axis_1 = theta + gamma - PI;
+    
+    ODriveArduino::SetPosition(0, axis_0);
+    ODriveArduino::SetPosition(1, axis_1);
+}
+
 
 String ODriveArduino::readString() {
     String str = "";
