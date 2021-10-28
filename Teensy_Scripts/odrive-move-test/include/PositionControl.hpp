@@ -29,9 +29,9 @@ void RadialTrajectory(float t, struct RadialGaitParams gait, float& X, float& Y)
 
 void RadialLegMovement(LegConfig leg, float t, struct RadialGaitParams gait, float& theta, float& gamma);
 
-bool inBounds(float Gamma, float Theta);
+bool inBounds(float Gamma, float Theta, float L);
 
-bool inBounds();
+bool inBounds(float x, float y);
 
 struct RadialGaitParams {
     float L_i = 0.1f; // Initial Length of leg

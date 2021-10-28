@@ -9,7 +9,10 @@
  */
 struct RadialGaitParams radial_gait_params[] = {
     {NAN, NAN, NAN, NAN},
-
+    {NAN, NAN, NAN, NAN},
+    {NAN, NAN, NAN, NAN},
+    {NAN, NAN, NAN, NAN},
+    {NAN, NAN, NAN, NAN},
 };
 
 // !Works off of the assumption that axis 1's angle reference is a mirror of axis 0
@@ -150,12 +153,12 @@ void MoveToPosition(ODriveArduino &odrive, float t)
 
 /**
  * @brief Finds the leg position at a given time in a radial movement
- * 
+ *
  * @param t: time (seconds)
  * @param gait: struct containing radial movement parameters
  * @param X: output toe position
  * @param Y: output Y position
- * 
+ *
  * @note The function assumes that 2*pi = 1 second
  */
 void RadialTrajectory(float t, struct RadialGaitParams gait, float &X, float &Y)
@@ -169,31 +172,47 @@ void RadialTrajectory(float t, struct RadialGaitParams gait, float &X, float &Y)
     AbstractToPhysical(L, theta, X, Y);
 }
 
-void RadialLegMovement(LegConfig leg, struct RadialGaitParams gait, float t, float& theta, float& gamma) {
+void RadialLegMovement(LegConfig leg, struct RadialGaitParams gait, float t, float &theta, float &gamma)
+{
     float x;
     float y;
 
     RadialTrajectory(t, gait, x, y);
     PhysicalToAbstract(x, y, theta, gamma);
-    
-    if (!inBounds(theta, gamma)) { return; }
-    
+
+    if (!inBounds(x, y))
+    {
+        return;
+    }
+
     leg.odrv().first.SetCoupledPosition(theta, gamma);
 }
 
-// ! MUST FIND WORKSPACE EMPIRICALLY
+// ! MUST FIND WORKSPACE EMPIRICALLY TO DETERMINE THETA BOUNDS
 /**
  * @brief Checks whether a current abstract leg position is valid
  */
-bool inBounds(float Gamma, float Theta)
+bool inBounds(float Gamma, float Theta, float L)
 {
-    return true;
+    if (Gamma <= 0 || L <= 0.03 || L >= 0.3) {
+        return false;
+    } else {
+        return true; 
+    }
+    
 }
 
 /**
  * @brief Checks whether a toe position is in bounds
  */
-bool inBounds()
+bool inBounds(float x, float y)
 {
-    return true;
+    float L = sqrtf(pow(x, 2) + pow(y, 2));
+    
+    if (L <= 0.03 || L >= 0.3) {
+        return false;
+    } else {
+        return true;
+    }
+    
 }
