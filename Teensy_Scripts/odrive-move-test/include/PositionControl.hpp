@@ -40,4 +40,4 @@ struct RadialGaitParams {
     float freq = 0.5f; // Frequency of one movement cycle (Hz)
 };
 
-extern struct RadialGaitParams radial_gate_params[6];
+extern struct RadialGaitParams radial_gait_params[6];

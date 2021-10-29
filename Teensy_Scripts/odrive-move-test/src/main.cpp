@@ -24,6 +24,7 @@ void loop() {
 
 	switch(c) {
 		case 's':
+			float time;
 			float t = millis();
 			float start = t;
 
@@ -32,7 +33,11 @@ void loop() {
 			float gamma;
 
 			while (Serial.read() != 'q') {
-				RadialLegMovement(Leg, t - start, radial_gate_params[2], theta, gamma); 
+				time = t - start;
+				RadialLegMovement(Leg, time, radial_gait_params[2], theta, gamma);
+				
+				delay(1);
+				t = millis();
 			}
 			break;
 	}

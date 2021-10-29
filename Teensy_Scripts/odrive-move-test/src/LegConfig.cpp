@@ -28,6 +28,7 @@ void LegConfig::serialSetup()
     Serial.println("Setting parameters...");
 
     Serial.println(_odrv.first.getBoardInfo());
+    return;
 }
 
 void LegConfig::legSetup(int calibration_mode)
@@ -60,12 +61,14 @@ void LegConfig::legSetup(int calibration_mode)
         "	'b' -> reads bus voltage\n"
         "	'q' -> Sends motors to IDLE STATE\n"
         "	'c' -> Execute Buelher Clock\n");
+    return;
 }
 
 void LegConfig::setup()
 {
     serialSetup();
     legSetup();
+    return;
 }
 
 bool LegConfig::ErrorCheck(int axis)
@@ -74,6 +77,12 @@ bool LegConfig::ErrorCheck(int axis)
     *(_odrv.second) << "r axis" << axis << "error\n";
     errorNum = _odrv.first.readInt();
     return errorNum;
+}
+
+void LegConfig::EStop() {
+    *(_odrv.second) << "w axis" << 0 << ".requested_state " << 1 << '\n';
+    *(_odrv.second) << "w axis" << 1 << ".requested_state " << 1 << '\n';
+    return;
 }
 
 const float LegConfig::init_offset(int axis) const
@@ -89,3 +98,4 @@ const float LegConfig::init_offset(int axis) const
     }
     return 0.0f;
 }
+
