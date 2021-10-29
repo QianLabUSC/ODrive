@@ -5,11 +5,21 @@
 #define DEBUG
 
 /**
+ * ! Leg Workspace:
+ * Gamma must be within [0.087, 2.61] radians
+ * Theta must be within [-2.47, +2.47] radians
+ */
+
+
+/**
  * {L_i, L_f, theta, freq}
  */
 struct RadialGaitParams radial_gait_params[] = {
     {NAN, NAN, NAN, NAN},
-
+    {0.04f, .20f, PI/2, .5f},
+    {NAN, NAN, NAN, NAN},
+    {NAN, NAN, NAN, NAN},
+    {NAN, NAN, NAN, NAN},
 };
 
 // !Works off of the assumption that axis 1's angle reference is a mirror of axis 0
@@ -150,12 +160,12 @@ void MoveToPosition(ODriveArduino &odrive, float t)
 
 /**
  * @brief Finds the leg position at a given time in a radial movement
- * 
+ *
  * @param t: time (seconds)
  * @param gait: struct containing radial movement parameters
  * @param X: output toe position
  * @param Y: output Y position
- * 
+ *
  * @note The function assumes that 2*pi = 1 second
  */
 void RadialTrajectory(float t, struct RadialGaitParams gait, float &X, float &Y)
@@ -169,31 +179,55 @@ void RadialTrajectory(float t, struct RadialGaitParams gait, float &X, float &Y)
     AbstractToPhysical(L, theta, X, Y);
 }
 
-void RadialLegMovement(LegConfig leg, struct RadialGaitParams gait, float t, float& theta, float& gamma) {
+void RadialLegMovement(LegConfig leg, float t, struct RadialGaitParams gait, float& theta, float& gamma)
+{
     float x;
     float y;
 
     RadialTrajectory(t, gait, x, y);
     PhysicalToAbstract(x, y, theta, gamma);
-    
-    if (!inBounds(theta, gamma)) { return; }
-    
+
+    if (!inBounds(x, y))
+    {
+        leg.EStop();
+        return;
+    }
+
     leg.odrv().first.SetCoupledPosition(theta, gamma);
 }
 
-// ! MUST FIND WORKSPACE EMPIRICALLY
+/**
+ * ! Leg Workspace Must be validated empirically
+ * Gamma must be within [0.087, 2.61] radians
+ * Theta must be within [-2.47, +2.47] radians
+ */
+
 /**
  * @brief Checks whether a current abstract leg position is valid
  */
-bool inBounds(float Gamma, float Theta)
+bool inBounds(float Gamma, float Theta, float L)
 {
-    return true;
+    if (Gamma <= 0.087 || Gamma > 2.61 || 
+        Theta < -2.47 || Theta > 2.47 ||
+        L <= 0.03 || L >= 0.3) { // ! CALCULATE PRECISE L RANGE FROM GAMMA
+        return false;
+    } else {
+        return true; 
+    }
+    
 }
 
 /**
  * @brief Checks whether a toe position is in bounds
  */
-bool inBounds()
+bool inBounds(float x, float y)
 {
-    return true;
+    float L = sqrtf(pow(x, 2) + pow(y, 2));
+    
+    if (L <= 0.03 || L >= 0.3) { // ! CALCULATE PRECISE L RANGE FROM GAMMA
+        return false;
+    } else {
+        return true;
+    }
+    
 }

@@ -103,8 +103,9 @@ int ODriveArduino::motor_calibrated(int axis) {
  * @brief Finds the motor angles in Radians from reference of axis0, CCW +
  */
 void ODriveArduino::GetThetaGamma(float& theta, float& gamma) {
-    float axis_0 = ODriveArduino::GetPosition(0);
-    float axis_1 = ODriveArduino::GetPosition(1) + PI; // Transforms axis_1 encoder reading
+    // Finds axis 0 and axis 1 motor positions and converts to radians
+    float axis_0 = ODriveArduino::GetPosition(0) * 2 * PI;
+    float axis_1 = ODriveArduino::GetPosition(1) * 2 * PI + PI; // Transforms axis_1 encoder reading
 
     theta = (axis_1 - axis_0) / 2;
     gamma = axis_1 - theta;

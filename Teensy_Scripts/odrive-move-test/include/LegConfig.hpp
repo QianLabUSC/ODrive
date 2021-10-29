@@ -14,6 +14,11 @@ class LegConfig {
         static const int BAUD = 115200;
         static const int MOTOR_COUNT = 2;
         
+        /** 
+         * @param serial_ptr : ODrive Board Serial Connection
+         * @param axis0_init_offset: angular offset 0
+         * @param axis1_init_offset: angular offset 1
+         */
         LegConfig(
             HardwareSerial *serial_ptr,
             float axis0_init_offset, 
@@ -40,10 +45,10 @@ class LegConfig {
          * @return  FALSE: there is no error in @param axis
          */ 
         bool ErrorCheck(int axis);
+
+        void EStop();
         
   
-
-
         // *Data Members:
     private:
         // ODrive Board

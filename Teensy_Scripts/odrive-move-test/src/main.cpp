@@ -21,6 +21,27 @@ void loop() {
 
 
 	char c = Serial.read();
+
+	switch(c) {
+		case 's':
+			float time;
+			float t = millis();
+			float start = t;
+
+			// ? start at neutral leg position?
+			float theta;
+			float gamma;
+
+			while (Serial.read() != 'q') {
+				time = t - start;
+				RadialLegMovement(Leg, time, radial_gait_params[2], theta, gamma);
+				
+				delay(1);
+				t = millis();
+			}
+			break;
+	}
+
 	
 
 }
