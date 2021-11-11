@@ -117,8 +117,8 @@ void ODriveArduino::FindMotorAngles(float theta, float gamma, float& axis_0, flo
 }
 
 void ODriveArduino::SetCoupledPosition(float theta, float gamma) {
-    float axis_0 = theta - gamma;
-    float axis_1 = theta + gamma - PI;
+    float axis_0 = (theta - gamma) / (2 * PI);
+    float axis_1 = ( PI - (theta + gamma) ) / (2 * PI);
     
     ODriveArduino::SetPosition(0, axis_0);
     ODriveArduino::SetPosition(1, axis_1);

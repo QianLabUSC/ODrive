@@ -16,10 +16,10 @@
  */
 struct RadialGaitParams radial_gait_params[] = {
     {NAN, NAN, NAN, NAN},
-    {0.04f, .20f, PI/2, .5f},
-    {NAN, NAN, NAN, NAN},
-    {NAN, NAN, NAN, NAN},
-    {NAN, NAN, NAN, NAN},
+    {0.11f, 0.27f, PI/2, 0.5f},
+    {0.13f, 0.25f, (3*PI/4), 1.0f},
+    {0.13f, 0.25f, PI, 1.0f},
+    {0.13f, 0.25f, PI, 0.25f},
 };
 
 // !Works off of the assumption that axis 1's angle reference is a mirror of axis 0
@@ -36,8 +36,8 @@ void GetAngles(LegConfig leg, float &angle_0, float &angle_1)
 #ifdef DEBUG
     char buffer[80];
     sprintf(buffer, "Axis 0: %f, Axis 1: %f\n", angle_0, angle_1);
-    Serial.print("DEBUG:: Axis Angle Outputs:\n");
-    Serial.print(buffer);
+    Serial.println("\nDEBUG:: Axis Angle Outputs:");
+    Serial.println(buffer);
 #endif
 }
 
@@ -51,14 +51,28 @@ void GetAngles(LegConfig leg, float &angle_0, float &angle_1)
  */
 void GetGamma(float L, float theta, float &gamma)
 {
-    gamma = acos((pow(l_1, 2) + pow(L, 2) + pow(l_2, 2)) / (2 * l_2 * L));
+    float cos_param = (pow(L1, 2.0) + pow(L, 2.0) - pow(L2, 2.0)) / (2 * L1 * L);
+    
+    if (cos_param < -1.0) {
+        gamma = PI;
+        #ifdef DEBUG
+        Serial.println("ERROR: L is too small to find valid alpha and beta!");
+        #endif
+    } else if (cos_param > 1.0) {
+        gamma = 0;
+        #ifdef DEBUG
+        Serial.println("ERROR: L is too large to find valid alpha and beta!");
+        #endif
+    } else {
+        gamma = acos(cos_param);
+    }
 
 // DEBUG OUTPUT
 #ifdef DEBUG
     char buffer[80];
-    sprintf(buffer, "Theta: %f, Gamma: %f\n", theta, gamma);
-    Serial.print("DEBUG:: Theta Gamma Calculation:\n");
-    Serial.print(buffer);
+    sprintf(buffer, "Theta: %f, Gamma: %f, Cos_Param: %f", theta, gamma, cos_param);
+    Serial.println("DEBUG:: Theta Gamma Calculation:");
+    Serial.println(buffer);
 #endif
 }
 
@@ -74,14 +88,14 @@ void PhysicalToAbstract(float X, float Y, float &L, float &theta, float &gamma)
 {
     L = sqrt(pow(X, 2) + pow(X, 2));
     theta = atan2(Y, X);
-    gamma = (float)acos((pow(l_1, 2) + pow(L, 2) + pow(l_2, 2)) / (2 * l_2 * L));
+    gamma = (float)acos((pow(L1, 2) + pow(L, 2) + pow(L2, 2)) / (2 * L2 * L));
 
 // DEBUG OUTPUT
 #ifdef DEBUG
     char buffer[80];
     sprintf(buffer, "Length: %f, Theta: %f, Gamma: %f\n", L, theta, gamma);
-    Serial.print("DEBUG:: Physical to Abstract:\n");
-    Serial.print(buffer);
+    Serial.println("\nDEBUG:: Physical to Abstract:");
+    Serial.println(buffer);
 #endif
 }
 
@@ -97,13 +111,13 @@ void PhysicalToAbstract(float X, float Y, float &theta, float &gamma)
 {
     float L = sqrt(pow(X, 2) + pow(X, 2));
     theta = atan2f(Y, X);
-    gamma = (float)acosf((pow(l_1, 2) + pow(L, 2) + pow(l_2, 2)) / (2 * l_2 * L));
+    gamma = (float)acosf((pow(L1, 2) + pow(L, 2) + pow(L2, 2)) / (2 * L2 * L));
 
 // DEBUG OUTPUT
 #ifdef DEBUG
     char buffer[80];
     sprintf(buffer, "Length: %f, Theta: %f, Gamma: %f\n", L, theta, gamma);
-    Serial.print("DEBUG:: Physical to Abstract:\n");
+    Serial.println("\nDEBUG:: Physical to Abstract:\n");
     Serial.print(buffer);
 #endif
 }
@@ -121,13 +135,13 @@ void PhysicalToAbstract(LegConfig leg, float &L, float &theta, float &gamma)
 
     gamma = (180 - (angle_0 + angle_1)) / 2.0f;
     theta = angle_0 + gamma;
-    L = sqrt(pow(l_1, 2) + pow(l_2, 2) - 2 * l_1 * l_2 * cosf(gamma));
+    L = sqrt(pow(L1, 2) + pow(L2, 2) - 2 * L1 * L2 * cosf(gamma));
 
 // DEBUG OUTPUT
 #ifdef DEBUG
     char buffer[80];
     sprintf(buffer, "Length: %f, Theta: %f, Gamma: %f\n", L, theta, gamma);
-    Serial.print("DEBUG:: Physical to Abstract:\n");
+    Serial.println("\nDEBUG:: Physical to Abstract:\n");
     Serial.print(buffer);
 #endif
 }
@@ -149,8 +163,8 @@ void AbstractToPhysical(float L, float Theta, float &x, float &y)
 #ifdef DEBUG
     char buffer[80];
     sprintf(buffer, "X Position: %f, Y Position: %f\n", x, y);
-    Serial.print("DEBUG:: Abstract To Physical:\n");
-    Serial.print(buffer);
+    Serial.println("DEBUG:: Abstract To Physical:");
+    Serial.println(buffer);
 #endif
 }
 
@@ -168,24 +182,37 @@ void MoveToPosition(ODriveArduino &odrive, float t)
  *
  * @note The function assumes that 2*pi = 1 second
  */
-void RadialTrajectory(float t, struct RadialGaitParams gait, float &X, float &Y)
+void RadialTrajectory(float t, struct RadialGaitParams gait, float &gamma, float &X, float &Y)
 {
     float theta = gait.theta;
-    float a = gait.L_f - gait.L_i;
+    float a = (gait.L_f - gait.L_i) / 2;
     float b = gait.freq;
 
-    float L = a * cosf(2 * PI * b * t) + a / 2;
+    //produces a cosine wave with a midline at the average of Lf and Li
+    //with amplitude a and frequency b
+    float L = a * cosf(2 * PI * b * t) + (gait.L_f + gait.L_i) / 2;
+    
+    GetGamma(L, theta, gamma);
 
     AbstractToPhysical(L, theta, X, Y);
+
+// DEBUG OUTPUT
+#ifdef DEBUG
+    char buffer[80];
+    sprintf(buffer, "Length: %f, Amp: %f, Freq: %f", L, a, b);
+    Serial.println("---------------------------");
+    Serial.println("DEBUG:: Radial Trajectory:");
+    Serial.println("---------------------------");
+    Serial.println(buffer);
+#endif
 }
 
 void RadialLegMovement(LegConfig leg, float t, struct RadialGaitParams gait, float& theta, float& gamma)
 {
     float x;
     float y;
-
-    RadialTrajectory(t, gait, x, y);
-    PhysicalToAbstract(x, y, theta, gamma);
+    theta = gait.theta;
+    RadialTrajectory(t, gait, gamma, x, y);
 
     if (!inBounds(x, y))
     {

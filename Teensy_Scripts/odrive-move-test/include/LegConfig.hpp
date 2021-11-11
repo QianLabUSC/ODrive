@@ -37,7 +37,7 @@ class LegConfig {
         void legSetup(int calibration_mode = 3);
 
         // Full Leg Setup
-        void setup();
+        void setup(int calibration_mode = 3);
 
         /**
          * @brief checks the ODrive Axis for errors

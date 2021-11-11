@@ -8,8 +8,8 @@
 #include "LegConfig.hpp"
 
 // Global Debug Flag
-const float l_1 = 0.1;
-const float l_2 = 0.2;
+const float L1 = 0.1;
+const float L2 = 0.2;
 
 void GetAngles(LegConfig leg, float& angle_0, float& angle_1);
 
@@ -25,7 +25,7 @@ void AbstractToPhysical(float L, float Theta, float& x, float& y);
 
 void MoveToPosition(LegConfig leg, float t);
 
-void RadialTrajectory(float t, struct RadialGaitParams gait, float& X, float& Y);
+void RadialTrajectory(float t, struct RadialGaitParams gait, float &gamma, float& X, float& Y);
 
 void RadialLegMovement(LegConfig leg, float t, struct RadialGaitParams gait, float& theta, float& gamma);
 

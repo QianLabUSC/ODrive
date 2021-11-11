@@ -10,9 +10,9 @@
 int NUM_MOTORS = 1;
 int WORKSPACE = 0.75f;
 
-LegConfig Leg = LegConfig((HardwareSerial*) &Serial, 0.0f, 0.0f);
+LegConfig Leg = LegConfig(&Serial1, 0.0f, 0.0f);
 
-void setup() { Leg.setup(); }
+void setup() { Leg.setup(6); } //runs encoder offset calibration in setup
 
 
 // MAIN CONTROL LOOP
@@ -23,25 +23,39 @@ void loop() {
 	char c = Serial.read();
 
 	switch(c) {
-		case 's':
-			float time;
-			float t = millis();
-			float start = t;
+		case 's' :
+			{
+				float time;
+				float ms = millis();
+				float start = ms / 1000.0;
 
-			// ? start at neutral leg position?
-			float theta;
-			float gamma;
-
-			while (Serial.read() != 'q') {
-				time = t - start;
-				RadialLegMovement(Leg, time, radial_gait_params[2], theta, gamma);
+				// ? start at neutral leg position?
+				float theta;
+				float gamma;
 				
-				delay(1);
-				t = millis();
+				Serial.println("Enter Mode #: ");
+				while (Serial.available() == false) {}
+				int mode = Serial.parseInt();
+
+				while (Serial.read() != 'q') {
+					time = ms - start;
+					RadialLegMovement(Leg, time, radial_gait_params[mode], theta, gamma);
+					delay(1);
+					ms = millis() / 1000.0;
+				}
 			}
+			break;
+		case 'r':
+			*(Leg.odrv().second) << "sr" << "\n";
+			break;
+		case 'q' :
+			Leg.EStop();
+			break;
+		case 'z' :
+			Leg.odrv().first.SetPosition(0, 0.0);
+			Leg.odrv().first.SetPosition(1, 0.0);
 			break;
 	}
 
 	
-
 }

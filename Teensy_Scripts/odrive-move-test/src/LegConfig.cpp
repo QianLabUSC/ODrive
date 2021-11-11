@@ -40,15 +40,26 @@ void LegConfig::legSetup(int calibration_mode)
          *  Performs a control lockout until calibration ends.
          */
         _odrv.first.run_state(axis, calibration_mode, true);
-        *(_odrv.second) << "w axis" << axis << ".controller.input_mode " << 3 << "\n";
+        //*(_odrv.second) << "w axis" << axis << ".controller.input_mode " << 3 << "\n";
 
         // * ERROR CHECK SEQUENCE
         if (ErrorCheck(axis))
         {
-            Serial.println("Error in Motor Axis");
+            if (axis == 0) {
+                Serial.println("Error in Motor Axis 0");
+            } else {
+                Serial.println("Error in Motor Axis 1");
+            }
             return;
         }
     }
+
+    // Puts both motors into Closed Loop Control
+    for (int axis = 0; axis < 2; axis++)
+    {
+        _odrv.first.run_state(axis, 8, true);
+    }
+
     Serial.println(
         "**********************************\n"
         "*****CONFIGURATION SUCCESSFUL*****\n"
@@ -57,17 +68,15 @@ void LegConfig::legSetup(int calibration_mode)
     Serial.println(
         "Motor Armed & Ready\n"
         "Command Menu:\n"
-        "	'l' -> enter closed loop control.\n"
-        "	'b' -> reads bus voltage\n"
-        "	'q' -> Sends motors to IDLE STATE\n"
-        "	'c' -> Execute Buelher Clock\n");
+        "	'q' -> exit.\n"
+        "	's' -> execute radial leg movement\n");
     return;
 }
 
-void LegConfig::setup()
+void LegConfig::setup(int calibration_mode)
 {
     serialSetup();
-    legSetup();
+    legSetup(calibration_mode);
     return;
 }
 
