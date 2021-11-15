@@ -33,7 +33,7 @@ void GetAngles(LegConfig leg, float &angle_0, float &angle_1)
     angle_1 = leg.odrv().first.GetPosition(1) * 2 * PI;
 
 // DEBUG OUTPUT
-#ifdef DEBUG
+#ifdef DEBUG_HIGH
     char buffer[80];
     sprintf(buffer, "Axis 0: %f, Axis 1: %f\n", angle_0, angle_1);
     Serial.println("\nDEBUG:: Axis Angle Outputs:");
@@ -55,12 +55,12 @@ void GetGamma(float L, float theta, float &gamma)
     
     if (cos_param < -1.0) {
         gamma = PI;
-        #ifdef DEBUG
+        #if defined(DEBUG) || defined(DEBUG_HIGH)
         Serial.println("ERROR: L is too small to find valid alpha and beta!");
         #endif
     } else if (cos_param > 1.0) {
         gamma = 0;
-        #ifdef DEBUG
+        #if defined(DEBUG) || defined(DEBUG_HIGH)
         Serial.println("ERROR: L is too large to find valid alpha and beta!");
         #endif
     } else {
@@ -68,7 +68,7 @@ void GetGamma(float L, float theta, float &gamma)
     }
 
 // DEBUG OUTPUT
-#ifdef DEBUG
+#ifdef DEBUG_HIGH
     char buffer[80];
     sprintf(buffer, "Theta: %f, Gamma: %f, Cos_Param: %f", theta, gamma, cos_param);
     Serial.println("DEBUG:: Theta Gamma Calculation:");
@@ -91,7 +91,7 @@ void PhysicalToAbstract(float X, float Y, float &L, float &theta, float &gamma)
     gamma = (float)acos((pow(L1, 2) + pow(L, 2) + pow(L2, 2)) / (2 * L2 * L));
 
 // DEBUG OUTPUT
-#ifdef DEBUG
+#ifdef DEBUG_HIGH
     char buffer[80];
     sprintf(buffer, "Length: %f, Theta: %f, Gamma: %f\n", L, theta, gamma);
     Serial.println("\nDEBUG:: Physical to Abstract:");
@@ -114,7 +114,7 @@ void PhysicalToAbstract(float X, float Y, float &theta, float &gamma)
     gamma = (float)acosf((pow(L1, 2) + pow(L, 2) + pow(L2, 2)) / (2 * L2 * L));
 
 // DEBUG OUTPUT
-#ifdef DEBUG
+#ifdef DEBUG_HIGH
     char buffer[80];
     sprintf(buffer, "Length: %f, Theta: %f, Gamma: %f\n", L, theta, gamma);
     Serial.println("\nDEBUG:: Physical to Abstract:\n");
@@ -138,7 +138,7 @@ void PhysicalToAbstract(LegConfig leg, float &L, float &theta, float &gamma)
     L = sqrt(pow(L1, 2) + pow(L2, 2) - 2 * L1 * L2 * cosf(gamma));
 
 // DEBUG OUTPUT
-#ifdef DEBUG
+#ifdef DEBUG_HIGH
     char buffer[80];
     sprintf(buffer, "Length: %f, Theta: %f, Gamma: %f\n", L, theta, gamma);
     Serial.println("\nDEBUG:: Physical to Abstract:\n");
@@ -160,7 +160,7 @@ void AbstractToPhysical(float L, float Theta, float &x, float &y)
     y = L * sinf(Theta);
 
 // DEBUG OUTPUT
-#ifdef DEBUG
+#ifdef DEBUG_HIGH
     char buffer[80];
     sprintf(buffer, "X Position: %f, Y Position: %f\n", x, y);
     Serial.println("DEBUG:: Abstract To Physical:");
@@ -197,7 +197,7 @@ void RadialTrajectory(float t, struct RadialGaitParams gait, float &gamma, float
     AbstractToPhysical(L, theta, X, Y);
 
 // DEBUG OUTPUT
-#ifdef DEBUG
+#ifdef DEBUG_HIGH
     char buffer[80];
     sprintf(buffer, "Length: %f, Amp: %f, Freq: %f", L, a, b);
     Serial.println("---------------------------");
@@ -244,7 +244,7 @@ bool inBounds(float Gamma, float Theta, float L)
         error = 3;
     }
     
-    #ifdef DEBUG
+    #if defined(DEBUG) || defined(DEBUG_HIGH)
         if (error == 1) {
             Serial.println("Gamma Value is Invalid");
         } else if (error == 2) {
