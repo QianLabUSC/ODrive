@@ -182,7 +182,7 @@ void MoveToPosition(ODriveArduino &odrive, float t)
  *
  * @note The function assumes that 2*pi = 1 second
  */
-void RadialTrajectory(float t, struct RadialGaitParams gait, float &gamma, float &X, float &Y)
+void RadialTrajectory(float t, struct RadialGaitParams gait, float &gamma, float &L, float &X, float &Y)
 {
     float theta = gait.theta;
     float a = (gait.L_f - gait.L_i) / 2;
@@ -190,7 +190,7 @@ void RadialTrajectory(float t, struct RadialGaitParams gait, float &gamma, float
 
     //produces a cosine wave with a midline at the average of Lf and Li
     //with amplitude a and frequency b
-    float L = a * cosf(2 * PI * b * t) + (gait.L_f + gait.L_i) / 2;
+    L = a * cosf(2 * PI * b * t) + (gait.L_f + gait.L_i) / 2;
     
     GetGamma(L, theta, gamma);
 
@@ -211,10 +211,11 @@ void RadialLegMovement(LegConfig leg, float t, struct RadialGaitParams gait, flo
 {
     float x;
     float y;
+    float L;
     theta = gait.theta;
-    RadialTrajectory(t, gait, gamma, x, y);
+    RadialTrajectory(t, gait, gamma, L, x, y);
 
-    if (!inBounds(x, y))
+    if (!inBounds(gamma, theta, L))
     {
         leg.EStop();
         return;
@@ -234,14 +235,26 @@ void RadialLegMovement(LegConfig leg, float t, struct RadialGaitParams gait, flo
  */
 bool inBounds(float Gamma, float Theta, float L)
 {
-    if (Gamma <= 0.087 || Gamma > 2.61 || 
-        Theta < -2.47 || Theta > 2.47 ||
-        L <= 0.03 || L >= 0.3) { // ! CALCULATE PRECISE L RANGE FROM GAMMA
-        return false;
-    } else {
-        return true; 
+    int error = 0;
+    if (Gamma <= 0.087 || Gamma > 2.61) {
+        error = 1;
+    } else if (Theta < -2.47 || Theta > 2.47) {
+        error = 2;
+    } else if (L <= 0.03 || L >= 0.3) { // ! CALCULATE PRECISE L RANGE FROM GAMMA
+        error = 3;
     }
     
+    #ifdef DEBUG
+        if (error == 1) {
+            Serial.println("Gamma Value is Invalid");
+        } else if (error == 2) {
+            Serial.println("Theta Value is Invalid");
+        } else if (error == 3) {
+            Serial.println("L Value is Invalid");
+        }
+    #endif
+
+    return !error;
 }
 
 /**

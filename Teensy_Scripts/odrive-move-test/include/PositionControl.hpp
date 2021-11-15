@@ -25,7 +25,7 @@ void AbstractToPhysical(float L, float Theta, float& x, float& y);
 
 void MoveToPosition(LegConfig leg, float t);
 
-void RadialTrajectory(float t, struct RadialGaitParams gait, float &gamma, float& X, float& Y);
+void RadialTrajectory(float t, struct RadialGaitParams gait, float &gamma, float &L, float& X, float& Y);
 
 void RadialLegMovement(LegConfig leg, float t, struct RadialGaitParams gait, float& theta, float& gamma);
 
