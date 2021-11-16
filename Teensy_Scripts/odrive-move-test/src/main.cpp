@@ -1,4 +1,5 @@
 #include "PositionControl.hpp"
+#include "SinusoidalGait.hpp"
 #include "LegConfig.hpp"
 #include "UtilityHelpers.hpp"
 #include "TorqueHelpers.hpp"
@@ -23,7 +24,7 @@ void loop() {
 	char c = Serial.read();
 
 	switch(c) {
-		case 's' :
+		case 'r' :
 			{
 				float time;
 				float ms = millis();
@@ -45,15 +46,37 @@ void loop() {
 				}
 			}
 			break;
-		case 'r':
+		case 's' :
+			{
+				float time;
+				float ms = millis();
+				float start = ms / 1000.0;
+
+				// ? start at neutral leg position?
+				float theta;
+				float gamma;
+				
+				Serial.println("Enter Gait #: ");
+				while (Serial.available() == false) {}
+				int mode = Serial.parseInt();
+
+				while (Serial.read() != 'q') {
+					time = ms - start;
+					GaitMovement(Leg, time, Gaits[mode], theta, gamma);
+					delay(1);
+					ms = millis() / 1000.0;
+				}
+			}	
+			break;
+		case 'e' :
+			Leg.odrv().first.SetPosition(0, 0.0);
+			Leg.odrv().first.SetPosition(1, 0.0);
+			break;
+		case 'w':
 			*(Leg.odrv().second) << "sr" << "\n";
 			break;
 		case 'q' :
 			Leg.EStop();
-			break;
-		case 'z' :
-			Leg.odrv().first.SetPosition(0, 0.0);
-			Leg.odrv().first.SetPosition(1, 0.0);
 			break;
 	}
 

@@ -61,15 +61,22 @@ void LegConfig::legSetup(int calibration_mode)
     }
 
     Serial.println(
+        "\x1b[1;37;42m"
         "**********************************\n"
-        "*****CONFIGURATION SUCCESSFUL*****\n"
-        "**********************************");
+        "**** CONFIGURATION SUCCESSFUL ****\n"
+        "****   Motor Armed & Ready    ****\n"
+        "**********************************"
+        "\x1b[0m\n");
 
     Serial.println(
-        "Motor Armed & Ready\n"
-        "Command Menu:\n"
-        "	'q' -> exit.\n"
-        "	's' -> execute radial leg movement\n");
+        "**********************************\n"
+        "********  Command Menu:  *********\n"
+        "**********************************\n"
+        "	'r' -> execute radial leg movement\n"
+        "   's' -> execute sinusoidal leg movement\n"
+        "   'e' -> move legs to horizontal position\n"
+        "   'w' -> restart ODrive Board\n"
+        "	'q' -> exit");
     return;
 }
 

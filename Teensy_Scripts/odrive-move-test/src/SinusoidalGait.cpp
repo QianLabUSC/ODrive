@@ -26,7 +26,6 @@ void SinusoidalTrajectory (float t, struct GaitParams gait, float &theta, float 
     double period = 1 / gait.freq;
     float t_mod = fmod(t, period);
     if (t_mod > period * gait.stance_ratio) {
-        //*calculating Sin() every time this is called is slow?
         X = gait.x_amp * cosf(2 * PI * gait.freq * gait.stance_freq * t_mod);
         Y = gait.stance_depth * sinf(2 * PI * gait.freq * gait.stance_freq * t_mod) + gait.stance_height;
     }
@@ -60,6 +59,14 @@ void GaitMovement(LegConfig Leg, float t, struct GaitParams gait,
 
 
 bool ValidateGaitParams(struct GaitParams gait) {
+    int error = 0;
+    
+    if (gait.stance_height == NAN || gait.freq == NAN ||
+        gait.stance_depth == NAN || gait.stance_ratio == NAN ||
+        gait.stride_length == NAN || gait.swing_retraction == NAN) {
+            error = 1;
+    }
+    
     if (gait.stance_freq == NAN) {
         gait.stance_freq = 1 / (2 * gait.stance_ratio);
     }
@@ -72,7 +79,6 @@ bool ValidateGaitParams(struct GaitParams gait) {
         gait.x_amp = sinf(gait.stride_length / 2);
     }
     
-    int error = 0;
     if (gait.stance_height + gait.stance_depth > L_MAX) {
         error = 1;
     } else if (gait.stance_height - gait.swing_retraction < L_MIN) {
@@ -83,7 +89,10 @@ bool ValidateGaitParams(struct GaitParams gait) {
         error = 4;
     }
     #ifdef DEBUG
-        Serial.println("Invalid Gait Parameters!");
+        if (!error) {
+            Serial.println("Invalid Gait Parameters!");
+        }
+        
     #endif
     
     #ifdef DEBUG_HIGH
