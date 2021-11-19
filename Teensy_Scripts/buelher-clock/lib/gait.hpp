@@ -30,6 +30,8 @@ class Gait {
     int left_hind;
 };
 
+const Gait ZERO = Gait("ZERO", 0, 0, 0, 0);
+
 const Gait TROTTING = Gait("TROT",
                            0,    // right_fore
                            180,  // left_fore
