@@ -74,6 +74,9 @@ LegConfig::LegConfig(HardwareSerial *serial_ptr, int axis, float init_offset,
       invert_direction(invert_direction) {}
 
 void LegConfig::setPosition(float rotations) {
+    if (invert_direction) {
+        rotations = -rotations;
+    }
     _odrv.first.SetPosition(_axis, rotations);
 }
 
