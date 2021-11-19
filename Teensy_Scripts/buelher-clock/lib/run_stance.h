@@ -5,4 +5,4 @@
 /**
  * @brief Hold a stance.
  */
-void run_stance(RoboConfig conf, Gait gait = ZERO);
+void run_stance(RoboConfig conf, Gait gait);
