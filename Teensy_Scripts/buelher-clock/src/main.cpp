@@ -16,6 +16,7 @@
 #include "calibrate.hpp"
 #include "robo_config.hpp"
 #include "run_clock.hpp"
+#include "run_zero.h"
 
 // ! Robot Configuration.
 const RoboConfig Robot =
@@ -45,8 +46,13 @@ void loop() {
          * !Note: In Development
          * @brief: runs a Buelher Clock
          */
-        case 'c':
+        case 'c': {
             run_clock(Robot, BOUNDING);
             break;
+        }
+        case 'z': {
+            run_zero(Robot);
+            break;
+        }
     }
 }
