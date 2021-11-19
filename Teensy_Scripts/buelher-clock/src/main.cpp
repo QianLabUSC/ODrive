@@ -16,6 +16,7 @@
 #include "calibrate.hpp"
 #include "robo_config.hpp"
 #include "run_clock.hpp"
+#include "run_stance.h"
 #include "run_zero.h"
 
 // ! Robot Configuration.
@@ -52,6 +53,10 @@ void loop() {
         }
         case 'z': {
             run_zero(Robot);
+            break;
+        }
+        case 's': {
+            run_stance(Robot, STANCE);
             break;
         }
     }
