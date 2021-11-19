@@ -22,13 +22,13 @@
 // ! Robot Configuration.
 const RoboConfig Robot =
     RoboConfig(LegConfig(&Serial1, 0, 0.0f,
-                         false),  // right_fore
-               LegConfig(&Serial1, 1, 0.0f,
-                         true),  // left_fore
+                         true),  // right_fore
                LegConfig(&Serial2, 0, 0.0f,
-                         false),  // right_hind
+                         false),  // left_fore
+               LegConfig(&Serial1, 1, 0.0f,
+                         true),  // right_hind
                LegConfig(&Serial2, 1, 0.0f,
-                         true),  // left_hind
+                         false),  // left_hind
                {std::make_pair(ODriveArduino(Serial1), &Serial1),
                 std::make_pair(ODriveArduino(Serial2), &Serial2)});
 
