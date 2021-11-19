@@ -7,7 +7,7 @@
 #include "TorqueHelpers.hpp"
 #include "UtilityHelpers.hpp"
 
-void run_zero(RoboConfig conf, Gait gait = ZERO) {
+void run_zero(RoboConfig conf) {
     Serial.println("Executing Zero. Send 'q' to stop.");
 
     // MUST enter closed loop mode before starting movement.
