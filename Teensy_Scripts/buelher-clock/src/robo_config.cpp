@@ -79,4 +79,5 @@ void LegConfig::setPosition(float rotations) {
 
 void LegConfig::setState(ODriveArduino::AxisState_t state) {
     _odrv.first.run_state(_axis, state, false /*don't wait*/);
+    delay(100);  // Give a little time for the state to change.
 }
