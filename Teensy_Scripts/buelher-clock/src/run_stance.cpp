@@ -21,10 +21,10 @@ void run_stance(RoboConfig conf, Gait gait) {
     while (true) {
         if (Serial.read() == 'q') break;
 
-        conf[right_fore].setPosition(gait.right_fore);
-        conf[right_hind].setPosition(gait.right_hind);
-        conf[left_fore].setPosition(gait.left_fore);
-        conf[left_hind].setPosition(gait.left_hind);
+        conf[right_fore].setPosition(float(gait.right_fore) / 360.0);
+        conf[right_hind].setPosition(float(gait.right_hind) / 360.0);
+        conf[left_fore].setPosition(float(gait.left_fore) / 360.0);
+        conf[left_hind].setPosition(float(gait.left_hind) / 360.0);
     }
 
     // Idle Motors.
