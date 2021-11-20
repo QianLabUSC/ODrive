@@ -56,7 +56,7 @@ void loop() {
             break;
         }
         case 's': {
-            run_stance(Robot, STANCE);
+            run_stance(Robot, STANCE_45);
             break;
         }
     }
