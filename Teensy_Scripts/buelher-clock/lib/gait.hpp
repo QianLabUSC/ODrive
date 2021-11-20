@@ -32,7 +32,8 @@ class Gait {
 
 const Gait ZERO = Gait("ZERO", 0, 0, 0, 0);
 
-const Gait STANCE = Gait("STANCE", 90, 90, 90, 90);
+const Gait STANCE_90 = Gait("STANCE", 90, 90, 90, 90);
+const Gait STANCE_45 = Gait("STANCE", 45, 45, 45, 45);
 
 const Gait TROTTING = Gait("TROT",
                            0,    // right_fore
