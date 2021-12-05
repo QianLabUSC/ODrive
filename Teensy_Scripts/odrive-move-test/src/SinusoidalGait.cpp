@@ -10,7 +10,7 @@ const float THETA_MAX = 2.47;
 
 
 struct GaitParams Gaits[] = {
-    {NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN},
+    {0.12f, 0.25f, 0.5f, 0.75f, 0.1f, 0.05f, NAN, NAN, NAN},
     {NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN},
     {NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN},
     {NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN},
@@ -97,6 +97,8 @@ bool ValidateGaitParams(struct GaitParams gait) {
     
     #ifdef DEBUG_HIGH
         switch(error) {
+            case 0 :
+                Serial.println("\x1b[32mGait Params Successfully Validated.");
             case 1 :
                 Serial.println("\x1b[31mInvalid Stance Height or Depth.");
                 break;
@@ -115,57 +117,5 @@ bool ValidateGaitParams(struct GaitParams gait) {
     return !error;
 }
 
-/**
- * ! Leg Workspace Must be validated empirically
- * Gamma must be within [0.087, 2.61] radians
- * Theta must be within [-2.47, +2.47] radians
- */
 
-/**
- * @brief Checks whether a current abstract leg position is valid
- */
-bool inBounds(float Gamma, float Theta, float L)
-{
-    int error = 0;
-    if (Gamma <= GAMMA_MIN || Gamma > GAMMA_MAX) {
-        error = 1;
-    } else if (abs(Theta) > THETA_MAX) {
-        error = 2;
-    } else if (L <= L_MIN || L >= L_MAX) { // ! CALCULATE PRECISE L RANGE FROM GAMMA
-        error = 3;
-    }
-    
-    #ifdef DEBUG
-        if (!error) {
-            Serial.println("Leg out of bounds.");
-        }
-    #endif
-
-    #ifdef DEBUG_HIGH
-        if (error == 1) {
-            Serial.println("\x1b[31mGamma Value is Invalid");
-        } else if (error == 2) {
-            Serial.println("\x1b[31mTheta Value is Invalid");
-        } else if (error == 3) {
-            Serial.println("\x1b[31mL Value is Invalid");
-        }
-    #endif
-    Serial.print("\x1b[0m");
-    return !error;
-}
-
-/**
- * @brief Checks whether a toe position is in bounds
- */
-bool inBounds(float x, float y)
-{
-    float L = sqrtf(pow(x, 2) + pow(y, 2));
-    
-    if (L <= L_MIN || L >= L_MAX) { // ! CALCULATE PRECISE L RANGE FROM GAMMA
-        return false;
-    } else {
-        return true;
-    }
-    
-}
 

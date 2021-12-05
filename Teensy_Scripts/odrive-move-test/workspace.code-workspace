@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"name": "odrive-move-test",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

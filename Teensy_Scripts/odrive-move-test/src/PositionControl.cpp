@@ -4,6 +4,11 @@
 
 #define DEBUG
 
+const float L_MAX = 0.3;
+const float L_MIN = 0.03;
+const float GAMMA_MIN = 0.087;
+const float GAMMA_MAX = 2.61;
+const float THETA_MAX = 2.47;
 /**
  * ! Leg Workspace:
  * Gamma must be within [0.087, 2.61] radians
@@ -236,24 +241,30 @@ void RadialLegMovement(LegConfig leg, float t, struct RadialGaitParams gait, flo
 bool inBounds(float Gamma, float Theta, float L)
 {
     int error = 0;
-    if (Gamma <= 0.087 || Gamma > 2.61) {
+    if (Gamma <= GAMMA_MIN || Gamma > GAMMA_MAX) {
         error = 1;
-    } else if (Theta < -2.47 || Theta > 2.47) {
+    } else if (abs(Theta) > THETA_MAX) {
         error = 2;
-    } else if (L <= 0.03 || L >= 0.3) { // ! CALCULATE PRECISE L RANGE FROM GAMMA
+    } else if (L <= L_MIN || L >= L_MAX) { // ! CALCULATE PRECISE L RANGE FROM GAMMA
         error = 3;
     }
     
-    #if defined(DEBUG) || defined(DEBUG_HIGH)
-        if (error == 1) {
-            Serial.println("Gamma Value is Invalid");
-        } else if (error == 2) {
-            Serial.println("Theta Value is Invalid");
-        } else if (error == 3) {
-            Serial.println("L Value is Invalid");
+    #ifdef DEBUG
+        if (!error) {
+            Serial.println("Leg out of bounds.");
         }
     #endif
 
+    #ifdef DEBUG_HIGH
+        if (error == 1) {
+            Serial.println("\x1b[31mGamma Value is Invalid");
+        } else if (error == 2) {
+            Serial.println("\x1b[31mTheta Value is Invalid");
+        } else if (error == 3) {
+            Serial.println("\x1b[31mL Value is Invalid");
+        }
+    #endif
+    Serial.print("\x1b[0m");
     return !error;
 }
 
@@ -264,7 +275,7 @@ bool inBounds(float x, float y)
 {
     float L = sqrtf(pow(x, 2) + pow(y, 2));
     
-    if (L <= 0.03 || L >= 0.3) { // ! CALCULATE PRECISE L RANGE FROM GAMMA
+    if (L <= L_MIN || L >= L_MAX) { // ! CALCULATE PRECISE L RANGE FROM GAMMA
         return false;
     } else {
         return true;
