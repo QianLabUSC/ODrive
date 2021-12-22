@@ -1,4 +1,4 @@
-#include "mode_facilitator.hpp"
+#include "ModeFacilitator.hpp"
 
 
 void RadialGait(LegConfig Leg) {
@@ -35,7 +35,7 @@ void SinusoidalGait(LegConfig Leg) {
     while (Serial.available() == false) {}
     int mode = Serial.parseInt();
     
-    if(ValidateGaitParams(Gaits[mode])) {
+    if(!ValidateGaitParams(Gaits[mode])) {
         return;
     }
     
