@@ -18,17 +18,19 @@
 #include "run_clock.hpp"
 #include "run_stance.h"
 #include "run_zero.h"
+#include "run_torque_test.h"
+
 
 // ! Robot Configuration.
 const RoboConfig Robot =
     RoboConfig(LegConfig(&Serial1, 0, 0.0f,
-                         true),  // right_fore
+                         false),  // right_fore
                LegConfig(&Serial2, 0, 0.0f,
-                         false),  // left_fore
+                         true),  // left_fore
                LegConfig(&Serial1, 1, 0.0f,
-                         true),  // right_hind
+                         false),  // right_hind
                LegConfig(&Serial2, 1, 0.0f,
-                         false),  // left_hind
+                         true),  // left_hind
                {std::make_pair(ODriveArduino(Serial1), &Serial1),
                 std::make_pair(ODriveArduino(Serial2), &Serial2)});
 
@@ -57,6 +59,10 @@ void loop() {
         }
         case 's': {
             run_stance(Robot, STANCE_45);
+            break;
+        }
+        case 't': {
+            run_torque_test(Robot, BOUNDING);
             break;
         }
     }

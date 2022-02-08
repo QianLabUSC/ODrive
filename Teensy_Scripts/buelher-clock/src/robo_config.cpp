@@ -80,6 +80,10 @@ void LegConfig::setPosition(float rotations) {
     _odrv.first.SetPosition(_axis, rotations);
 }
 
+float LegConfig::readFloat() {
+   return  _odrv.first.readFloat();
+}
+
 void LegConfig::setState(ODriveArduino::AxisState_t state) {
     _odrv.first.run_state(_axis, state, false /*don't wait*/);
     delay(100);  // Give a little time for the state to change.
